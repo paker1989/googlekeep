@@ -10,7 +10,7 @@
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
   },
-  "dependencies": {
+  "dependencies": { 
     "connect-flash": "^0.1.1",
     "express": "^4.16.2",
     "lodash": "^4.17.4",
