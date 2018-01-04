@@ -1,7 +1,7 @@
 var connectionString, db, mongoose, options;
 
 mongoose = require('mongoose');
-connectionString = 'mongodb://127.0.0.1:27017/googleKeep';
+connectionString = 'mongodb://127.0.0.1:27018/googleKeep';
 
 options = {
 	db: {

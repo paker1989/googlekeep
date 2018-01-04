@@ -16,17 +16,17 @@ let webpack = require('webpack')
 let proxyMiddleware = require('http-proxy-middleware')
 let webpackConfigPromise = require('./webpack.dev.conf')
 
-// default port where dev server listens for incoming traffic
-let port = process.env.PORT || config.dev.port
-// automatically open browser, if not set will be false
-let autoOpenBrowser = !!config.dev.autoOpenBrowser
-// Define HTTP proxies to your custom API backend
-// https://github.com/chimurai/http-proxy-middleware
-let proxyTable = config.dev.proxyTable
-
-let app = express()
-
 webpackConfigPromise.then((webpackConfig) => {
+  // default port where dev server listens for incoming traffic
+  let port = process.env.PORT || config.dev.port
+  // automatically open browser, if not set will be false
+  let autoOpenBrowser = !!config.dev.autoOpenBrowser
+  // Define HTTP proxies to your custom API backend
+  // https://github.com/chimurai/http-proxy-middleware
+  let proxyTable = config.dev.proxyTable
+
+  let app = express()
+
   let compiler = webpack(webpackConfig)
 
   let devMiddleware = require('webpack-dev-middleware')(compiler, {
@@ -82,7 +82,6 @@ webpackConfigPromise.then((webpackConfig) => {
       console.log(err)
       return
     }
-
     // when env is testing, don't need open it
       if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
       opn(uri)

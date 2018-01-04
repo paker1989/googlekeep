@@ -76,6 +76,7 @@ module.exports = new Promise((resolve, reject) => {
     } else {
       // publish the new Port, necessary for e2e tests
       process.env.PORT = port
+      console.log('portfinder defines new port: ' + port)
       // add port to devServer config
       devWebpackConfig.devServer.port = port
 
