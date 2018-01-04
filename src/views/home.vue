@@ -3,7 +3,7 @@
     header-bar
 </template>
 <script>
-import HeaderBar from '@/components/headerBar'
+import HeaderBar from '@/components/header/headerBar'
 
 export default {
   name: 'home',
