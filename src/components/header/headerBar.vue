@@ -1,7 +1,8 @@
 <template lang="jade">
   .headerBar
     .leftComponent
-      span.glyphicon.glyphicon-list
+      .glyphiconWraper
+        span.glyphicon.glyphicon-list
       .logo
         strong Google
         | keep
@@ -29,6 +30,8 @@ export default {
 @import (reference) '../../style/headerVars';
 .headerBar {
   .headerLayout; // flex
+  position: fixed;
+  top:0;
   background-color: @bg-color;
   width: 100%;
   height: @bar-height;
@@ -40,6 +43,22 @@ export default {
     & > * {
       margin-right: @lc-mar-right;
     }
+    & .glyphiconWraper {
+      position: relative;
+      border-radius: 50%;
+      width: @bar-height - @padding-vert*2;
+      height: @bar-height - @padding-vert*2;
+      &> .glyphicon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+      }
+      &:hover {
+        background: darken(@bg-color, 3%);
+      }
+    } // end .glyphiconWraper
     & .logo {
       font-size: @logo-fsize;
       & strong {
@@ -48,13 +67,13 @@ export default {
       @media only screen and (max-width : 960px) {
         display: none;
       }
-    }
+    } // end .logo
     & .searchWraper {
       height: @bar-height - @padding-vert*2;
       flex-grow: 1;
       flex-shrink: 1; // never minimize
       flex-basis: @search-flex-basis; // equals to min width
-    }
+    } // end .searchWraper
   } // end .leftComponent
 
   & .rightComponent {

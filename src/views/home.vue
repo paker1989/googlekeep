@@ -1,9 +1,9 @@
 <template lang="jade">
   .home.container-fluid
-    header-bar
+    header-container
 </template>
 <script>
-import HeaderBar from '@/components/header/headerBar'
+import HeaderContainer from '@/components/header/headerContainer'
 
 export default {
   name: 'home',
@@ -13,12 +13,12 @@ export default {
     }
   },
   components: {
-    HeaderBar,
+    HeaderContainer,
   }
 }
 </script>
 <style lang="less" scoped>
-  .container-fluid {
+  .home {
     padding:0;
   }
 </style>
