@@ -1,8 +1,8 @@
 <template lang="jade">
-  .headerBar
+  .headerBar(:class="{ displayBoxShadow: leaveTop }")
     .leftComponent
       .glyphiconWraper
-        span.glyphicon.glyphicon-list
+        span.glyphicon.glyphicon-list(@click="toggleSideBar")
       .logo
         strong Google
         | keep
@@ -16,18 +16,32 @@ import SearchInput from './searchInput'
 
 export default {
   name: 'headerBar',
+  props: ['hideSideBar'],
   data() {
     return {
-
+      sideBarStatus: this.hideSideBar,
+      leaveTop: false
     }
+  },
+  created() {
+    window.addEventListener('scroll', _.debounce(() => {
+      this.leaveTop = window.scrollY > 0
+    }, 100))
   },
   components: {
     SearchInput,
+  },
+  methods: {
+    toggleSideBar() {
+      this.sideBarStatus = !this.sideBarStatus
+      this.$emit('update:hideSideBar', this.sideBarStatus)
+    }
   }
 }
 </script>
 <style lang="less" scoped>
 @import (reference) '../../style/headerVars';
+
 .headerBar {
   .headerLayout; // flex
   position: fixed;
@@ -36,6 +50,13 @@ export default {
   width: 100%;
   height: @bar-height;
   padding: @padding-vert @padding-hor;
+  z-index: 999;
+  transition: all .2s ease;
+  &.displayBoxShadow {
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),
+                0 1px 10px 0 rgba(0,0,0,0.12), 
+                0 2px 4px -1px rgba(0,0,0,0.2);
+  }
 
   & .leftComponent {
     flex-grow: 1;
@@ -82,14 +103,6 @@ export default {
   } // end .rightComponent
 
 }// end .headerBar
-
-.headerLayout(@justifyContent: space-between) {
-  position: relative;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: @justifyContent;
-  align-items: center;
-}
 </style>
 
 

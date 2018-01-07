@@ -13,6 +13,7 @@
   "dependencies": {
     "connect-flash": "^0.1.1",
     "express": "^4.16.2",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "mongoose": "^5.0.0-rc0",
     "vue": "^2.5.2",

@@ -14,8 +14,18 @@
 @search-fontSize: 18px;
 @search-padding-hor: 60px; 
 
+//sideBar basic style
+@sideBar-width: 280px;
+
 //colors
 @bg-color:#fb0;
 @focus-bg-color: rgb(62, 80, 180);
 
 //mixins
+.headerLayout(@justifyContent: space-between, @flex-direction: row, @wrap: nowrap) {
+  display: flex;
+  flex-direction: @flex-direction;
+  flex-wrap: @wrap;
+  justify-content: @justifyContent;
+  align-items: center;
+}
