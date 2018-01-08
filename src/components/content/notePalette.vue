@@ -1,15 +1,21 @@
 <template lang="jade">
   .nodePalette
-    .colorWraper(v-for="i in 12")  
+    .colorWraper(v-for="(item, index) in bgColors", :style="item", :key="index")  
 </template>
 <script>
+/* eslint import/no-absolute-path: off, no-console: off */
+import paletteColors from '../../../static/paletteColors'
+
 export default {
   name: 'nodePalette',
   data() {
     return {
-      nbs: 12,
+      bgColors: [],
     }
   },
+  created() {
+    this.bgColors = _.assignIn(this.bgColors, paletteColors)
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -27,7 +33,10 @@ export default {
     height: 26px;
     border-radius: 50%;
     margin: 5px auto;
-    background-color:rgb(255, 138, 128);
+    cursor: pointer;
+    &:hover {
+      border: 2px solid rgba(0,0,0,0.4);
+    }
   }
 }
 </style>
