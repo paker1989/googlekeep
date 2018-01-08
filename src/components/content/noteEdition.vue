@@ -1,5 +1,5 @@
 <template lang="jade">
-  .noteEdition(@focus.capture="editMode=true")
+  .noteEdition(@focus.capture="editMode=true", :style="bgColor")
     .noteTitlePlaceHolder.textStyle(v-show="showTitlePh")
       | 标题
     .noteTextEdit.textStyle.noteTitleEdit(contenteditable="true",
@@ -12,8 +12,11 @@
     
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import NoteContent from './noteContentEditable'
 import NoteToolbar from './noteToolbar'
+
+const { mapGetters } = createNamespacedHelpers('userStore')
 
 export default {
   name: 'noteEdition',
@@ -36,6 +39,12 @@ export default {
     NoteToolbar, NoteContent,
   },
   computed: {
+    ...mapGetters([
+      'getUserBgColor'
+    ]),
+    bgColor() {
+      return this.getUserBgColor('abc')
+    },
     showTitlePh() {
       return this.editMode && this.noteTitle.length === 0
     },

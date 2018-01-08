@@ -7,11 +7,6 @@
 <script>
 export default {
   name: 'searchInput',
-  data() {
-    return {
-
-    }
-  },
 }
 </script>
 <style lang="less" scoped>

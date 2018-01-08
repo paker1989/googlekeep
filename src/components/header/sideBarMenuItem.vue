@@ -7,11 +7,6 @@
 <script>
 export default {
   name: 'sideBarMenuItem',
-  data() {
-    return {
-
-    }
-  },
 }
 </script>
 <style lang="less" scoped>

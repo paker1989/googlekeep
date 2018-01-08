@@ -2,19 +2,16 @@
   .home.container-fluid
     header-container(v-on:toggleSideBar="setContentLayout")
     note-container(:class="{ isAside: displaySideBar }")
-
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import HeaderContainer from '@/components/header/headerContainer'
 import NoteContainer from '@/components/content/content'
 
+const { mapGetters } = createNamespacedHelpers('userStore')
+
 export default {
   name: 'home',
-  data() {
-    return {
-      displaySideBar: false
-    }
-  },
   methods: {
     setContentLayout(isDisplaySideBar) {
       this.displaySideBar = isDisplaySideBar
@@ -22,6 +19,14 @@ export default {
   },
   components: {
     HeaderContainer, NoteContainer
+  },
+  computed: {
+    ...mapGetters([
+      'getUserProp'
+    ]),
+    displaySideBar() {
+      return !this.getUserProp('abc', 'sideBarStatus')
+    }
   }
 }
 </script>

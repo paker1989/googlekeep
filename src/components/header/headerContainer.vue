@@ -1,27 +1,28 @@
 <template lang="jade">
   .headerContainer
-    header-bar(:hideSideBar.sync="hideSideBar")
+    header-bar
     side-bar.md-sbar(ref="mdSideBar", :class="{ hiddenSideBar: hideSideBar }")
     side-bar.sm-sbar(ref="smSideBar", :class="{ hiddenSideBar: hideSideBar }")  
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import HeaderBar from './headerBar'
 import SideBar from './sideBar'
 
+const { mapGetters } = createNamespacedHelpers('userStore')
+
 export default {
   name: 'headerContainer',
-  data() {
-    return {
-      hideSideBar: true,
-    }
-  },
-  watch: {
-    hideSideBar(newVal) {
-      this.$emit('toggleSideBar', !newVal)
-    }
-  },
   components: {
     HeaderBar, SideBar
+  },
+  computed: {
+    ...mapGetters([
+      'getUserProp'
+    ]),
+    hideSideBar() {
+      return this.getUserProp('abc', 'sideBarStatus')
+    }
   }
 }
 </script>

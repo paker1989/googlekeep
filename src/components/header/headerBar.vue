@@ -12,14 +12,18 @@
 
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
+import Types from '../../store/mutationType'
 import SearchInput from './searchInput'
+
+const { mapGetters, mapMutations } = createNamespacedHelpers('userStore')
+
 
 export default {
   name: 'headerBar',
   props: ['hideSideBar'],
   data() {
     return {
-      sideBarStatus: this.hideSideBar,
       leaveTop: false
     }
   },
@@ -31,10 +35,20 @@ export default {
   components: {
     SearchInput,
   },
+  computed: {
+    ...mapGetters([
+      'getUserProp'
+    ]),
+  },
   methods: {
+    ...mapMutations({
+      toggleSideBarStatus: Types.TOGGLE_SIDE_BAR
+    }),
     toggleSideBar() {
-      this.sideBarStatus = !this.sideBarStatus
-      this.$emit('update:hideSideBar', this.sideBarStatus)
+      this.toggleSideBarStatus({
+        userId: 'abc',
+        sideBarStatus: !this.getUserProp('abc', 'sideBarStatus')
+      })
     }
   }
 }

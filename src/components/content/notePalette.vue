@@ -1,10 +1,16 @@
 <template lang="jade">
   .nodePalette
-    .colorWraper(v-for="(item, index) in bgColors", :style="item", :key="index")  
+    .colorWraper(v-for="(item, index) in bgColors",
+                 :style="item",
+                 :key="index",
+                 @click="setBgColor(index)")  
 </template>
 <script>
-/* eslint import/no-absolute-path: off, no-console: off */
+import { createNamespacedHelpers } from 'vuex'
 import paletteColors from '../../../static/paletteColors'
+import Types from '../../store/mutationType'
+
+const { mapMutations } = createNamespacedHelpers('userStore')
 
 export default {
   name: 'nodePalette',
@@ -15,6 +21,17 @@ export default {
   },
   created() {
     this.bgColors = _.assignIn(this.bgColors, paletteColors)
+  },
+  methods: {
+    ...mapMutations(
+      { changeColorIndex: Types.CHANGE_NOTE_EDIT_BG }
+    ),
+    setBgColor(index) {
+      this.changeColorIndex({
+        userId: 'abc',
+        colorIndex: index
+      })
+    }
   }
 }
 </script>
