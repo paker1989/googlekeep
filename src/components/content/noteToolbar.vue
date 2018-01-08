@@ -78,7 +78,7 @@ export default {
       font-size: 12px;
       cursor: pointer;
       &:hover {
-        background: lighten(black, 10%);
+        background: lighten(lightgray, 10%);
       }
     }
   } // end actionContainer

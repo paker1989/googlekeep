@@ -8,7 +8,7 @@ const state = {
     abc: {
       userId: 1, // fake, to be removed
       sideBarStatus: true, // hide = true
-      noteEditionBgIndex: 5,
+      noteEditionBgIndex: 0,
     }
   }
 }
