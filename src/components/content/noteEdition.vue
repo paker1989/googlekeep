@@ -60,7 +60,7 @@ export default {
 .noteEdition {
   position: relative;
   margin: 32px auto 16px auto; 
-  min-height: 50px; // to remove
+  // min-height: 50px; // to remove
   background: white;
   box-shadow: 0 3px 5px rgba(0,0,0,0.20);
 
