@@ -2,14 +2,16 @@
   .headerContainer
     header-bar
     side-bar.md-sbar(ref="mdSideBar", :class="{ hiddenSideBar: hideSideBar }")
-    side-bar.sm-sbar(ref="smSideBar", :class="{ hiddenSideBar: hideSideBar }")  
+    .sm-sbarWraper(@click="toggleSideBar", :class="{ hiddenSideBar: hideSideBar }")
+      side-bar.sm-sbar(ref="smSideBar", :class="{ hiddenSideBar: hideSideBar }")  
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import Types from '../../store/mutationType'
 import HeaderBar from './headerBar'
 import SideBar from './sideBar'
 
-const { mapGetters } = createNamespacedHelpers('userStore')
+const { mapGetters, mapMutations } = createNamespacedHelpers('userStore')
 
 export default {
   name: 'headerContainer',
@@ -23,7 +25,20 @@ export default {
     hideSideBar() {
       return this.getUserProp('abc', 'sideBarStatus')
     }
-  }
+  },
+  methods: {
+    ...mapMutations({
+      toggleSideBarStatus: Types.TOGGLE_SIDE_BAR
+    }),
+    toggleSideBar(event) {
+      if (event.target.contains(document.querySelector('.sm-sbarWraper'))) {
+        this.toggleSideBarStatus({
+          userId: 'abc',
+          sideBarStatus: !this.getUserProp('abc', 'sideBarStatus')
+        })
+      }
+    }
+  },
 }
 </script>
 <style lang="less" scoped>
@@ -43,14 +58,12 @@ export default {
       transform: translateX(-@sidebar-md-width);
     }
     @media only screen and (min-width : 960px) {
-      display: flex;
+      display: block;
     }
   } // end .md-screen
+
   & .sm-sbar {
-    display: none;
-    position: absolute;
-    height: 100vh;
-    top:0;
+    .sm-bar-basis();
     background-color: whitesmoke;
     z-index: 999;
     width: @sidebar-sm-width;
@@ -61,6 +74,26 @@ export default {
       display: flex;
     }
   }
+
+  & .sm-sbarWraper {
+    .sm-bar-basis();
+    width: 100vw;
+    z-index: 998;
+    background: transparent;
+    &.hiddenSideBar {
+      transform: translateX(-100vw);
+    }
+    @media only screen and (max-width : 960px) {
+      display: flex;
+    }
+  }
+}
+
+.sm-bar-basis {
+  display: none;
+  position: absolute;
+  height: 100vh;
+  top:0;
 }
 </style>
 

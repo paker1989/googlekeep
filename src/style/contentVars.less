@@ -4,8 +4,21 @@
 @title-padding-ver: 10px;
 @title-mini-height: @title-line-height + @title-padding-ver*2;
 
+//Note main content:
 .basicLayout {
   padding: @title-padding-ver 15px;
   width: 100%;
   margin: 0px;
+}
+
+.textStyle(){
+  text-align: left;
+  line-height: 19px;
+  min-height: @title-mini-height;
+  .noteTextEdit {
+    outline: none;
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-size: 15px;
+  }
 }

@@ -32,7 +32,6 @@ export default {
   overflow-x: hidden;
   transform: translateX(0);
   transition: transform .25s ease;
-  // border-right: 1px solid lightgrey; // to remove
   .headerLayout(@justifyContent:flex-start, @flex-direction: column);
 
   & .menuContainer {

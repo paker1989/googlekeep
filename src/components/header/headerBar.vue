@@ -8,6 +8,7 @@
         | keep
       search-input.searchWraper
     .rightComponent
+    // .test(v-custTest)
 
 </template>
 <script>
@@ -16,7 +17,6 @@ import Types from '../../store/mutationType'
 import SearchInput from './searchInput'
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('userStore')
-
 
 export default {
   name: 'headerBar',
@@ -63,7 +63,7 @@ export default {
   width: 100%;
   height: @bar-height;
   padding: @padding-vert @padding-hor;
-  z-index: 999;
+  z-index: 997;
   transition: all .2s ease;
   &.displayBoxShadow {
     box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),

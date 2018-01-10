@@ -7,10 +7,14 @@ import 'bootstrap/js/popover'
 import './style/custom-bootstrap.less'
 
 import Vue from 'vue'
+import VueResource from 'vue-resource'
 import App from './App'
 import router from './router'
 import store from './store'
+import test from './plugins/test' // test
 
+Vue.use(VueResource)
+Vue.use(test) // test
 
 Vue.config.productionTip = false
 

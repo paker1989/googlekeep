@@ -2,6 +2,7 @@
   .nodePalette
     .colorWraper(v-for="(item, index) in bgColors",
                  :style="item",
+                 :class="{selected: index === selectedIndex }",
                  :key="index",
                  @click="setBgColor(index)")  
 </template>
@@ -10,7 +11,7 @@ import { createNamespacedHelpers } from 'vuex'
 import paletteColors from '../../../static/paletteColors'
 import Types from '../../store/mutationType'
 
-const { mapMutations } = createNamespacedHelpers('userStore')
+const { mapGetters, mapMutations } = createNamespacedHelpers('userStore')
 
 export default {
   name: 'nodePalette',
@@ -21,6 +22,14 @@ export default {
   },
   created() {
     this.bgColors = _.assignIn(this.bgColors, paletteColors)
+  },
+  computed: {
+    ...mapGetters([
+      'getUserProp'
+    ]),
+    selectedIndex() {
+      return this.getUserProp('abc', 'noteEditionBgIndex')
+    }
   },
   methods: {
     ...mapMutations(
@@ -51,7 +60,7 @@ export default {
     border-radius: 50%;
     margin: 5px auto;
     cursor: pointer;
-    &:hover {
+    &:hover, &.selected {
       border: 2px solid rgba(0,0,0,0.4);
     }
   }
