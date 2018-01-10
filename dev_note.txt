@@ -1,0 +1,4 @@
+- device service 搜索栏调整 --> done.
+- palette, color style when selected.
+- photo display: plugin way, call by js:
+- Mongo db design for a note.   

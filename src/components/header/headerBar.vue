@@ -3,12 +3,11 @@
     .leftComponent
       .glyphiconWraper
         span.glyphicon.glyphicon-list(@click="toggleSideBar")
-      .logo
+      .logoWraper
         strong Google
         | keep
       search-input.searchWraper
     .rightComponent
-      | to do
 
 </template>
 <script>
@@ -73,10 +72,13 @@ export default {
   }
 
   & .leftComponent {
+    position: relative;
     flex-grow: 1;
     .headerLayout(flex-start);
     & > * {
       margin-right: @lc-mar-right;
+      flex: 0 1 auto;
+      flex-basis: 0px;
     }
     & .glyphiconWraper {
       position: relative;
@@ -94,25 +96,25 @@ export default {
         background: darken(@bg-color, 3%);
       }
     } // end .glyphiconWraper
-    & .logo {
+    & .logoWraper {
       font-size: @logo-fsize;
       & strong {
         margin-right:5px;
+        @media only screen and (max-width : 600px) {
+          display: none;
+        }
       }
-      @media only screen and (max-width : 960px) {
-        display: none;
-      }
+
     } // end .logo
     & .searchWraper {
       height: @bar-height - @padding-vert*2;
-      flex-grow: 1;
-      flex-shrink: 1; // never minimize
-      flex-basis: @search-flex-basis; // equals to min width
+      flex: 1 1 auto;
+      max-width: @search-max-size;
+      // flex-basis: @search-flex-basis; // equals to min width
     } // end .searchWraper
   } // end .leftComponent
 
   & .rightComponent {
-    flex-grow: 2;
     .headerLayout(flex-end);
   } // end .rightComponent
 

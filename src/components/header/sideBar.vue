@@ -27,7 +27,7 @@ export default {
 @import '../../style/headerVars';
 
 .sideBar {
-  width: @sideBar-width;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   transform: translateX(0);

@@ -38,8 +38,8 @@ export default {
   position: relative;
   & .isAside {
     @media only screen and (min-width : 960px) {
-      margin-left: @sideBar-width;
-      width: calc(~'100vw - @{sideBar-width}');
+      margin-left: @sidebar-md-width;
+      width: calc(~'100vw - @{sidebar-md-width}');
     }
   }
 }

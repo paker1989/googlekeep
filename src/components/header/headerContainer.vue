@@ -38,8 +38,9 @@ export default {
     position: absolute;
     height: calc(~'100vh - 100%');
     top:100%;
+    width: @sidebar-md-width;
     &.hiddenSideBar {
-      transform: translateX(-@sideBar-width);
+      transform: translateX(-@sidebar-md-width);
     }
     @media only screen and (min-width : 960px) {
       display: flex;
@@ -52,8 +53,9 @@ export default {
     top:0;
     background-color: whitesmoke;
     z-index: 999;
+    width: @sidebar-sm-width;
     &.hiddenSideBar {
-      transform: translateX(-@sideBar-width);
+      transform: translateX(-@sidebar-sm-width);
     }
     @media only screen and (max-width : 960px) {
       display: flex;
