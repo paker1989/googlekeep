@@ -16,6 +16,9 @@ let webpack = require('webpack')
 let proxyMiddleware = require('http-proxy-middleware')
 let webpackConfigPromise = require('./webpack.dev.conf')
 
+let noteRoutes = require('../src/routes/note')
+let bodyParser = require('body-parser')
+
 webpackConfigPromise.then((webpackConfig) => {
   // default port where dev server listens for incoming traffic
   let port = process.env.PORT || config.dev.port
@@ -76,6 +79,13 @@ webpackConfigPromise.then((webpackConfig) => {
   devMiddleware.waitUntilValid(() => {
       console.log(`> Listening at ${  uri  }\n`)
     })
+  
+   app.use(bodyParser.json());
+   app.use(bodyParser.urlencoded({extended: true}));
+  // app.use(bodyParser.raw({
+  //   type: 'multipart/form-data'
+  // }))
+  app.use('/note', noteRoutes)
 
   module.exports = app.listen(port, (err) => {
       if (err) {

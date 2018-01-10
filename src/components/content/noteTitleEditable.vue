@@ -8,10 +8,12 @@
 <script>
 export default {
   name: 'noteTitleEdit',
-  props: ['editMode'],
+  props: [
+    'editMode',
+  ],
   data() {
     return {
-      noteTitle: '',
+      noteTitle: ''
     }
   },
   methods: {

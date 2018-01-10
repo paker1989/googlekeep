@@ -12,7 +12,7 @@
       a(href="#", data-toggle="tooltip", data-placement="bottom", title="重做")
         span.glyphicon.glyphicon-arrow-right
     .actionContainer
-      span 完成
+      span(@click="saveNote") 完成
     .notePaletteWraper(:style="palettePosition",
                        @mouseleave = "togglePalette($event, false)")
       note-palette
@@ -54,6 +54,9 @@ export default {
           left: 0,
           display: 'none'
         })
+    },
+    saveNote() {
+      this.$emit('saveNote')
     }
   }
 }
