@@ -1,6 +1,9 @@
 <template lang="jade">
   .noteWaterfallWraper
-    note-item(v-for="(note, index) in items", :item="note", :key="index")
+    note-item(v-for="(note, index) in items",
+              :item="note",
+              :last="index===items.length-1",
+              :key="index")
 </template>
 <script>
 import NoteItem from './noteItem'
@@ -8,8 +11,16 @@ import NoteItem from './noteItem'
 export default {
   name: 'noteWaterfallWraper',
   props: ['items'],
+  data() {
+    return {
+      align: 'center'
+    }
+  },
+  mounted() {
+
+  },
   components: {
-    NoteItem
+    NoteItem, 
   }
 }
 </script>
@@ -19,7 +30,7 @@ export default {
   .headerLayout(flex-start, column, wrap, flex-start);
   position: relative;
   margin: 0 auto;
-  width: 650px;
+  max-width: 70vw;
   height: 900px; // to remove
 }
 </style>
