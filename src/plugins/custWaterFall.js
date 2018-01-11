@@ -10,10 +10,13 @@ function getHeight(array, row, col) {
 
 export default (wraper = '.noteWaterfallWraper',
                 element = '.noteItem',
-                eWidth = 240) => {
+                elementWidth = 220,
+                vertMargin = 32,
+                horMargin = 16) => {
+  const eWidth = elementWidth + (horMargin * 2)
   const wraperWidth = $(wraper).width()
   const nbPerRow = Math.floor(wraperWidth / eWidth)
-  const originLeft = (wraperWidth - eWidth * nbPerRow) / 2 // 起始左侧位置
+  const originLeft = (wraperWidth - (eWidth * nbPerRow)) / 2 // 起始左侧位置
   const $itemArrays = $(element).toArray()
   const array = new Array(nbPerRow)
 
@@ -21,7 +24,8 @@ export default (wraper = '.noteWaterfallWraper',
     const row = Math.floor((index) / nbPerRow) // 第几行
     const col = index % nbPerRow // 第几列
     array[col] = array[col] || []
-    array[col][row] = $(item).height()
+    $(item).css({ height: (100 + (Math.random() * 80)) }) // to remove
+    array[col][row] = $(item).height() + vertMargin
   })
 
   $itemArrays.forEach((item, index) => {
