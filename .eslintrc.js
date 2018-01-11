@@ -54,5 +54,6 @@ module.exports = {
     'import/no-unresolved': 'off',
     'linebreak-style': 'off',
     'comma-dangle': 'off',
+    'func-names': 'off',
   }
 }

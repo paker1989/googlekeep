@@ -1,14 +1,18 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const NoteSchema = new mongoose.Schema({
-  content: String,
   title: String,
+  content: String,
   noteType: {
     type: String,
     enum: ['note', 'checkList'],
     default: 'note'
   },
   photos: [String],
+  colorIndex: {
+    type: Number,
+    default: 0
+  },
   meta: {
     // Add later
     // createdBy: {
@@ -26,8 +30,31 @@ const NoteSchema = new mongoose.Schema({
     isArchived: {
       type: Boolean,
       default: false
+    },
+    isHighLighted: {
+      type: Boolean,
+      default: false
     }
   }
 })
 
-export default NoteSchema
+NoteSchema.pre('save', function(next) {
+  if(this.isNew) {
+    this.meta.createdAt = this.meta.updateAt = Date.now()
+  }
+  else {
+    this.meta.updateAt = Date.now()
+  }
+  next()
+})
+
+NoteSchema.statics = {
+  fetch: function(cb) {
+    return this
+      .find({})
+      .sort('meta.updateAt')
+      .exec(cb)
+  }
+}
+
+module.exports = NoteSchema

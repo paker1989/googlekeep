@@ -26,11 +26,19 @@ export default {
       this.editMode = false
     },
     saveNote() {
-      const formData = new FormData()
-      formData.append('noteTile', this.$refs.noteTitle.noteTitle)
-      formData.append('noteContent', this.$refs.noteContent.noteContent)
+      // const formData = new FormData()
+      // formData.append('noteTile', this.$refs.noteTitle.noteTitle)
+      // formData.append('noteContent', this.$refs.noteContent.noteContent)
 
-      this.$http.post('/note/saveNote', formData).then((res) => {
+      // this.$http.post('/note/saveNote', formData).then((res) => {
+      //   console.log(res)
+      // })
+      const noteText = {
+        title: this.$refs.noteTitle.noteTitle,
+        content: this.$refs.noteContent.noteContent,
+        colorIndex: this.getUserProp('abc', 'noteEditionBgIndex'),
+      }
+      this.$http.post('/note/saveNoteText', { note: noteText }).then((res) => {
         console.log(res)
       })
     }
@@ -40,7 +48,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getUserBgColor'
+      'getUserBgColor', 'getUserProp'
     ]),
     bgColor() {
       return this.getUserBgColor('abc')

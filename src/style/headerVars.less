@@ -23,10 +23,14 @@
 @focus-bg-color: rgb(62, 80, 180);
 
 //mixins
-.headerLayout(@justifyContent: space-between, @flex-direction: row, @wrap: nowrap) {
+.headerLayout(@justifyContent: space-between, 
+              @flex-direction: row, 
+              @wrap: nowrap, 
+              @align-items: center)
+{
   display: flex;
   flex-direction: @flex-direction;
   flex-wrap: @wrap;
   justify-content: @justifyContent;
-  align-items: center;
+  align-items: @align-items;
 }
