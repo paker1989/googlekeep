@@ -8,7 +8,8 @@ export function getHeight(array, row, col) {
   return totalHeight
 }
 
-export function setFontSize(elementDiv, maxHeight = 293, maxFontSize = 40) {
+export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
+  maxHeight = 293, maxFontSize = 40) {
   let currCHeight
   let currFontSize
   const $elements = $(elementDiv).toArray()

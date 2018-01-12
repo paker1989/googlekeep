@@ -9,7 +9,7 @@
 
 </template>
 <script>
-import { waterFall, setFontSize } from '../../plugins/custWaterFall'
+import { waterFall, setFontSize } from '../../plugins/utils'
 import NoteToolbar from './noteToolbar'
 
 export default {
@@ -20,7 +20,7 @@ export default {
   },
   mounted() {
     if (this.last) {
-      setFontSize('.noteItem .noteItemWraper .noteContent')
+      setFontSize()
       waterFall()
       window.addEventListener('resize', _.debounce(() => { waterFall() }, 100))
     }
@@ -47,9 +47,10 @@ export default {
   }
 
   & .noteItemWraper {
-    .textStyle(auto);
+    text-align: left;
     position: relative;
     overflow: hidden;
+    min-height: 30px;
     max-height: 293px;
 
     & .noteTitle {
