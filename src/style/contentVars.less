@@ -11,14 +11,14 @@
   margin: 0px;
 }
 
-.textStyle(){
+.textStyle(@lineHeight: 19px){
   text-align: left;
-  line-height: 19px;
+  line-height: @lineHeight;
   min-height: @title-mini-height;
-  .noteTextEdit {
+  .noteTextEdit(@fontSize: 15px) {
     outline: none;
     direction: ltr;
     unicode-bidi: isolate;
-    font-size: 15px;
+    font-size: @fontSize;
   }
 }

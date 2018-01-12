@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import Types from './mutationType'
+// import Vue from 'vue'
+// import Types from './mutationType'
 
 /* eslint no-shadow: off */
 const state = {
-  cachedNotes : {}
+  cachedNotes: {}
 }
 
 const getters = {

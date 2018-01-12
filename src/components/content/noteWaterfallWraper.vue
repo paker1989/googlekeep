@@ -20,7 +20,7 @@ export default {
 
   },
   components: {
-    NoteItem, 
+    NoteItem,
   }
 }
 </script>

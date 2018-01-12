@@ -11,7 +11,7 @@ import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 
 const { mapGetters } = createNamespacedHelpers('userStore')
-
+/* eslint no-console: off */
 export default {
   name: 'noteEdition',
   data() {
