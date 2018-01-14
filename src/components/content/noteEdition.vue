@@ -1,9 +1,11 @@
 <template lang="jade">
   .noteEdition(@focus.capture="editMode=true", :style="bgColor")
-    image-wraper(:images="uploadedImages")
+    image-wraper(:images="uploadedImages", )
     note-title(ref="noteTitle", v-show="editMode", :editMode="editMode")
     note-content(ref="noteContent")          
-    note-toolbar(:colorIndex.sync="colorIndex", v-show="editMode", @saveNote="saveNote")
+    note-toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
+                 @saveNote="saveNote",
+                 @newImageUpload="uploadImage")
 </template>
 <script>
 // import { createNamespacedHelpers } from 'vuex'
@@ -35,6 +37,9 @@ export default {
   methods: {
     stopEditing() {
       this.editMode = false
+    },
+    uploadImage(newFile) {
+      this.uploadedImages.unshift(newFile)
     },
     saveNote() {
       // const formData = new FormData()

@@ -5,7 +5,8 @@
         span.glyphicon.glyphicon-bell
       a(href="#", data-toggle="tooltip", data-placement="top", title="图片")
         span.glyphicon.glyphicon-picture(@click="openFile")
-        input(type="file" ref="fileInput")
+        input(type="file" ref="fileInput", accept="image/**", multiple=true,
+              @change="handleFile($event)")
       a.optionBg(href="#", data-toggle="tooltip", data-placement="top", title="背景")                  
         span.glyphicon.glyphicon-th(@mouseover.stop="togglePalette($event, true)")
       a(href="#", data-toggle="tooltip", data-placement="top", title="撤销")
@@ -56,6 +57,21 @@ export default {
   methods: {
     openFile() {
       this.$refs.fileInput.click()
+    },
+    handleFile(event) {
+      const files = event.target.files
+      if(!files) return
+
+      [...files].forEach( file => {
+        const fileReader = new FileReader()
+        fileReader.onload = e => {
+          this.$emit('newImageUpload', {
+              toUpload: true,
+              tmpUrl: e.target.result
+          })
+        }
+        fileReader.readAsDataURL(file)
+      })
     },
     togglePalette(event, isShow) {
       // isShow = isShow === undefined ?

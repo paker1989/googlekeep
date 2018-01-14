@@ -4,12 +4,30 @@
       img(:src="image.url")
 </template>
 <script>
+import { arrangeImages } from '../../plugins/utils'
+
 export default {
   name: 'imageWraper',
   props: ['images'],
   data() {
     return {
       attachedImages: []
+    }
+  },
+  watch: {
+    images(uplodaedImages) {
+      const newImage = uplodaedImages[0]
+      const image = new Image()
+      image.src = newImage.tmpUrl
+      image.onload = () => {
+        this.attachedImages.push({
+          url: image.src,
+          naturalHeight: image.naturalHeight,
+          naturalWidth: image.naturalWidth
+        })
+        this.attachedImages = _.assignIn({}, arrangeImages(this.attachedImages))
+        console.log(this.attachedImages)
+      }
     }
   },
   created() {
@@ -21,7 +39,7 @@ export default {
 .imageWraper {
   position: relative;
   width: 100%;
-  height: 100px;
+  // height: 100px;
   margin: 0;
   padding: 0;
   & .imageContainer {
