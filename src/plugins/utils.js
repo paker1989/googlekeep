@@ -9,22 +9,29 @@ export function getHeight(array, row, col) {
 }
 
 export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
-  maxHeight = 293, maxFontSize = 40) {
+  maxHeight = 280, maxFontSize = 40) {
   let currCHeight
   let currFontSize
+  // let lineHeight
   const $elements = $(elementDiv).toArray()
 
   $elements.forEach((element) => {
-    for (let i = 1; i < 50; i += 1) {
+    for (let i = 1; i < 25; i += 1) {
       currCHeight = $(element).innerHeight()
       currFontSize = parseInt($(element).css('font-size'), 10)
-
+      // console.log(currCHeight)
       if (currCHeight < maxHeight && currFontSize < maxFontSize) {
         $(element).css('font-size', '+=1')
       } else {
         break
       }
     }
+    // currCHeight = $(element).innerHeight()
+    // lineHeight = Math.ceil(parseInt($(element).css('line-height'), 10))
+    // console.log(`line-height: ${lineHeight}`)
+    // $(element).css('line-height', `${lineHeight}px`)
+    // $(element).height(Math.floor(currCHeight / lineHeight) * lineHeight)
+    // $(element).css('-webkit-line-clamp', (Math.floor(currCHeight / lineHeight)).toString())
   })
 }
 
@@ -54,5 +61,61 @@ export function waterFall(wraper = '.noteWaterfallWraper', element = '.noteItem'
   })
 }
 
+export function arrangeImages(images, nbColumns = 3) {
+  let columnIndex
+  let sizeRatio
+  const array = []
+
+  images.forEach((item, index) => {
+    columnIndex = Math.floor(index / nbColumns) // 在第几列
+    sizeRatio = item.natureWidth / item.natureHeight // 宽高比
+    array[columnIndex] = array[columnIndex] || []
+    array[columnIndex].push({ index, sizeRatio })
+  })
+
+  array.forEach((item, colIndex) => {
+    const ratioSums = array[colIndex].reduce((a, b) => a.sizeRatio || a + b.sizeRatio || b, 0)
+    array[colIndex].forEach((e) => {
+      images[e.index].width = `${(e.sizeRatio * 100) / ratioSums}%`
+    })
+  })
+  return images
+}
+
+
 // console.log(`index: ${index}row : ${row}, col: ${col}, top: ${top}, left: ${left}`)
+
+
+/* eslint brace-style: off */
+// export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
+//   maxHeight = 293, maxFontSize = 40) {
+//   let currCHeight
+//   let currFontSize
+//   let content
+//   let scrollHeight
+//   const $elements = $(elementDiv).toArray()
+
+//   $elements.forEach((element) => {
+//     scrollHeight = $(element).prop('scrollHeight')
+//     console.log(scrollHeight)
+//     if (scrollHeight > maxHeight) {
+//       console.log($(element).text())
+//       content = $(element).text()
+//       $(element).text(content.slice(0, Math.floor(content.length * (maxHeight / scrollHeight))))
+//       console.log($(element).text())
+//     }
+//     else {
+//       for (let i = 1; i < 50; i += 1) {
+//         currCHeight = $(element).innerHeight()
+//         currFontSize = parseInt($(element).css('font-size'), 10)
+
+//         if (currCHeight < maxHeight && currFontSize < maxFontSize) {
+//           $(element).css('font-size', '+=1')
+//         } else {
+//           break
+//         }
+//       }
+//     }
+//   })
+// }
 

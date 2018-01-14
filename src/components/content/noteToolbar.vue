@@ -1,34 +1,48 @@
 <template lang="jade">
   .noteToolbar
     .toollistContainer
-      a(href="#", data-toggle="tooltip", data-placement="bottom", title="提醒")
+      a(href="#", data-toggle="tooltip", data-placement="top", title="提醒")
         span.glyphicon.glyphicon-bell
-      a(href="#", data-toggle="tooltip", data-placement="bottom", title="图片")
-        span.glyphicon.glyphicon-picture
+      a(href="#", data-toggle="tooltip", data-placement="top", title="图片")
+        span.glyphicon.glyphicon-picture(@click="openFile")
+        input(type="file" ref="fileInput")
       a.optionBg(href="#", data-toggle="tooltip", data-placement="top", title="背景")                  
         span.glyphicon.glyphicon-th(@mouseover.stop="togglePalette($event, true)")
-      a(href="#", data-toggle="tooltip", data-placement="bottom", title="撤销")
+      a(href="#", data-toggle="tooltip", data-placement="top", title="撤销")
         span.glyphicon.glyphicon-arrow-left
-      a(href="#", data-toggle="tooltip", data-placement="bottom", title="重做")
+      a(href="#", data-toggle="tooltip", data-placement="top", title="重做")
         span.glyphicon.glyphicon-arrow-right
-    .actionContainer
+    .actionContainer(v-if="isEdit")
       span(@click="saveNote") 完成
     .notePaletteWraper(:style="palettePosition",
                        @mouseleave = "togglePalette($event, false)")
-      note-palette
+      note-palette(:colorIndex.sync='selectedIndex')
 </template>
 <script>
 import NotePalette from './notePalette'
 
 export default {
   name: 'noteToolbar',
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: true
+    },
+    colorIndex: Number
+  },
   data() {
     return {
+      selectedIndex: this.colorIndex,
       palettePosition: {
         top: 0,
         left: 0,
         display: 'none'
       }
+    }
+  },
+  watch: {
+    selectedIndex(newVal) {
+      this.$emit('update:colorIndex', newVal)
     }
   },
   created() {
@@ -40,13 +54,21 @@ export default {
     NotePalette,
   },
   methods: {
+    openFile() {
+      this.$refs.fileInput.click()
+    },
     togglePalette(event, isShow) {
-      const target = $(event.target)
+      // isShow = isShow === undefined ?
+      //   event.target.contains(document.querySelector('.notePaletteWraper')) : isShow
+      // if(isShow) {
+      //   this.$refs.notePaletteWraper.click()
+      // }
+      const $target = $(event.target)
       _.extend(this.palettePosition,
         isShow ?
         {
-          top: `${Math.ceil(target.position().top) + 3}px`,
-          left: `${Math.ceil(target.position().left) + 3}px`,
+          top: `-${Math.ceil($target.position().top) + 80}px`,
+          left: `${Math.ceil($target.position().left) + 5}px`,
           display: 'block'
         }
         : {
@@ -72,6 +94,12 @@ export default {
     .headerLayout(flex-start);
     &> * {
       margin-right: 2em;
+    }
+    & .glyphicon-picture+input[type="file"] {
+      opacity: 0;
+      position: absolute; 
+      width: 0.1px;
+      height: 0.1px;
     }
   }
   &> .actionContainer {

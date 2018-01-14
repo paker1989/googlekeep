@@ -1,25 +1,36 @@
 <template lang="jade">
   .noteEdition(@focus.capture="editMode=true", :style="bgColor")
+    image-wraper(:images="uploadedImages")
     note-title(ref="noteTitle", v-show="editMode", :editMode="editMode")
     note-content(ref="noteContent")          
-    note-toolbar(v-show="editMode", @saveNote="saveNote")
+    note-toolbar(:colorIndex.sync="colorIndex", v-show="editMode", @saveNote="saveNote")
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
+// import { createNamespacedHelpers } from 'vuex'
+import { mapGetters } from 'vuex'
+import ImageWraper from './imageWraper'
 import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 
-const { mapGetters } = createNamespacedHelpers('userStore')
+import testImages from '../../assets/testImages'
+import { arrangeImages } from '../../plugins/utils'
+
+// const { mapGetters } = createNamespacedHelpers('userStore')
 /* eslint no-console: off */
 export default {
   name: 'noteEdition',
   data() {
     return {
+      colorIndex: 0,
       editMode: false,
       noteTitle: '',
       NoteContent: '',
+      uploadedImages: arrangeImages(testImages)
     }
+  },
+  components: {
+    NoteToolbar, NoteContent, NoteTitle, ImageWraper
   },
   methods: {
     stopEditing() {
@@ -36,22 +47,19 @@ export default {
       const noteText = {
         title: this.$refs.noteTitle.noteTitle,
         content: this.$refs.noteContent.noteContent,
-        colorIndex: this.getUserProp('abc', 'noteEditionBgIndex'),
+        colorIndex: this.colorIndex
       }
       this.$http.post('/note/saveNoteText', { note: noteText }).then((res) => {
         console.log(res)
       })
     }
   },
-  components: {
-    NoteToolbar, NoteContent, NoteTitle
-  },
   computed: {
     ...mapGetters([
-      'getUserBgColor', 'getUserProp'
+      'getBgColors'
     ]),
     bgColor() {
-      return this.getUserBgColor('abc')
+      return this.getBgColors(this.colorIndex)
     },
   }
 }
@@ -64,6 +72,8 @@ export default {
   margin: 32px auto 16px auto; 
   background: white;
   box-shadow: 0 3px 5px rgba(0,0,0,0.20);
+  overflow-y: auto;
+  max-height: 800px;
 
   @media only screen and (max-width : 600px) {
      width: 93vw;
@@ -73,6 +83,7 @@ export default {
   }
   & >* {
     .basicLayout;
+    clear: both;
   }
 }
 </style>
