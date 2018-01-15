@@ -12,26 +12,19 @@ export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent
   maxHeight = 280, maxFontSize = 40) {
   let currCHeight
   let currFontSize
-  // let lineHeight
   const $elements = $(elementDiv).toArray()
 
   $elements.forEach((element) => {
     for (let i = 1; i < 25; i += 1) {
       currCHeight = $(element).innerHeight()
       currFontSize = parseInt($(element).css('font-size'), 10)
-      // console.log(currCHeight)
+
       if (currCHeight < maxHeight && currFontSize < maxFontSize) {
         $(element).css('font-size', '+=1')
       } else {
         break
       }
     }
-    // currCHeight = $(element).innerHeight()
-    // lineHeight = Math.ceil(parseInt($(element).css('line-height'), 10))
-    // console.log(`line-height: ${lineHeight}`)
-    // $(element).css('line-height', `${lineHeight}px`)
-    // $(element).height(Math.floor(currCHeight / lineHeight) * lineHeight)
-    // $(element).css('-webkit-line-clamp', (Math.floor(currCHeight / lineHeight)).toString())
   })
 }
 
@@ -48,7 +41,6 @@ export function waterFall(wraper = '.noteWaterfallWraper', element = '.noteItem'
     const row = Math.floor((index) / nbPerRow) // 第几行
     const col = index % nbPerRow // 第几列
     array[col] = array[col] || []
-    // $(item).css({ height: (100 + (Math.random() * 80)) }) // to remove
     array[col][row] = $(item).height() + vertMargin
   })
 
@@ -61,6 +53,7 @@ export function waterFall(wraper = '.noteWaterfallWraper', element = '.noteItem'
   })
 }
 
+/* eslint no-param-reassign: off */
 export function arrangeImages(images, nbColumns = 3) {
   let columnIndex
   let sizeRatio
@@ -68,7 +61,7 @@ export function arrangeImages(images, nbColumns = 3) {
 
   images.forEach((item, index) => {
     columnIndex = Math.floor(index / nbColumns) // 在第几列
-    sizeRatio = item.natureWidth / item.natureHeight // 宽高比
+    sizeRatio = item.naturalWidth / item.naturalHeight // 宽高比
     array[columnIndex] = array[columnIndex] || []
     array[columnIndex].push({ index, sizeRatio })
   })

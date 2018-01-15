@@ -1,6 +1,6 @@
 <template lang="jade">
   .noteEdition(@focus.capture="editMode=true", :style="bgColor")
-    image-wraper(:images="uploadedImages", )
+    image-wraper(:images="uploadedImages", ref="imageWraper" )
     note-title(ref="noteTitle", v-show="editMode", :editMode="editMode")
     note-content(ref="noteContent")          
     note-toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
@@ -24,6 +24,7 @@ export default {
   name: 'noteEdition',
   data() {
     return {
+      noteId: 0,
       colorIndex: 0,
       editMode: false,
       noteTitle: '',
@@ -38,17 +39,11 @@ export default {
     stopEditing() {
       this.editMode = false
     },
-    uploadImage(newFile) {
-      this.uploadedImages.unshift(newFile)
+    uploadImage(newImage) {
+      this.uploadedImages.unshift(newImage.tmpUrl)
+      this.$refs.imageWraper.uploadNewImage({ newImage }, this.noteId) // file, userId, noteId
     },
     saveNote() {
-      // const formData = new FormData()
-      // formData.append('noteTile', this.$refs.noteTitle.noteTitle)
-      // formData.append('noteContent', this.$refs.noteContent.noteContent)
-
-      // this.$http.post('/note/saveNote', formData).then((res) => {
-      //   console.log(res)
-      // })
       const noteText = {
         title: this.$refs.noteTitle.noteTitle,
         content: this.$refs.noteContent.noteContent,

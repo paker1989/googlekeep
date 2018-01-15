@@ -1,8 +1,14 @@
 const mongoose = require('mongoose')
 
 const NoteSchema = new mongoose.Schema({
-  title: String,
-  content: String,
+  title: {
+    type: String,
+    default: ''
+  },
+  content: {
+    type: String,
+    default: ''
+  },
   noteType: {
     type: String,
     enum: ['note', 'checkList'],

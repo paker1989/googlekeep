@@ -60,25 +60,20 @@ export default {
     },
     handleFile(event) {
       const files = event.target.files
-      if(!files) return
+      if (!files) return
 
       [...files].forEach( file => {
         const fileReader = new FileReader()
-        fileReader.onload = e => {
+        fileReader.onload = (e) => {
           this.$emit('newImageUpload', {
-              toUpload: true,
-              tmpUrl: e.target.result
+            tmpUrl: e.target.result,
+            file
           })
         }
         fileReader.readAsDataURL(file)
       })
     },
     togglePalette(event, isShow) {
-      // isShow = isShow === undefined ?
-      //   event.target.contains(document.querySelector('.notePaletteWraper')) : isShow
-      // if(isShow) {
-      //   this.$refs.notePaletteWraper.click()
-      // }
       const $target = $(event.target)
       _.extend(this.palettePosition,
         isShow ?

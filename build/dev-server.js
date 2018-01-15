@@ -77,11 +77,11 @@ webpackConfigPromise.then((webpackConfig) => {
   let uri = `http://localhost:${  port}`
 
   devMiddleware.waitUntilValid(() => {
-      console.log(`> Listening at ${  uri  }\n`)
-    })
+    console.log(`> Listening at ${  uri  }\n`)
+  })
   
-   app.use(bodyParser.json());
-   app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
   // app.use(bodyParser.raw({
   //   type: 'multipart/form-data'
   // }))
