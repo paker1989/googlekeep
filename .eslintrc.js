@@ -55,5 +55,6 @@ module.exports = {
     'linebreak-style': 'off',
     'comma-dangle': 'off',
     'func-names': 'off',
+    'no-console': 'off',
   }
 }
