@@ -1,25 +1,39 @@
+/* eslint no-shadow: off, no-underscore-dangle: off */
 const express = require('express')
 const upload = require('./multerConfig')
 const Note = require('../model/note')
-const path = require('path')
+const url = require('url')
+const _ = require('lodash')
 
 const router = express.Router()
 
 const saveNoteText = (req, res) => {
   const note = req.body.note
-  if(note._id) {
-    // to do 
-  }
-  else {
-    const newNote = new Note(note)
-    newNote.save(function(err, note) {
-      if(err) {
-        console.log(err)
-        res.send({
-          message: 'err occurs'
+  if (note._id) {
+    Note.findById({ _id: note._id }, (err, existingNote) => {
+      if (err) {
+        res.send({ err })
+      } else {
+        _.extend(existingNote, note)
+        existingNote.save((err) => {
+          if (err) {
+            res.send({
+              err: new Error('update note\'s photo reference failed')
+            })
+          } else {
+            res.send({ note: existingNote })
+          }
         })
       }
-      else {
+    })
+  } else {
+    const newNote = new Note(note)
+    newNote.save((err, note) => {
+      if (err) {
+        res.send({
+          err: new Error('update note\'s photo reference failed')
+        })
+      } else {
         res.send({ note })
       }
     })
@@ -27,33 +41,26 @@ const saveNoteText = (req, res) => {
 }
 
 const savePhoto = (req, res) => {
-  console.log(req.file)
-  console.log(req.body)
   let noteId = req.body.noteId
-  
-  if(!req.file) {
+
+  if (!req.file) {
     res.send({
       err: new Error('photo not saved!')
     })
     return
   }
 
-  const filepath = path.join('/static', req.file.filename)
-  console.log('filepath')
-  console.log(req.file.filename)
-  console.log(filepath)
-  console.log(path.join('/static', 'filename.jpg'))
+  const filepath = url.resolve('/static/', req.file.filename)
   if (noteId) {
-    Note.findById({ _id: noteId}, function(err, note) {
-      if(err) {
+    Note.findById({ _id: noteId }, (err, note) => {
+      if (err) {
         res.send({ err })
-        return
       } else {
         note.photos.push(filepath)
-        note.save(function(err, note) {
-          if(err) {
+        note.save((err) => {
+          if (err) {
             res.send({
-              err: new Error(`update note's photo reference failed`)
+              err: new Error('update note\'s photo reference failed')
             })
           } else {
             res.send({ filepath, noteId })
@@ -65,11 +72,11 @@ const savePhoto = (req, res) => {
     const newNote = new Note({
       photos: [filepath]
     })
-    newNote.save(function(err, note) {
-      if(err) {
+    newNote.save((err, note) => {
+      if (err) {
         res.send({
           err: new Error('new note saved failed')
-        }) 
+        })
       } else {
         noteId = note._id
         res.send({ filepath, noteId })
@@ -80,15 +87,13 @@ const savePhoto = (req, res) => {
 
 const fetchNotes = (req, res) => {
   const userId = req.body.userId
-  if(userId) {
+  if (userId) {
     // to do
-  }
-  else {
-    Note.fetch(function(err, notes) {
-      if(err) {
+  } else {
+    Note.fetch((err, notes) => {
+      if (err) {
         res.send({ err })
-      }
-      else {
+      } else {
         res.send({ notes })
       }
     })

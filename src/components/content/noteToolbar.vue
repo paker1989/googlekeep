@@ -62,7 +62,7 @@ export default {
       const files = event.target.files
       if (!files) return
 
-      [...files].forEach( file => {
+      [...files].forEach((file) => {
         const fileReader = new FileReader()
         fileReader.onload = (e) => {
           this.$emit('newImageUpload', {

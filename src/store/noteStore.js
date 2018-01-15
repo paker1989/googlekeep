@@ -13,6 +13,17 @@ const mutations = {
 }
 
 const actions = {
+  saveNoteText({ commit, state }, { note }) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('/note/saveNoteText', { note }).then((res) => {
+        if (res.body.err) {
+          reject(res.body.err)
+        } else {
+          resolve({ note: res.body.note })
+        }
+      })
+    })
+  },
   savePhoto({ commit, state }, { formData }) {
     return new Promise((resolve, reject) => {
       Vue.http.post('/note/savePhoto', formData).then((res) => {
@@ -28,12 +39,6 @@ const actions = {
     })
   }
 }
-
-        // if (res.status === 200) {
-        //   resolve( { res.body })
-        // } else {
-        //   reject( { res.body })
-        // }
 
 export default {
   namespaced: true,

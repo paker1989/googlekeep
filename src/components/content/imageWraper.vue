@@ -26,14 +26,10 @@ export default {
   methods: {
     uploadNewImage({ newImage }, noteId) {
       const vm = this
-      // if (userId === undefined) {
-      //   console.log('session expired')
-      //   return 
-      // }
       const image = new Image()
       image.src = newImage.tmpUrl
       image.onload = () => {
-        const tmpImage = {
+        let tmpImage = {
           url: image.src,
           uploading: true,
           naturalHeight: image.naturalHeight,
@@ -44,10 +40,15 @@ export default {
         // handle image storage
         const formData = new FormData()
         formData.append('newPhoto', newImage.file)
-        noteId!==0 && formData.append('noteId', noteId)
+        if (noteId) {
+          formData.append('noteId', noteId)
+        }
         vm.savePhoto({ formData }).then((res) => {
-          console.log('imageWraper: savePhoto')
-          console.log(res)
+          tmpImage = _.assign(tmpImage, {
+            url: res.filepath,
+            uploading: false
+          })
+          this.$emit('updateNoteId', res.noteId)
         }, (err) => {
           console.log(err)
         })
