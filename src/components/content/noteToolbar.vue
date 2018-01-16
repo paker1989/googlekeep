@@ -62,16 +62,7 @@ export default {
       const files = event.target.files
       if (!files) return
 
-      [...files].forEach((file) => {
-        const fileReader = new FileReader()
-        fileReader.onload = (e) => {
-          this.$emit('newImageUpload', {
-            tmpUrl: e.target.result,
-            file
-          })
-        }
-        fileReader.readAsDataURL(file)
-      })
+      this.$emit('newImageUpload', [...files])
     },
     togglePalette(event, isShow) {
       const $target = $(event.target)

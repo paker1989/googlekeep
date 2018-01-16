@@ -2,3 +2,30 @@
 - palette, color style when selected.
 - photo display: plugin way, call by js:
 - Mongo db design for a note.   
+
+
+
+2018/01/17
+- implement了existing note card的图片显示问题 --> (未处理只显示最多6张的feature)
+
+- 改写了图片存储逻辑: 直接打包files给imageWraper处理。之前的逻辑会导致同时导入多张照片时新建2个note。
+- 改成了当图片数量少的时候不居中的问题。
+
+2018/01/18
+
+
+
+
+
+
+
+
+
+
+problems:
+- 图片未加载的时候，waterfall时取得的height不对。 --> 解决: $(window).on('load', function() { 
+  还是需要改成flex的格式
+
+to do (must):
+- override existing photo if cut;
+

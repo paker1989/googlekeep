@@ -33,6 +33,7 @@ export default {
 
 .noteTitleEditable {
   .textStyle();
+  .basicLayout();
   & .noteTitlePlaceHolder {
     position: absolute;
     color: rgba(0,0,0,.54);

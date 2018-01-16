@@ -2,6 +2,7 @@
 const express = require('express')
 const upload = require('./multerConfig')
 const Note = require('../model/note')
+const Photo = require('../model/photo')
 const url = require('url')
 const _ = require('lodash')
 
@@ -51,38 +52,51 @@ const savePhoto = (req, res) => {
   }
 
   const filepath = url.resolve('/static/', req.file.filename)
-  if (noteId) {
-    Note.findById({ _id: noteId }, (err, note) => {
-      if (err) {
-        res.send({ err })
-      } else {
-        note.photos.push(filepath)
-        note.save((err) => {
-          if (err) {
-            res.send({
-              err: new Error('update note\'s photo reference failed')
-            })
-          } else {
-            res.send({ filepath, noteId })
-          }
-        })
-      }
-    })
-  } else {
-    const newNote = new Note({
-      photos: [filepath]
-    })
-    newNote.save((err, note) => {
-      if (err) {
-        res.send({
-          err: new Error('new note saved failed')
-        })
-      } else {
-        noteId = note._id
-        res.send({ filepath, noteId })
-      }
-    })
-  }
+  const newPhoto = new Photo({
+    url: filepath,
+    naturalHeight: req.body.naturalHeight,
+    naturalWidth: req.body.naturalWidth,
+  })
+
+  newPhoto.save((err, savedPhoto) => {
+    if (err) {
+      res.send({ err })
+      return
+    }
+
+    if (noteId) {
+      Note.findById({ _id: noteId }, (err, note) => {
+        if (err) {
+          res.send({ err })
+        } else {
+          note.photos.push(savedPhoto._id)
+          note.save((err) => {
+            if (err) {
+              res.send({
+                err: new Error('update note\'s photo reference failed')
+              })
+            } else {
+              res.send({ filepath, noteId })
+            }
+          })
+        }
+      })
+    } else {
+      const newNote = new Note({
+        photos: [savedPhoto._id]
+      })
+      newNote.save((err, note) => {
+        if (err) {
+          res.send({
+            err: new Error('new note saved failed')
+          })
+        } else {
+          noteId = note._id
+          res.send({ filepath, noteId })
+        }
+      })
+    }
+  })
 }
 
 const fetchNotes = (req, res) => {

@@ -30,6 +30,7 @@ export default {
 
 .noteMainEdition {
   .textStyle();
+  .basicLayout();
   & .noteContentPlaceHolder {
     position: absolute;
     color: rgba(0,0,0,.54);

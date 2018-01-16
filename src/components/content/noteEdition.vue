@@ -1,22 +1,21 @@
 <template lang="jade">
   .noteEdition(@focus.capture="editMode=true", :style="bgColor")
-    image-wraper(:images="uploadedImages", ref="imageWraper",
-                 @updateNoteId="updateNoteId" )
-    note-title(ref="noteTitle", v-show="editMode", :editMode="editMode")
-    note-content(ref="noteContent")          
-    note-toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
+    .noteEditableContainer
+      image-wraper(:images="uploadedImages", ref="imageWraper")
+      note-title(ref="noteTitle", v-show="editMode", :editMode="editMode")
+      note-content(ref="noteContent")          
+    note-toolbar.toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
                  @saveNote="saveNote",
                  @newImageUpload="uploadImage")
 </template>
 <script>
-// import { createNamespacedHelpers } from 'vuex'
 import { mapGetters, mapActions } from 'vuex'
 import ImageWraper from './imageWraper'
 import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 
-import testImages from '../../assets/testImages'
+// import testImages from '../../assets/testImages'
 import { arrangeImages } from '../../plugins/utils'
 
 // const { mapGetters } = createNamespacedHelpers('userStore')
@@ -30,7 +29,7 @@ export default {
       editMode: false,
       noteTitle: '',
       NoteContent: '',
-      uploadedImages: arrangeImages(testImages)
+      uploadedImages: []
     }
   },
   components: {
@@ -40,14 +39,29 @@ export default {
     stopEditing() {
       this.editMode = false
     },
-    uploadImage(newImage) {
-      this.uploadedImages.unshift(newImage.tmpUrl)
-      this.$refs.imageWraper.uploadNewImage({ newImage }, this.noteId) // file, userId, noteId
-    },
-    updateNoteId(noteId) {
-      this.noteId = noteId
+    uploadImage(files) {
+      const vm = this
+      if (!this.noteId) {
+        const note = this.collectNoteText()
+        this.saveNoteText({ note }).then((res) => {
+          if (res.err) {
+            console.log(res.err)
+          } else {
+            vm.noteId = res.note._id
+            this.$refs.imageWraper.uploadNewImage({ newImages: files }, vm.noteId)
+          }
+        })
+      } else {
+        this.$refs.imageWraper.uploadNewImage({ newImages: files }, vm.noteId)
+      }
     },
     saveNote() {
+      const note = this.collectNoteText()
+      this.saveNoteText({ note }).then((res) => {
+        console.log(res)
+      })
+    },
+    collectNoteText() {
       const note = {
         title: this.$refs.noteTitle.noteTitle,
         content: this.$refs.noteContent.noteContent,
@@ -56,9 +70,7 @@ export default {
       if (this.noteId) {
         note._id = this.noteId
       }
-      this.saveNoteText({ note }).then((res) => {
-        console.log(res)
-      })
+      return note
     },
     ...mapActions('noteStore', [
       'saveNoteText'
@@ -82,8 +94,6 @@ export default {
   margin: 32px auto 16px auto; 
   background: white;
   box-shadow: 0 3px 5px rgba(0,0,0,0.20);
-  overflow-y: auto;
-  max-height: 800px;
 
   @media only screen and (max-width : 600px) {
      width: 93vw;
@@ -91,17 +101,16 @@ export default {
   @media only screen and (min-width : 600px) {
     width: 600px;
   }
-  & >* {
-    .basicLayout;
+  & .noteEditableContainer {
+    position: relative;
+    max-height: 600px;
+    overflow-y: auto;
     clear: both;
+  }
+
+  & .toolbar {
+    .basicLayout();
   }
 }
 </style>
-<!--
-  {
-    noteTile: this.$refs.noteTitle.noteTitle,
-    noteContent: this.$refs.noteContent.noteContent
-  },
-  { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
--->
 

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+const Schema = mongoose.Schema
+
 const NoteSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -14,7 +16,7 @@ const NoteSchema = new mongoose.Schema({
     enum: ['note', 'checkList'],
     default: 'note'
   },
-  photos: [String],
+  photos: [{ type: Schema.Types.ObjectId, ref: 'Photo', default: [] }],
   colorIndex: {
     type: Number,
     default: 0
@@ -44,20 +46,20 @@ const NoteSchema = new mongoose.Schema({
   }
 })
 
-NoteSchema.pre('save', function(next) {
-  if(this.isNew) {
+NoteSchema.pre('save', function (next) {
+  if (this.isNew) {
     this.meta.createdAt = this.meta.updateAt = Date.now()
-  }
-  else {
+  } else {
     this.meta.updateAt = Date.now()
   }
   next()
 })
 
 NoteSchema.statics = {
-  fetch: function(cb) {
+  fetch(cb) {
     return this
       .find({})
+      .populate('photos')
       .sort('meta.updateAt')
       .exec(cb)
   }

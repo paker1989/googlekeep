@@ -24,35 +24,43 @@ export default {
     this.attachedImages = _.assignIn(this.attachedImages, this.images)
   },
   methods: {
-    uploadNewImage({ newImage }, noteId) {
+    uploadNewImage({ newImages }, noteId) {
       const vm = this
-      const image = new Image()
-      image.src = newImage.tmpUrl
-      image.onload = () => {
-        let tmpImage = {
-          url: image.src,
-          uploading: true,
-          naturalHeight: image.naturalHeight,
-          naturalWidth: image.naturalWidth
+      newImages.forEach((newImage) => {
+        const fileReader = new FileReader()
+        fileReader.onload = (e) => {
+          const tmpUrl = e.target.result
+          const image = new Image()
+          image.src = tmpUrl
+          image.onload = () => {
+            let tmpImage = {
+              url: image.src,
+              uploading: true,
+              naturalHeight: image.naturalHeight,
+              naturalWidth: image.naturalWidth
+            }
+            vm.attachedImages.push(tmpImage)        
+            vm.attachedImages = _.assignIn([], arrangeImages(vm.attachedImages))
+            // handle image storage
+            const formData = new FormData()
+            formData.append('newPhoto', newImage)
+            formData.append('naturalWidth', tmpImage.naturalWidth)
+            formData.append('naturalHeight', tmpImage.naturalHeight)
+            if (noteId) {
+              formData.append('noteId', noteId)
+            }
+            vm.savePhoto({ formData }).then((res) => {
+              tmpImage = _.assign(tmpImage, {
+                url: res.filepath,
+                uploading: false
+              })
+            }, (err) => {
+              console.log(err)
+            })                           
+          }
         }
-        vm.attachedImages.push(tmpImage)
-        vm.attachedImages = _.assignIn([], arrangeImages(vm.attachedImages))
-        // handle image storage
-        const formData = new FormData()
-        formData.append('newPhoto', newImage.file)
-        if (noteId) {
-          formData.append('noteId', noteId)
-        }
-        vm.savePhoto({ formData }).then((res) => {
-          tmpImage = _.assign(tmpImage, {
-            url: res.filepath,
-            uploading: false
-          })
-          this.$emit('updateNoteId', res.noteId)
-        }, (err) => {
-          console.log(err)
-        })
-      }
+        fileReader.readAsDataURL(newImage)
+      })
     },
     ...mapActions([
       'savePhoto'

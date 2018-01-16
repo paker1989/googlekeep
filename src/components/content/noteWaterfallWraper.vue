@@ -16,9 +16,6 @@ export default {
       align: 'center'
     }
   },
-  mounted() {
-
-  },
   components: {
     NoteItem,
   }
@@ -31,7 +28,7 @@ export default {
   position: relative;
   margin: 0 auto;
   max-width: 70vw;
-  height: 900px; // to remove
+  // height: 900px; // to remove
 }
 </style>
 

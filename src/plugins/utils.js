@@ -1,13 +1,3 @@
-export function getHeight(array, row, col) {
-  let totalHeight = 0
-  array[col].forEach((item, index) => {
-    if (index < row) {
-      totalHeight += array[col][index]
-    }
-  })
-  return totalHeight
-}
-
 export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
   maxHeight = 280, maxFontSize = 40) {
   let currCHeight
@@ -28,13 +18,23 @@ export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent
   })
 }
 
+export function getHeight(array, row, col) {
+  let totalHeight = 0
+  array[col].forEach((item, index) => {
+    if (index < row) {
+      totalHeight += array[col][index]
+    }
+  })
+  return totalHeight
+}
+
 export function waterFall(wraper = '.noteWaterfallWraper', element = '.noteItem',
   elementWidth = 220, vertMargin = 32, horMargin = 20) {
+  const $itemArrays = $(element).toArray()
   const eWidth = elementWidth + (horMargin * 2)
   const wraperWidth = $(wraper).width()
-  const nbPerRow = Math.floor(wraperWidth / eWidth)
+  const nbPerRow = Math.min(Math.floor(wraperWidth / eWidth), $itemArrays.length)
   const originLeft = (wraperWidth - (eWidth * nbPerRow)) / 2 // 起始左侧位置
-  const $itemArrays = $(element).toArray()
   const array = new Array(nbPerRow)
 
   $itemArrays.forEach((item, index) => {
@@ -60,15 +60,12 @@ export function arrangeImages(images, nbColumns = 3) {
   const array = []
 
   images.forEach((item, index) => {
-    console.log(item.naturalWidth + ': ' + item.naturalHeight)
     columnIndex = Math.floor(index / nbColumns) // 在第几列
     sizeRatio = item.naturalWidth / item.naturalHeight // 宽高比
-    console.log(sizeRatio)
     array[columnIndex] = array[columnIndex] || []
     array[columnIndex].push({ index, sizeRatio })
   })
 
-  console.log(array)
   array.forEach((item, colIndex) => {
     const ratioSums = array[colIndex].reduce((a, b) => a.sizeRatio || a + b.sizeRatio || b, 0)
     array[colIndex].forEach((e) => {
