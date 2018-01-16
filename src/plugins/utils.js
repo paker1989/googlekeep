@@ -60,12 +60,15 @@ export function arrangeImages(images, nbColumns = 3) {
   const array = []
 
   images.forEach((item, index) => {
+    console.log(item.naturalWidth + ': ' + item.naturalHeight)
     columnIndex = Math.floor(index / nbColumns) // 在第几列
     sizeRatio = item.naturalWidth / item.naturalHeight // 宽高比
+    console.log(sizeRatio)
     array[columnIndex] = array[columnIndex] || []
     array[columnIndex].push({ index, sizeRatio })
   })
 
+  console.log(array)
   array.forEach((item, colIndex) => {
     const ratioSums = array[colIndex].reduce((a, b) => a.sizeRatio || a + b.sizeRatio || b, 0)
     array[colIndex].forEach((e) => {
