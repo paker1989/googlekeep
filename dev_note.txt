@@ -12,7 +12,10 @@
 - 改成了当图片数量少的时候不居中的问题。
 
 2018/01/18
+- implement noteItem最多显示6个图片
 
+
+- 解决了上传图片显示不完整的问题: 在编辑模式下不更改data成server returned url。
 
 
 

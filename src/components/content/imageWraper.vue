@@ -21,7 +21,8 @@ export default {
     }
   },
   created() {
-    this.attachedImages = _.assignIn(this.attachedImages, this.images)
+    this.attachedImages = _.assignIn(this.attachedImages, arrangeImages(this.images))
+
   },
   methods: {
     uploadNewImage({ newImages }, noteId) {
@@ -51,12 +52,12 @@ export default {
             }
             vm.savePhoto({ formData }).then((res) => {
               tmpImage = _.assign(tmpImage, {
-                url: res.filepath,
+                // url: res.filepath,
                 uploading: false
               })
             }, (err) => {
               console.log(err)
-            })                           
+            })        
           }
         }
         fileReader.readAsDataURL(newImage)

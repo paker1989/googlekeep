@@ -1,7 +1,7 @@
 <template lang="jade">
   .noteItem(:style="bgColor")
     .noteItemWraper
-      image-wraper.photoWraper(:images="uploadedImages", ref="imageWraper")
+      image-wraper.photoWraper(:images="uploadedImages | noteItemImageFilter('6')", ref="imageWraper")
       .noteTitle
         {{ item.title}}
       .noteContent
@@ -12,7 +12,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { waterFall, setFontSize } from '../../plugins/utils'
-import { arrangeImages } from '../../plugins/utils'
+import { noteItemImageFilter } from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
 
@@ -22,16 +22,21 @@ export default {
   data() {
     return {
       colorIndex: this.item.colorIndex || 0,
-      uploadedImages: arrangeImages(this.item.photos)
+      uploadedImages: this.item.photos,
     }
   },
   components: {
     NoteToolbar, ImageWraper
   },
+  filters: {
+    noteItemImageFilter,
+  },
   mounted() {
     if (this.last) {
+      setFontSize()
+      waterFall()
+      
       $(window).on('load', function() { 
-        setFontSize()
         waterFall()
         window.addEventListener('resize', _.debounce(() => { waterFall() }, 100))     
       })
