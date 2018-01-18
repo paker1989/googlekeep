@@ -89,17 +89,3 @@ export default {
   }
 }
 </style>
-
-<!--
-    formatterContent(target) {
-      const restore = saveCaretPosition(target)
-      const vm = this
-      console.log(target.innerHTML)
-      const formattedHtml = target.innerHTML.replace(/<div>((<br>)+?)<\/div>/g, '$1')
-        .replace(/<div>(.*?)<\/div>/g, '<br>$1')
-      target.innerHTML = formattedHtml
-      vm.noteContent = formattedHtml
-      console.log(formattedHtml)
-      restore()
-    },
--->

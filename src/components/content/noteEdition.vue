@@ -15,10 +15,6 @@ import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 
-// import testImages from '../../assets/testImages'
-// import { arrangeImages } from '../../plugins/utils'
-
-// const { mapGetters } = createNamespacedHelpers('userStore')
 /* eslint no-console: off */
 export default {
   name: 'noteEdition',
