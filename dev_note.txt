@@ -14,6 +14,7 @@
 2018/01/18
 - implement noteItem最多显示6个图片
 - 解决了上传图片显示不完整的问题: 在编辑模式下不更改data成server returned url。
+- 开始处理文本问题
 ERR: 
 - 获取光标问题
 - 复制粘贴时如何移除style

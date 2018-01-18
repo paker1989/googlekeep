@@ -22,26 +22,14 @@ export default {
       const target = e.target
       e.preventDefault()
       const text = (e.originalEvent || e).clipboardData.getData('text/plain')
-      console.log(text)
-      console.log(text.indexOf('div'))
       document.execCommand('insertText', false, text)
       this.$nextTick(function() {
-        // console.log('next tick')
-        console.log(target.innerHTML)
-        console.log($(target).html())
-        console.log(target.innerHTML.indexOf('div'))
         this.formatterContent(target.innerHTML, target)
       })
     },
     updateContent(event) {
-     // this.noteContent = event.target.innerText
       const vm = this
-      // let selection = window.getSelection()
-      // this.lastEditRange = selection.getRangeAt(0)
-      // console.log('Origin lastEditRange :')
-      // console.log(this.lastEditRange)
-      // console.log($(event.target).html())
-      const formattedHtml = $(event.target).html().replace(/\\n/g, '<br>')
+      const formattedHtml = $(event.target).html().replace(/<div>([\w|\W]*?)<\/div>/g, '<br>$1')
       clearTimeout(this.timer)
       this.timer = setTimeout(function() {
         $(event.target).html(formattedHtml)
