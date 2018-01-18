@@ -5,21 +5,36 @@
 
 
 
-2018/01/17
+2018/01/16
 - implement了existing note card的图片显示问题 --> (未处理只显示最多6张的feature)
 
 - 改写了图片存储逻辑: 直接打包files给imageWraper处理。之前的逻辑会导致同时导入多张照片时新建2个note。
 - 改成了当图片数量少的时候不居中的问题。
 
-2018/01/18
+2018/01/17
 - implement noteItem最多显示6个图片
 - 解决了上传图片显示不完整的问题: 在编辑模式下不更改data成server returned url。
 - 开始处理文本问题
 ERR: 
-- 获取光标问题
-- 复制粘贴时如何移除style
-- regex有问题
+- 获取光标问题 --> 解决
+- 复制粘贴时如何移除style --> 解决
+- regex有问题 --> 解决
 
+2018/10/18
+- 解决17号3个问题
+- 解决contentEditable文本处理问题
+- 解决点击 完成 时图片不显示问题 --> saveNote时fetchNoteById (populate photo)
+- 解决了noteItem文字截断问题
+- 对title进行了文字截断处理以及样式
+
+ERR:
+- 排序后瀑布流混乱 --> 需要用flex。
+
+2018/10/19
+TO DO:
+> edition: 对title进行回车将focus edition
+> revise waterfall.
+> 撤销和重做。
 
 
 

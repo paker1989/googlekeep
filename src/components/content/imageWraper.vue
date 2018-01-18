@@ -51,7 +51,6 @@ export default {
             }
             vm.savePhoto({ formData }).then(() => {
               tmpImage = _.assign(tmpImage, {
-                // url: res.filepath,
                 uploading: false
               })
             }, (err) => {
@@ -61,6 +60,9 @@ export default {
         }
         fileReader.readAsDataURL(newImage)
       })
+    },
+    reset() {
+      this.attachedImages = []
     },
     ...mapActions([
       'savePhoto'

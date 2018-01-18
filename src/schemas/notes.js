@@ -62,6 +62,12 @@ NoteSchema.statics = {
       .populate('photos')
       .sort('meta.updateAt')
       .exec(cb)
+  },
+  fetchById({ noteId }, cb) {
+    return this
+      .findById({ _id: noteId })
+      .populate('photos')
+      .exec(cb)
   }
 }
 

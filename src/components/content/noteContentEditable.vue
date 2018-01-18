@@ -28,16 +28,16 @@ export default {
     updateContent(event) {
       const vm = this
       vm.noteContent = event.target.innerHTML
+      if (!vm.target) {
+        vm.target = event.target
+      }
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-        if (!vm.target) {
-          vm.target = event.target
-        }
-        vm.noteContent = vm.formatterContent(event.target)
+        vm.noteContent = vm.formatterContent(event.target.innerHTML)
       }, vm.timeoutDuration)
     },
     // return formatted value
-    formatterContent(target) {
+    formatterContent(originHtml) {
       const regex = []
       regex.push(
         {
@@ -49,12 +49,18 @@ export default {
           replacement: '<br>$1'
         }
       )
-      return replaceRec(target.innerHTML, regex)
+      return replaceRec(originHtml, regex)
     },
     reset() {
       if (this.target) {
         this.noteContent = this.target.innerHTML = ''
       }
+    },
+    getFinalText() {
+      if (this.target) {
+        return this.formatterContent(this.target.innerHTML)
+      }
+      return ''
     }
   },
   computed: {

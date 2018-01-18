@@ -27,8 +27,6 @@ export default {
       noteId: null,
       colorIndex: 0,
       editMode: false,
-      // noteTitle: '',
-      // NoteContent: '',
       uploadedImages: []
     }
   },
@@ -67,7 +65,7 @@ export default {
     collectNoteText() {
       const note = {
         title: this.$refs.noteTitle.noteTitle,
-        content: this.$refs.noteContent.noteContent,
+        content: this.$refs.noteContent.getFinalText(),
         colorIndex: this.colorIndex
       }
       if (this.noteId) {
@@ -76,11 +74,13 @@ export default {
       return note
     },
     reset() {
-      this.$refs.noteTitle.reset()
-      this.$refs.noteContent.reset()
+      this.noteId = null
       this.colorIndex = 0
       this.editMode = false
       this.uploadedImages = []
+      this.$refs.noteTitle.reset()
+      this.$refs.noteContent.reset()
+      this.$refs.imageWraper.reset()
     },
     ...mapActions('noteStore', [
       'saveNoteText'

@@ -8,6 +8,11 @@ const _ = require('lodash')
 
 const router = express.Router()
 
+/**
+ * @param {*} req
+ * @param {*} res
+ * @returns {note | err}
+ */
 const saveNoteText = (req, res) => {
   const note = req.body.note
   if (note._id) {
@@ -41,16 +46,21 @@ const saveNoteText = (req, res) => {
   }
 }
 
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @requires noteId
+ * @returns {savedPhoto | err}
+ */
 const savePhoto = (req, res) => {
-  let noteId = req.body.noteId
-
+  const noteId = req.body.noteId
   if (!req.file) {
     res.send({
       err: new Error('photo not saved!')
     })
     return
   }
-
   const filepath = url.resolve('/static/', req.file.filename)
   const newPhoto = new Photo({
     url: filepath,
@@ -63,7 +73,6 @@ const savePhoto = (req, res) => {
       res.send({ err })
       return
     }
-
     if (noteId) {
       Note.findById({ _id: noteId }, (err, note) => {
         if (err) {
@@ -76,29 +85,20 @@ const savePhoto = (req, res) => {
                 err: new Error('update note\'s photo reference failed')
               })
             } else {
-              res.send({ filepath, noteId })
+              res.send({ savedPhoto })
             }
           })
-        }
-      })
-    } else {
-      const newNote = new Note({
-        photos: [savedPhoto._id]
-      })
-      newNote.save((err, note) => {
-        if (err) {
-          res.send({
-            err: new Error('new note saved failed')
-          })
-        } else {
-          noteId = note._id
-          res.send({ filepath, noteId })
         }
       })
     }
   })
 }
 
+/**
+ * @param {*} req
+ * @param {*} res
+ * @returns {notes | err}
+ */
 const fetchNotes = (req, res) => {
   const userId = req.body.userId
   if (userId) {
@@ -114,8 +114,24 @@ const fetchNotes = (req, res) => {
   }
 }
 
+/**
+ * @param {*} req
+ * @param {*} res
+ * @returns {note | err}
+ */
+const fetchNoteById = (req, res) => {
+  Note.fetchById({ noteId: req.body.noteId }, (err, note) => {
+    if (err) {
+      res.send({ err })
+    } else {
+      res.send({ note })
+    }
+  })
+}
+
 router.post('/saveNoteText', saveNoteText)
 router.post('/fetchNotes', fetchNotes)
+router.post('/fetchNoteById', fetchNoteById)
 router.post('/savePhoto', upload.single('newPhoto'), savePhoto)
 
 module.exports = router

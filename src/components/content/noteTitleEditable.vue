@@ -54,6 +54,8 @@ export default {
   & .noteTitleEdit {
     .textStyle .noteTextEdit();
     font-weight: bold; 
+    -webkit-user-modify: read-write-plaintext-only;
+    -moz-user-modify: read-write-plaintext-only;
   }
 }
 </style>

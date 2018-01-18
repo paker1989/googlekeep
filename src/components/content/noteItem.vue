@@ -33,6 +33,7 @@ export default {
   },
   mounted() {
     if (this.last) {
+      setFontSize('.noteItem .noteItemWraper .noteTitle', 40)
       setFontSize()
       waterFall()
       $(window).on('load', () => {
@@ -89,6 +90,7 @@ export default {
     & .noteTitle {
       .textStyle .noteTextEdit(14px);
       font-weight: bold; 
+      max-height: 40px;  
     }
     & .noteContent {
       position: relative;

@@ -1,4 +1,4 @@
-export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
+export function setFontSizeBu(elementDiv = '.noteItem .noteItemWraper .noteContent',
   maxHeight = 280, maxFontSize = 40) {
   let currCHeight
   let currFontSize
@@ -17,6 +17,46 @@ export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent
     }
   })
 }
+
+export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
+  maxHeight = 280, maxFontSize = 40) {
+  let currCHeight
+  let currScrolHeight
+  let currFontSize
+  let htmlContent
+  const $elements = $(elementDiv).toArray()
+
+  $elements.forEach((element) => {
+    currCHeight = $(element).innerHeight()
+    currScrolHeight = element.scrollHeight
+    if (currScrolHeight > maxHeight) {
+      for (let j = 1; j < 200; j += 1) {
+        currScrolHeight = element.scrollHeight
+        if (currScrolHeight > maxHeight) {
+          $(element).html($(element).html().substring(0, $(element).html().length - 1))
+        } else {
+          break
+        }
+      }
+      htmlContent = $(element).html()
+      htmlContent = `${htmlContent.substring(0, htmlContent.length - 3)}...`
+      htmlContent = htmlContent.replace(/((<b)|<|(<br))...$/g, '...')
+      $(element).html(htmlContent)
+    } else {
+      for (let i = 1; i < 25; i += 1) {
+        currCHeight = $(element).innerHeight()
+        currFontSize = parseInt($(element).css('font-size'), 10)
+        if (currCHeight < maxHeight && currFontSize < maxFontSize) {
+          $(element).css('font-size', '+=1')
+        } else {
+          $(element).css('font-size', '-=1')
+          break
+        }
+      }
+    }
+  })
+}
+
 export function getHeight(array, row, col) {
   let totalHeight = 0
   array[col].forEach((item, index) => {
@@ -73,41 +113,3 @@ export function arrangeImages(images, nbColumns = 3) {
   })
   return images
 }
-
-
-// console.log(`index: ${index}row : ${row}, col: ${col}, top: ${top}, left: ${left}`)
-
-
-/* eslint brace-style: off */
-// export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
-//   maxHeight = 293, maxFontSize = 40) {
-//   let currCHeight
-//   let currFontSize
-//   let content
-//   let scrollHeight
-//   const $elements = $(elementDiv).toArray()
-
-//   $elements.forEach((element) => {
-//     scrollHeight = $(element).prop('scrollHeight')
-//     console.log(scrollHeight)
-//     if (scrollHeight > maxHeight) {
-//       console.log($(element).text())
-//       content = $(element).text()
-//       $(element).text(content.slice(0, Math.floor(content.length * (maxHeight / scrollHeight))))
-//       console.log($(element).text())
-//     }
-//     else {
-//       for (let i = 1; i < 50; i += 1) {
-//         currCHeight = $(element).innerHeight()
-//         currFontSize = parseInt($(element).css('font-size'), 10)
-
-//         if (currCHeight < maxHeight && currFontSize < maxFontSize) {
-//           $(element).css('font-size', '+=1')
-//         } else {
-//           break
-//         }
-//       }
-//     }
-//   })
-// }
-
