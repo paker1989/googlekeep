@@ -4,8 +4,8 @@
       image-wraper.photoWraper(:images="uploadedImages | noteItemImageFilter('6')", ref="imageWraper")
       .noteTitle
         {{ item.title}}
-      .noteContent
-        {{ item.content }}
+      .noteContent(v-html="item.content")
+        // {{ item.content }}
     note-toolbar.toolbar(:isEdit="false", :colorIndex.sync="colorIndex")
 
 </template>
@@ -97,6 +97,7 @@ export default {
       font-size: 15px;
       font-weight: 300;
       max-height: 280px;
+      word-wrap: break-word;
     }
   }
 }

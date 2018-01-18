@@ -19,6 +19,9 @@ export default {
   methods: {
     tapeTitle(event) {
       this.noteTitle = event.target.innerText
+    },
+    reset() {
+      /* TO DO */
     }
   },
   computed: {

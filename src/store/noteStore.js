@@ -1,24 +1,56 @@
 import Vue from 'vue'
-// import Types from './mutationType'
+// import { Types } from 'mongoose';
+import Types from './mutationType'
 
-/* eslint no-shadow: off */
+/* eslint no-shadow: off, no-unused-vars: off */
 const state = {
   cachedNotes: {}
 }
 
 const getters = {
+  getUserNotes: state => userId => Object.keys(state.cachedNotes)
+    .map(noteId => state.cachedNotes[noteId])
 }
 
 const mutations = {
+  [Types.CACHE_NOTES](state, { notes }) {
+    [...notes].forEach((note) => {
+      Vue.set(state.cachedNotes, note._id, note)
+    })
+  },
+  [Types.UPDATE_NOTE](state, { note }) {
+    Vue.set(state.cachedNotes, note._id, note)
+  }
 }
 
 const actions = {
-  saveNoteText({ commit, state }, { note }) {
+  fetchNotes({ commit }) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('/note/fetchNotes').then((res) => {
+        if (res.body.err) {
+          reject({ err: res.body.err })
+        } else {
+          commit({
+            type: Types.CACHE_NOTES,
+            notes: res.body.notes
+          })
+          resolve({ notes: res.body.notes })
+        }
+      })
+    })
+  },
+  saveNoteText({ commit, state }, { note, isUpdateCache }) {
     return new Promise((resolve, reject) => {
       Vue.http.post('/note/saveNoteText', { note }).then((res) => {
         if (res.body.err) {
-          reject(res.body.err)
+          reject({ err: res.body.err })
         } else {
+          if (isUpdateCache) {
+            commit({
+              type: Types.UPDATE_NOTE,
+              note: res.body.note
+            })
+          }
           resolve({ note: res.body.note })
         }
       })

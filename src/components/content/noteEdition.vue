@@ -27,8 +27,8 @@ export default {
       noteId: null,
       colorIndex: 0,
       editMode: false,
-      noteTitle: '',
-      NoteContent: '',
+      // noteTitle: '',
+      // NoteContent: '',
       uploadedImages: []
     }
   },
@@ -56,9 +56,10 @@ export default {
       }
     },
     saveNote() {
+      const isUpdateCache = true
       const note = this.collectNoteText()
-      this.saveNoteText({ note }).then((res) => {
-        console.log(res)
+      this.saveNoteText({ note, isUpdateCache }).then((res) => {
+        this.reset()
       })
     },
     collectNoteText() {
@@ -71,6 +72,13 @@ export default {
         note._id = this.noteId
       }
       return note
+    },
+    reset() {
+      this.$refs.noteTitle.reset()
+      this.$refs.noteContent.reset()
+      this.colorIndex = 0
+      this.editMode = false
+      this.uploadedImages = []
     },
     ...mapActions('noteStore', [
       'saveNoteText'
