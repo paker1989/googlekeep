@@ -16,7 +16,7 @@ import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 
 // import testImages from '../../assets/testImages'
-import { arrangeImages } from '../../plugins/utils'
+// import { arrangeImages } from '../../plugins/utils'
 
 // const { mapGetters } = createNamespacedHelpers('userStore')
 /* eslint no-console: off */
@@ -59,7 +59,9 @@ export default {
       const isUpdateCache = true
       const note = this.collectNoteText()
       this.saveNoteText({ note, isUpdateCache }).then((res) => {
-        this.reset()
+        if (res.note) {
+          this.reset()
+        }
       })
     },
     collectNoteText() {

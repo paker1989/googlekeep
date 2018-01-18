@@ -12,7 +12,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { waterFall, setFontSize } from '../../plugins/utils'
-import { noteItemImageFilter } from '../../filters'
+import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
 
@@ -35,10 +35,9 @@ export default {
     if (this.last) {
       setFontSize()
       waterFall()
-      
-      $(window).on('load', function() { 
+      $(window).on('load', () => {
         waterFall()
-        window.addEventListener('resize', _.debounce(() => { waterFall() }, 100))     
+        window.addEventListener('resize', _.debounce(() => { waterFall() }, 100))
       })
     }
   },

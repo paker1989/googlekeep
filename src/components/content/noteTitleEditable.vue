@@ -6,6 +6,7 @@
                    @input="tapeTitle")
 </template>
 <script>
+/* eslint no-multi-assign: off */
 export default {
   name: 'noteTitleEdit',
   props: [
@@ -13,15 +14,21 @@ export default {
   ],
   data() {
     return {
-      noteTitle: ''
+      noteTitle: '',
+      target: ''
     }
   },
   methods: {
     tapeTitle(event) {
       this.noteTitle = event.target.innerText
+      if (!this.target) {
+        this.target = event.target
+      }
     },
     reset() {
-      /* TO DO */
+      if (this.target) {
+        this.noteTitle = this.target.innerHTML = ''
+      }
     }
   },
   computed: {

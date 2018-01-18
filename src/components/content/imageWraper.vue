@@ -22,7 +22,6 @@ export default {
   },
   created() {
     this.attachedImages = _.assignIn(this.attachedImages, arrangeImages(this.images))
-
   },
   methods: {
     uploadNewImage({ newImages }, noteId) {
@@ -40,7 +39,7 @@ export default {
               naturalHeight: image.naturalHeight,
               naturalWidth: image.naturalWidth
             }
-            vm.attachedImages.push(tmpImage)        
+            vm.attachedImages.push(tmpImage)
             vm.attachedImages = _.assignIn([], arrangeImages(vm.attachedImages))
             // handle image storage
             const formData = new FormData()
@@ -50,14 +49,14 @@ export default {
             if (noteId) {
               formData.append('noteId', noteId)
             }
-            vm.savePhoto({ formData }).then((res) => {
+            vm.savePhoto({ formData }).then(() => {
               tmpImage = _.assign(tmpImage, {
                 // url: res.filepath,
                 uploading: false
               })
             }, (err) => {
               console.log(err)
-            })        
+            })
           }
         }
         fileReader.readAsDataURL(newImage)

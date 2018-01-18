@@ -56,6 +56,8 @@ module.exports = {
     'comma-dangle': 'off',
     'func-names': 'off',
     'no-console': 'off',
-    'no-underscore-dangle': 'off'
+    'no-underscore-dangle': 'off',
+    'no-param-reassign': 'off',
+    'no-multi-assign': 'off'
   }
 }

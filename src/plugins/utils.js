@@ -17,7 +17,6 @@ export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent
     }
   })
 }
-
 export function getHeight(array, row, col) {
   let totalHeight = 0
   array[col].forEach((item, index) => {
