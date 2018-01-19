@@ -32,14 +32,16 @@ ERR:
 
 2018/10/19
 TO DO:
-> edition: 对title进行回车将focus edition --> done.
-> revise waterfall.
 > 撤销和重做。
 > 手机格式layout
 > noteItem edition basic layout
 > 图片展示
 
+> edition: 对title进行回车将focus edition --> done.
+> revise waterfall. --> done
 
+
+////////////////////////////////////////////
 problems:
 - 图片未加载的时候，waterfall时取得的height不对。 --> 解决: $(window).on('load', function() { 
   还是需要改成flex的格式
