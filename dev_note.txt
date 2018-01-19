@@ -35,6 +35,9 @@ TO DO:
 > edition: 对title进行回车将focus edition
 > revise waterfall.
 > 撤销和重做。
+> 手机格式layout
+> note edition basic layout
+> 图片展示
 
 
 

@@ -1,23 +1,3 @@
-export function setFontSizeBu(elementDiv = '.noteItem .noteItemWraper .noteContent',
-  maxHeight = 280, maxFontSize = 40) {
-  let currCHeight
-  let currFontSize
-  const $elements = $(elementDiv).toArray()
-
-  $elements.forEach((element) => {
-    for (let i = 1; i < 25; i += 1) {
-      currCHeight = $(element).innerHeight()
-      currFontSize = parseInt($(element).css('font-size'), 10)
-
-      if (currCHeight < maxHeight && currFontSize < maxFontSize) {
-        $(element).css('font-size', '+=1')
-      } else {
-        break
-      }
-    }
-  })
-}
-
 export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent',
   maxHeight = 280, maxFontSize = 40) {
   let currCHeight
