@@ -47,6 +47,36 @@ export function getHeight(array, row, col) {
   return totalHeight
 }
 
+/* eslint no-param-reassign: off */
+export function arrangeImages(images, nbColumns = 3) {
+  let columnIndex
+  let sizeRatio
+  const array = []
+
+  images.forEach((item, index) => {
+    columnIndex = Math.floor(index / nbColumns) // 在第几列
+    sizeRatio = item.naturalWidth / item.naturalHeight // 宽高比
+    array[columnIndex] = array[columnIndex] || []
+    array[columnIndex].push({ index, sizeRatio })
+  })
+
+  array.forEach((item, colIndex) => {
+    const ratioSums = array[colIndex].reduce((a, b) => a.sizeRatio || a + b.sizeRatio || b, 0)
+    array[colIndex].forEach((e) => {
+      images[e.index].width = `${(e.sizeRatio * 100) / ratioSums}%`
+    })
+  })
+  return images
+}
+
+/**
+ * @deprecated
+ * @param {*} wraper 
+ * @param {*} element 
+ * @param {*} elementWidth 
+ * @param {*} vertMargin 
+ * @param {*} horMargin 
+ */
 export function waterFall(wraper = '.noteWaterfallWraper', element = '.noteItem',
   elementWidth = 220, vertMargin = 32, horMargin = 20) {
   const $itemArrays = $(element).toArray()
@@ -70,26 +100,4 @@ export function waterFall(wraper = '.noteWaterfallWraper', element = '.noteItem'
     const top = getHeight(array, row, col)
     $(item).css({ top, left })
   })
-}
-
-/* eslint no-param-reassign: off */
-export function arrangeImages(images, nbColumns = 3) {
-  let columnIndex
-  let sizeRatio
-  const array = []
-
-  images.forEach((item, index) => {
-    columnIndex = Math.floor(index / nbColumns) // 在第几列
-    sizeRatio = item.naturalWidth / item.naturalHeight // 宽高比
-    array[columnIndex] = array[columnIndex] || []
-    array[columnIndex].push({ index, sizeRatio })
-  })
-
-  array.forEach((item, colIndex) => {
-    const ratioSums = array[colIndex].reduce((a, b) => a.sizeRatio || a + b.sizeRatio || b, 0)
-    array[colIndex].forEach((e) => {
-      images[e.index].width = `${(e.sizeRatio * 100) / ratioSums}%`
-    })
-  })
-  return images
 }
