@@ -35,11 +35,6 @@ export default {
     if (this.last) {
       setFontSize('.noteItem .noteItemWraper .noteTitle', 40)
       setFontSize()
-      waterFall()
-      $(window).on('load', () => {
-        waterFall()
-        window.addEventListener('resize', _.debounce(() => { waterFall() }, 100))
-      })
     }
   },
   computed: {
@@ -55,8 +50,9 @@ export default {
 <style lang="less" scoped>
  @import (reference) '../../style/contentVars';
 .noteItem {
-  position: absolute;
-  width: 240px; // to revise
+  // position: absolute;
+  // width: 240px;
+  width: 100%;
   background: #ffffff;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 
               0 3px 1px -2px rgba(0,0,0,0.2), 
@@ -101,3 +97,11 @@ export default {
   }
 }
 </style>
+
+<!--
+      waterFall()
+      $(window).on('load', () => {
+        waterFall()
+        window.addEventListener('resize', _.debounce(() => { waterFall() }, 100))
+      })
+-->

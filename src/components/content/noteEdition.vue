@@ -2,7 +2,8 @@
   .noteEdition(@focus.capture="editMode=true", :style="bgColor")
     .noteEditableContainer
       image-wraper(:images="uploadedImages", ref="imageWraper")
-      note-title(ref="noteTitle", v-show="editMode", :editMode="editMode")
+      note-title(ref="noteTitle", v-show="editMode", :editMode="editMode",
+                 @focusContent="focusContent")
       note-content(ref="noteContent")          
     note-toolbar.toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
                  @saveNote="saveNote",
@@ -15,7 +16,6 @@ import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 
-/* eslint no-console: off */
 export default {
   name: 'noteEdition',
   data() {
@@ -23,13 +23,16 @@ export default {
       noteId: null,
       colorIndex: 0,
       editMode: false,
-      uploadedImages: []
+      uploadedImages: [],
     }
   },
   components: {
     NoteToolbar, NoteContent, NoteTitle, ImageWraper
   },
   methods: {
+    focusContent() {
+      this.$refs.noteContent.focusContent()
+    },
     stopEditing() {
       this.editMode = false
     },

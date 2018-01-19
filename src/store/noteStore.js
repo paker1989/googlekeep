@@ -9,7 +9,7 @@ const state = {
 const getters = {
   getUserNotes: state => userId => Object.keys(state.cachedNotes)
     .map(noteId => state.cachedNotes[noteId])
-    // .sort((a, b) => new Date(b.meta.updateAt) - new Date(a.meta.updateAt))
+    .sort((a, b) => new Date(b.meta.updateAt) - new Date(a.meta.updateAt))
 }
 
 const mutations = {

@@ -2,9 +2,12 @@
   .noteMainEdition
     .noteContentPlaceHolder(v-show="showContentPh")
       | 添加记事...
-    .noteTextEdit(contenteditable="true", @input="updateContent", v-html="noteContent",
-      @paste="pastText"
-      v-once="true")
+    .noteTextEdit(ref="noteTextEdit"
+                  contenteditable="true",
+                  @input="updateContent",
+                  v-html="noteContent",
+                  @paste="pastText"
+                  v-once="true")
 </template>
 <script>
 import { replaceRec } from '../../plugins/contentUtil'
@@ -13,13 +16,19 @@ export default {
   name: 'noteContentEditable',
   data() {
     return {
-      noteContent: '', // '假装你人还没走<br><br>旧地如重游<br><br>月圆更寂寞' &lt;div id="editArea"
+      noteContent: '',
       timer: null,
       timeoutDuration: 1500,
-      target: null
+      target: null,
     }
   },
+  mounted() {
+    this.target = this.$refs.noteTextEdit
+  },
   methods: {
+    focusContent() {
+      this.target.focus()
+    },
     pastText(e) {
       e.preventDefault()
       const text = (e.originalEvent || e).clipboardData.getData('text/plain')
@@ -28,9 +37,6 @@ export default {
     updateContent(event) {
       const vm = this
       vm.noteContent = event.target.innerHTML
-      if (!vm.target) {
-        vm.target = event.target
-      }
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         vm.noteContent = vm.formatterContent(event.target.innerHTML)
@@ -52,15 +58,10 @@ export default {
       return replaceRec(originHtml, regex)
     },
     reset() {
-      if (this.target) {
-        this.noteContent = this.target.innerHTML = ''
-      }
+      this.noteContent = this.target.innerHTML = ''
     },
     getFinalText() {
-      if (this.target) {
-        return this.formatterContent(this.target.innerHTML)
-      }
-      return ''
+      return this.formatterContent(this.target.innerHTML)
     }
   },
   computed: {

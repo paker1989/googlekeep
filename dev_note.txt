@@ -32,19 +32,12 @@ ERR:
 
 2018/10/19
 TO DO:
-> edition: 对title进行回车将focus edition
+> edition: 对title进行回车将focus edition --> done.
 > revise waterfall.
 > 撤销和重做。
 > 手机格式layout
-> note edition basic layout
+> noteItem edition basic layout
 > 图片展示
-
-
-
-
-
-
-
 
 
 problems:

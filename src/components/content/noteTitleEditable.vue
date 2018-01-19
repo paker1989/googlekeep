@@ -3,7 +3,8 @@
     .noteTitlePlaceHolder(v-show="showTitlePh")
       | 标题
     .noteTitleEdit(contenteditable="true",
-                   @input="tapeTitle")
+                   @input="tapeTitle",
+                   @keydown.prevent.enter="focusContent")
 </template>
 <script>
 /* eslint no-multi-assign: off */
@@ -19,6 +20,9 @@ export default {
     }
   },
   methods: {
+    focusContent() {
+      this.$emit('focusContent')
+    },
     tapeTitle(event) {
       this.noteTitle = event.target.innerText
       if (!this.target) {
