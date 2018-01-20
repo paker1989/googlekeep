@@ -64,6 +64,9 @@ export default {
     undo() {
       if (this.cachedInputs.length > 1) {
         this.noteContent = this.target.innerHTML = this.cachedInputs[this.cachedInputs.length - 2]
+        if (this.removedInputs.length > this.getNoteConfigProp('mostUndo')) {
+          this.removedInputs.shift()
+        }
         this.removedInputs.push(this.cachedInputs.pop())
       }
     },

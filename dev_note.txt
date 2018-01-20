@@ -15,20 +15,15 @@
 - implement noteItem最多显示6个图片
 - 解决了上传图片显示不完整的问题: 在编辑模式下不更改data成server returned url。
 - 开始处理文本问题
-ERR: 
+
+2018/10/18
 - 获取光标问题 --> 解决
 - 复制粘贴时如何移除style --> 解决
 - regex有问题 --> 解决
-
-2018/10/18
-- 解决17号3个问题
 - 解决contentEditable文本处理问题
 - 解决点击 完成 时图片不显示问题 --> saveNote时fetchNoteById (populate photo)
 - 解决了noteItem文字截断问题
 - 对title进行了文字截断处理以及样式
-
-ERR:
-- 排序后瀑布流混乱 --> 需要用flex。
 
 2018/10/19
 
@@ -39,10 +34,6 @@ ERR:
 - > 撤销和重做。--> done
 
 ////////////////////////////////////////////
-problems:
-- 图片未加载的时候，waterfall时取得的height不对。 --> 解决: $(window).on('load', function() { 
-  还是需要改成flex的格式
-
 to do (must):
 > 手机格式layout
 > noteItem edition basic layout
@@ -51,4 +42,6 @@ to do (must):
 > delete items
 > global select and delete noteItems
 
+problems:
+> IE, Firefox bug
 
