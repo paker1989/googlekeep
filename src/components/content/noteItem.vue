@@ -5,20 +5,18 @@
       .noteTitle
         {{ item.title}}
       .noteContent(v-html="item.content")
-        // {{ item.content }}
     note-toolbar.toolbar(:isEdit="false", :colorIndex.sync="colorIndex")
 
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { waterFall, setFontSize } from '../../plugins/utils'
 import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
 
 export default {
   name: 'noteItem',
-  props: ['item', 'last'],
+  props: ['item'],
   data() {
     return {
       colorIndex: this.item.colorIndex || 0,
@@ -30,12 +28,6 @@ export default {
   },
   filters: {
     noteItemImageFilter,
-  },
-  mounted() {
-    if (this.last) {
-      setFontSize('.noteItem .noteItemWraper .noteTitle', 40)
-      setFontSize()
-    }
   },
   computed: {
     ...mapGetters([
@@ -50,8 +42,6 @@ export default {
 <style lang="less" scoped>
  @import (reference) '../../style/contentVars';
 .noteItem {
-  // position: absolute;
-  // width: 240px;
   width: 100%;
   background: #ffffff;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 
@@ -76,7 +66,6 @@ export default {
     position: relative;
     text-align: left;
     min-height: 30px;
-    padding-bottom:10px;
     &>*:not(.photoWraper) {
       padding: 15px 15px 0 15px;
     }

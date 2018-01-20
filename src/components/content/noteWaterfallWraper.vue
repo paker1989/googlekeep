@@ -9,6 +9,7 @@
 </template>
 <script>
 import NoteItem from './noteItem'
+import { setFontSize } from '../../plugins/utils'
 
 export default {
   name: 'noteWaterfallWraper',
@@ -24,7 +25,9 @@ export default {
   },
   mounted() {
     const vm = this
-    window.addEventListener('resize', _.debounce(() => { vm.resetColumnSize(vm.items) }, 500))
+    window.addEventListener('resize', _.debounce(() => {
+      vm.resetColumnSize(vm.items)
+    }, 500))
   },
   watch: {
     items(newVal) {
@@ -35,7 +38,13 @@ export default {
     resetColumnSize(notes) {
       const wraperWidth = this.$el.clientWidth
       const itemWidth = 240
-      this.nbColumns = Math.min(Math.floor(wraperWidth / itemWidth), notes.length)
+      const itemMargin = 10
+      this.nbColumns = Math.min(Math.floor(wraperWidth / (itemWidth + (itemMargin * 2))),
+        notes.length)
+      this.$nextTick(() => {
+        setFontSize('.noteItem .noteItemWraper .noteTitle', 40)
+        setFontSize()
+      })
     }
   }
 }
@@ -47,14 +56,14 @@ export default {
   position: relative;
   margin: 0 auto;
   width: 70%;
-  height: 1000px;
+  
   & .noteItemColumns {
    .headerLayout(flex-start, column, nowrap, flex-start);
    width: 260px;
    padding: 0 10px;
-   & > * {
-     margin: 10px;
-   }
+    & > * {
+      margin: 10px 0;
+    }
   }
 
 }

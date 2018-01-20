@@ -3,10 +3,12 @@ import Types from './mutationType'
 
 /* eslint no-shadow: off, no-unused-vars: off, consistent-return: off */
 const state = {
+  mostUndo: 5,
   cachedNotes: {}
 }
 
 const getters = {
+  getNoteConfigProp: state => prop => state[prop],
   getUserNotes: state => userId => Object.keys(state.cachedNotes)
     .map(noteId => state.cachedNotes[noteId])
     .sort((a, b) => new Date(b.meta.updateAt) - new Date(a.meta.updateAt))

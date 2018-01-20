@@ -10,10 +10,10 @@ export function setFontSize(elementDiv = '.noteItem .noteItemWraper .noteContent
     currCHeight = $(element).innerHeight()
     currScrolHeight = element.scrollHeight
     if (currScrolHeight > maxHeight) {
-      for (let j = 1; j < 200; j += 1) {
+      for (let j = 1; j < 100; j += 1) {
         currScrolHeight = element.scrollHeight
         if (currScrolHeight > maxHeight) {
-          $(element).html($(element).html().substring(0, $(element).html().length - 1))
+          $(element).html($(element).html().substring(0, $(element).html().length - 10))
         } else {
           break
         }
@@ -71,11 +71,11 @@ export function arrangeImages(images, nbColumns = 3) {
 
 /**
  * @deprecated
- * @param {*} wraper 
- * @param {*} element 
- * @param {*} elementWidth 
- * @param {*} vertMargin 
- * @param {*} horMargin 
+ * @param {*} wraper
+ * @param {*} element
+ * @param {*} elementWidth
+ * @param {*} vertMargin
+ * @param {*} horMargin
  */
 export function waterFall(wraper = '.noteWaterfallWraper', element = '.noteItem',
   elementWidth = 220, vertMargin = 32, horMargin = 20) {

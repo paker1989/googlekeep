@@ -31,15 +31,12 @@ ERR:
 - 排序后瀑布流混乱 --> 需要用flex。
 
 2018/10/19
-TO DO:
-> 撤销和重做。
-> 手机格式layout
-> noteItem edition basic layout
-> 图片展示
 
 > edition: 对title进行回车将focus edition --> done.
 > revise waterfall. --> done
 
+2018/10/20
+- > 撤销和重做。--> done
 
 ////////////////////////////////////////////
 problems:
@@ -47,5 +44,11 @@ problems:
   还是需要改成flex的格式
 
 to do (must):
-- override existing photo if cut;
+> 手机格式layout
+> noteItem edition basic layout
+> 图片展示
+> delete photos
+> delete items
+> global select and delete noteItems
+
 

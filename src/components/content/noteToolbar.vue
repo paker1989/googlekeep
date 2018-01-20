@@ -10,9 +10,11 @@
       a.optionBg(href="#", data-toggle="tooltip", data-placement="top", title="背景")                  
         span.glyphicon.glyphicon-th(@mouseover.stop="togglePalette($event, true)")
       a(href="#", data-toggle="tooltip", data-placement="top", title="撤销")
-        span.glyphicon.glyphicon-arrow-left
+        span.glyphicon.glyphicon-arrow-left(:class="{ isDisabled : disableUndo }",
+                                            @click.prevent="undo")
       a(href="#", data-toggle="tooltip", data-placement="top", title="重做")
-        span.glyphicon.glyphicon-arrow-right
+        span.glyphicon.glyphicon-arrow-right(:class="{ isDisabled : disableRedo }",
+                                             @click.prevent="redo")
     .actionContainer(v-if="isEdit")
       span(@click="saveNote") 完成
     .notePaletteWraper(:style="palettePosition",
@@ -29,7 +31,15 @@ export default {
       type: Boolean,
       default: true
     },
-    colorIndex: Number
+    colorIndex: Number,
+    cachedInputs: {
+      type: Array,
+      default() { return [] }
+    },
+    removedInputs: {
+      type: Array,
+      default() { return [] }
+    },
   },
   data() {
     return {
@@ -61,7 +71,6 @@ export default {
     handleFile(event) {
       const files = event.target.files
       if (!files) return
-
       this.$emit('newImageUpload', [...files])
     },
     togglePalette(event, isShow) {
@@ -79,8 +88,22 @@ export default {
           display: 'none'
         })
     },
+    undo() {
+      this.$emit('undo')
+    },
+    redo() {
+      this.$emit('redo')
+    },
     saveNote() {
       this.$emit('saveNote')
+    }
+  },
+  computed: {
+    disableUndo() {
+      return this.cachedInputs.length < 2
+    },
+    disableRedo() {
+      return this.removedInputs.length === 0
     }
   }
 }
@@ -118,6 +141,10 @@ export default {
   & .notePaletteWraper {
     position: absolute;
     display: none;
+  }
+
+  & .isDisabled {
+  opacity: .3;
   }
 }
 

@@ -10,15 +10,27 @@
                   v-once="true")
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import { replaceRec } from '../../plugins/contentUtil'
+
 
 export default {
   name: 'noteContentEditable',
+  props: {
+    cachedInputs: {
+      type: Array,
+      default() { return [] }
+    },
+    removedInputs: {
+      type: Array,
+      default() { return [] }
+    },
+  },
   data() {
     return {
       noteContent: '',
       timer: null,
-      timeoutDuration: 1500,
+      timeoutDuration: 1000,
       target: null,
     }
   },
@@ -40,7 +52,26 @@ export default {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         vm.noteContent = vm.formatterContent(event.target.innerHTML)
+        vm.cacheUndo(vm.noteContent)
       }, vm.timeoutDuration)
+    },
+    cacheUndo(formattedContent) {
+      if (this.cachedInputs.length > this.getNoteConfigProp('mostUndo')) {
+        this.cachedInputs.shift()
+      }
+      this.cachedInputs.push(formattedContent)
+    },
+    undo() {
+      if (this.cachedInputs.length > 1) {
+        this.noteContent = this.target.innerHTML = this.cachedInputs[this.cachedInputs.length - 2]
+        this.removedInputs.push(this.cachedInputs.pop())
+      }
+    },
+    redo() {
+      if (this.removedInputs.length > 0) {
+        this.noteContent = this.target.innerHTML = this.removedInputs.pop()
+        this.cachedInputs.push(this.target.innerHTML)
+      }
     },
     // return formatted value
     formatterContent(originHtml) {
@@ -67,8 +98,9 @@ export default {
   computed: {
     showContentPh() {
       return this.noteContent.length === 0
-    }
-  }
+    },
+    ...mapGetters('noteStore', ['getNoteConfigProp'])
+  },
 }
 </script>
 <style lang="less" scoped>

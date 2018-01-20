@@ -4,10 +4,16 @@
       image-wraper(:images="uploadedImages", ref="imageWraper")
       note-title(ref="noteTitle", v-show="editMode", :editMode="editMode",
                  @focusContent="focusContent")
-      note-content(ref="noteContent")          
+      note-content(ref="noteContent",
+                   :cachedInputs.sync="cachedInputs",
+                   :removedInputs.sync="removedInputs")          
     note-toolbar.toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
-                 @saveNote="saveNote",
-                 @newImageUpload="uploadImage")
+                         :cachedInputs="cachedInputs",
+                         :removedInputs="removedInputs",
+                         @saveNote="saveNote",
+                         @undo="undoContent",
+                         @redo="redoContent",
+                         @newImageUpload="uploadImage")
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -24,6 +30,8 @@ export default {
       colorIndex: 0,
       editMode: false,
       uploadedImages: [],
+      cachedInputs: [''],
+      removedInputs: [],
     }
   },
   components: {
@@ -51,6 +59,12 @@ export default {
       } else {
         this.$refs.imageWraper.uploadNewImage({ newImages: files }, vm.noteId)
       }
+    },
+    undoContent() {
+      this.$refs.noteContent.undo()
+    },
+    redoContent() {
+      this.$refs.noteContent.redo()
     },
     saveNote() {
       const isUpdateCache = true
