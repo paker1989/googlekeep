@@ -1,6 +1,6 @@
 <template lang="jade">
   .noteItem(:style="bgColor")
-    .noteItemWraper
+    .noteItemWraper(@click.capture="editItem")
       image-wraper.photoWraper(:images="uploadedImages | noteItemImageFilter('6')", ref="imageWraper")
       .noteTitle
         {{ item.title}}
@@ -9,7 +9,8 @@
 
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import Types from '../../store/mutationType'
 import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
@@ -36,6 +37,17 @@ export default {
     bgColor() {
       return this.getBgColors(this.colorIndex)
     },
+  },
+  methods: {
+    editItem() {
+      // console.log(this.item)
+      this.editNote({
+        note: this.item
+      })
+    },
+    ...mapMutations('noteStore', {
+      editNote: Types.EDIT_NOTE,
+    })
   }
 }
 </script>

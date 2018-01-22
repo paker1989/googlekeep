@@ -3,8 +3,10 @@
     .noteEditableContainer
       image-wraper(:images="uploadedImages", ref="imageWraper")
       note-title(ref="noteTitle", v-show="editMode", :editMode="editMode",
+                 :title="title",
                  @focusContent="focusContent")
       note-content(ref="noteContent",
+                   :content="content",
                    :cachedInputs.sync="cachedInputs",
                    :removedInputs.sync="removedInputs")          
     note-toolbar.toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
@@ -24,12 +26,20 @@ import NoteToolbar from './noteToolbar'
 
 export default {
   name: 'noteEdition',
+  props: {
+    note: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
-      noteId: null,
-      colorIndex: 0,
+      noteId: this.note ? this.note._id : null,
+      colorIndex: this.note ? this.note.colorIndex : 0,
       editMode: false,
-      uploadedImages: [],
+      title: this.note ? this.note.title : '',
+      content: this.note ? this.note.content : '',
+      uploadedImages: this.note ? this.note.photos : [],
       cachedInputs: [''],
       removedInputs: [],
     }
@@ -106,6 +116,19 @@ export default {
     bgColor() {
       return this.getBgColors(this.colorIndex)
     },
+  },
+  watch: {
+    note() { // value change only when edit a note, triger children components
+                   // change by watch
+      this.noteId = this.note ? this.note._id : null
+      this.colorIndex = this.note ? this.note.colorIndex : 0
+      this.editMode = !!this.note
+      this.title = this.note ? this.note.title : ''
+      this.content = this.note ? this.note.content : ''
+      this.uploadedImages = this.note ? this.note.photos : []
+      this.cachedInputs = ['']
+      this.removedInputs = []
+    }
   }
 }
 </script>
@@ -114,7 +137,6 @@ export default {
 
 .noteEdition {
   position: relative;
-  margin: 32px auto 16px auto; 
   background: white;
   box-shadow: 0 3px 5px rgba(0,0,0,0.20);
 
@@ -126,7 +148,8 @@ export default {
   }
   & .noteEditableContainer {
     position: relative;
-    max-height: 600px;
+    max-height: 70vh;
+    height: 100%;
     overflow-y: auto;
     clear: both;
   }

@@ -11,10 +11,12 @@ import VueResource from 'vue-resource'
 import App from './App'
 import router from './router'
 import store from './store'
-import test from './plugins/test' // test
+// import noteEdition from './plugins/noteEdition'
+// import test from './plugins/test' // test
 
 Vue.use(VueResource)
-Vue.use(test) // test
+// Vue.use(noteEdition)
+// Vue.use(test) // test
 
 Vue.config.productionTip = false
 

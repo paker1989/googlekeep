@@ -25,10 +25,14 @@ export default {
       type: Array,
       default() { return [] }
     },
+    content: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
-      noteContent: '',
+      noteContent: this.content,
       timer: null,
       timeoutDuration: 1000,
       target: null,
@@ -104,6 +108,12 @@ export default {
     },
     ...mapGetters('noteStore', ['getNoteConfigProp'])
   },
+  watch: { // content changed from upper level occurs
+           // only when edit a different note
+    content(newval) {
+      this.target.innerHTML = this.noteContent = newval
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

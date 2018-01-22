@@ -4,14 +4,18 @@ import Types from './mutationType'
 /* eslint no-shadow: off, no-unused-vars: off, consistent-return: off */
 const state = {
   mostUndo: 5,
+  currentEvent: null,
+  noteToEdit: null,
   cachedNotes: {}
 }
 
 const getters = {
+  displayBackground: state => state.currentEvent != null,
+  displayNoteToEdit: state => state.noteToEdit != null,
   getNoteConfigProp: state => prop => state[prop],
   getUserNotes: state => userId => Object.keys(state.cachedNotes)
     .map(noteId => state.cachedNotes[noteId])
-    .sort((a, b) => new Date(b.meta.updateAt) - new Date(a.meta.updateAt))
+    .sort((a, b) => new Date(b.meta.updateAt) - new Date(a.meta.updateAt)),
 }
 
 const mutations = {
@@ -22,6 +26,10 @@ const mutations = {
   },
   [Types.UPDATE_NOTE](state, { note }) {
     Vue.set(state.cachedNotes, note._id, note)
+  },
+  [Types.EDIT_NOTE](state, { note }) {
+    state.noteToEdit = note
+    state.currentEvent = Types.EDIT_NOTE
   }
 }
 

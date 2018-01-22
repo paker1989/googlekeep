@@ -1,6 +1,6 @@
 <template lang="jade">
   .contentContainer
-    note-edition
+    note-edition.noteEditionLayout
     NoteWaterfallWraper(:items="userNotes")
 
 </template>
@@ -41,16 +41,8 @@ export default {
   width: 100vw;
   max-width: 100%;
   transition: all .25s ease;
+  & .noteEditionLayout {
+    margin: 32px auto 16px auto; 
+  }
 }
 </style>
-<!--
-    fetchData() {
-      this.fetchNotes().then((res) => {
-        if (res.err) {
-          console.log(res.err)
-        } else {
-          this.userNotes.push(...res.notes)
-        }
-      })
-    },
--->

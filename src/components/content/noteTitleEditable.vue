@@ -3,6 +3,7 @@
     .noteTitlePlaceHolder(v-show="showTitlePh")
       | 标题
     .noteTitleEdit(contenteditable="true",
+                   ref="noteTitleEdit",
                    @input="tapeTitle",
                    @keydown.prevent.enter="focusContent")
 </template>
@@ -10,14 +11,23 @@
 /* eslint no-multi-assign: off */
 export default {
   name: 'noteTitleEdit',
-  props: [
-    'editMode',
-  ],
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+    editMode: {
+      type: Boolean,
+    }
+  },
   data() {
     return {
-      noteTitle: '',
-      target: ''
+      noteTitle: this.title,
+      target: null,
     }
+  },
+  mounted() {
+    this.target = this.$refs.noteTitleEdit
   },
   methods: {
     focusContent() {
@@ -39,6 +49,11 @@ export default {
     showTitlePh() {
       return this.editMode && this.noteTitle.length === 0
     },
+  },
+  watch: {
+    title(newval) {
+      this.target.innerHTML = this.noteTitle = newval
+    }
   }
 }
 </script>

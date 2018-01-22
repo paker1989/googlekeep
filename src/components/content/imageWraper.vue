@@ -66,7 +66,12 @@ export default {
     },
     ...mapActions([
       'savePhoto'
-    ])
+    ]),
+  },
+  watch: {
+    images(newVals) {
+      this.attachedImages = _.assignIn([], arrangeImages(newVals))
+    }
   }
 }
 </script>
