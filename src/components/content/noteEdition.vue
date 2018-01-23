@@ -37,7 +37,7 @@ export default {
     return {
       noteId: this.note ? this.note._id : null,
       colorIndex: this.note ? this.note.colorIndex : 0,
-      editMode: false,
+      editMode: !!this.note,
       title: this.note ? this.note.title : '',
       content: this.note ? this.note.content : '',
       uploadedImages: this.note ? this.note.photos : [],

@@ -39,6 +39,10 @@
 2018/10/23
 -> 继续完善edit note的point。
 
+TO DO:
+-> hide item when it is been edited;
+-> if no changes, then do nothing while saving. (_.deepEquals)
+
 ////////////////////////////////////////////
 to do (must):
 > 手机格式layout
