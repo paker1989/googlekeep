@@ -4,10 +4,10 @@
     note-container(:class="{ isAside: displaySideBar }")
     .editNoteContainer(v-show="displayNoteToEdit")
        note-edition(:note="noteToEdit")
-    .bgWraper(v-show="displayBackground")
+    .bgWraper(v-show="displayBackground", @click="terminateEvent")
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import HeaderContainer from '@/components/header/headerContainer'
 import NoteContainer from '@/components/content/content'
 import NoteEdition from '@/components/content/noteEdition'
@@ -18,7 +18,13 @@ export default {
   methods: {
     setContentLayout(isDisplaySideBar) {
       this.displaySideBar = isDisplaySideBar
-    }
+    },
+    terminateEvent() {
+      this.terminateCurrentEvent()
+    },
+    ...mapMutations('noteStore', {
+      terminateCurrentEvent: Types.TERMINATE_TARGET_EVENT
+    })
   },
   components: {
     HeaderContainer, NoteContainer, NoteEdition

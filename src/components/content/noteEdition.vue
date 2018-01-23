@@ -31,7 +31,7 @@ export default {
     note: {
       type: Object,
       default: null
-    }
+    },
   },
   data() {
     return {
@@ -43,6 +43,7 @@ export default {
       uploadedImages: this.note ? this.note.photos : [],
       cachedInputs: [''],
       removedInputs: [],
+      // originalNote: this.note
     }
   },
   components: {
@@ -51,9 +52,6 @@ export default {
   methods: {
     focusContent() {
       this.$refs.noteContent.focusContent()
-    },
-    stopEditing() {
-      this.editMode = false
     },
     uploadImage(files) {
       const vm = this
@@ -82,8 +80,8 @@ export default {
       const note = this.collectNoteText()
       this.saveNoteText({ note, isUpdateCache }).then((res) => {
         if (res.note) {
-          if (this.getNoteConfigProp('currentEvent') === Types.EDIT_NOTE) {
-            this.resetTargetNoteEvent({
+          if (this.getNoteConfigProp(Types.EDIT_NOTE) != null) {
+            this.finalizeTargetNoteEvent({
               eventRelatedProp: Types.EDIT_NOTE
             })
           } else {
@@ -116,7 +114,7 @@ export default {
       'saveNoteText'
     ]),
     ...mapMutations('noteStore', {
-      resetTargetNoteEvent: Types.RESET_TARGET_EVENT
+      finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT
     }),
   },
   computed: {
@@ -129,19 +127,27 @@ export default {
     bgColor() {
       return this.getBgColors(this.colorIndex)
     },
+    globalNoteEvent() {
+      return this.getNoteConfigProp('currentEvent')
+    }
   },
   watch: {
-    note() { // value change only when edit a note, triger children components
+    note(newNote) { // value change only when edit a note, triger children components
                    // change by watch
-      this.noteId = this.note ? this.note._id : null
-      this.colorIndex = this.note ? this.note.colorIndex : 0
-      this.editMode = !!this.note
-      this.title = this.note ? this.note.title : ''
-      this.content = this.note ? this.note.content : ''
-      this.uploadedImages = this.note ? this.note.photos : []
+      this.noteId = newNote ? newNote._id : null
+      this.colorIndex = newNote ? newNote.colorIndex : 0
+      this.editMode = !!newNote
+      this.title = newNote ? newNote.title : ''
+      this.content = newNote ? newNote.content : ''
+      this.uploadedImages = newNote ? newNote.photos : []
       this.cachedInputs = ['']
       this.removedInputs = []
-    }
+    },
+    globalNoteEvent(newVal) {
+      if (newVal === Types.TERMINATE_TARGET_EVENT && this.editMode) {
+        this.saveNote()
+      }
+    },
   }
 }
 </script>

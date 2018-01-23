@@ -20,7 +20,7 @@ export default {
   methods: {
     ...mapActions('noteStore', [
       'fetchNotes'
-    ])
+    ]),
   },
   computed: {
     userNotes() {

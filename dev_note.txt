@@ -37,19 +37,33 @@
 -> noteItem edition basic layout --> in progress (21h40 - 00h20)
 
 2018/10/23
--> 继续完善edit note的point。
-
-TO DO:
+-> 解决了编辑第一个元素没有变化的bug(因为没有watch)
+-> 点击outside自动保存 note(编辑模式)。
 -> hide item when it is been edited;
--> if no changes, then do nothing while saving. (_.deepEquals)
+
+2018/10/24
+TO DO
+-> toolbar下拉菜单 0.5
+-> delete items  0.5
 
 ////////////////////////////////////////////
 to do (must):
-> 手机格式layout
-> 图片展示
-> delete photos
-> delete items
-> global select and delete noteItems
+> 固定记事 0.5
+> 直接在noteItem上操作 (更改颜色，加载图片 : 删除图片之后做) 0.5
+> delete photos 1
+> 点击外部时保存新建note 0.5
+> 图片展示 1.5
+> global select and delete noteItems 1
+> 手机格式layout 1
+-> if no changes, then do nothing while saving. (_.deepEquals) 0.5
+-> 标签 2
+-> 修改时间 0.5
+
+-> 搜索
+-> 动画
+-> 图片编辑等
+-> 提醒
+-> session
 
 problems:
 > IE, Firefox bug

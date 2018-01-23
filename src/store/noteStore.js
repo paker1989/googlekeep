@@ -29,10 +29,12 @@ const mutations = {
     Vue.set(state, Types.EDIT_NOTE, note)
     state.currentEvent = Types.EDIT_NOTE
   },
-  [Types.RESET_TARGET_EVENT](state, { eventRelatedProp }) {
-    console.log('reset')
+  [Types.FINALIZE_TARGET_EVENT](state, { eventRelatedProp }) {
     state.currentEvent = null
     Vue.set(state, eventRelatedProp, null)
+  },
+  [Types.TERMINATE_TARGET_EVENT](state) {
+    state.currentEvent = Types.TERMINATE_TARGET_EVENT
   }
 }
 

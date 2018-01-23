@@ -52,7 +52,7 @@ export default {
 <style lang="less" scoped>
 @import (reference) '../../style/headerVars';
 .noteWaterfallWraper {
-  .headerLayout(center, row, nowrap, flex-start);
+  .headerLayout(flex-start, row, nowrap, flex-start);
   position: relative;
   margin: 0 auto;
   width: 70%;

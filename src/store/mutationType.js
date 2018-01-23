@@ -4,5 +4,6 @@ export default {
   CACHE_NOTES: 'cache_notes',
   UPDATE_NOTE: 'update_note',
   EDIT_NOTE: 'edit_note',
-  RESET_TARGET_EVENT: 'reset_target_event'
+  FINALIZE_TARGET_EVENT: 'finalize_target_event', // do normal action to terminate event
+  TERMINATE_TARGET_EVENT: 'terminate_target_event' // click outside to terminate event
 }

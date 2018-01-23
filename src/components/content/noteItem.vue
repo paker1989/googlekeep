@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     editItem() {
-      // console.log(this.item)
       this.editNote({
         note: this.item
       })
@@ -48,6 +47,12 @@ export default {
     ...mapMutations('noteStore', {
       editNote: Types.EDIT_NOTE,
     })
+  },
+  watch: {
+    item(newVal) {
+      this.colorIndex = newVal.colorIndex || 0
+      this.uploadedImages = newVal.photos
+    }
   }
 }
 </script>
