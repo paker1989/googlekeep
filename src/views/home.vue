@@ -11,6 +11,7 @@ import { mapGetters } from 'vuex'
 import HeaderContainer from '@/components/header/headerContainer'
 import NoteContainer from '@/components/content/content'
 import NoteEdition from '@/components/content/noteEdition'
+import Types from '../store/mutationType'
 
 export default {
   name: 'home',
@@ -30,10 +31,10 @@ export default {
       'getNoteConfigProp',
     ]),
     noteToEdit() {
-      return this.getNoteConfigProp('noteToEdit')
+      return this.getNoteConfigProp(Types.EDIT_NOTE)
     },
     displayNoteToEdit() {
-      return this.getNoteConfigProp('noteToEdit') != null
+      return this.getNoteConfigProp(Types.EDIT_NOTE) != null
     },
     displayBackground() {
       return this.getNoteConfigProp('currentEvent') != null

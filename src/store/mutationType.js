@@ -4,4 +4,5 @@ export default {
   CACHE_NOTES: 'cache_notes',
   UPDATE_NOTE: 'update_note',
   EDIT_NOTE: 'edit_note',
+  RESET_TARGET_EVENT: 'reset_target_event'
 }

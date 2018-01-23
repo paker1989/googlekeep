@@ -5,13 +5,11 @@ import Types from './mutationType'
 const state = {
   mostUndo: 5,
   currentEvent: null,
-  noteToEdit: null,
   cachedNotes: {}
+  // noteToEdit: null,
 }
 
 const getters = {
-  displayBackground: state => state.currentEvent != null,
-  displayNoteToEdit: state => state.noteToEdit != null,
   getNoteConfigProp: state => prop => state[prop],
   getUserNotes: state => userId => Object.keys(state.cachedNotes)
     .map(noteId => state.cachedNotes[noteId])
@@ -28,8 +26,13 @@ const mutations = {
     Vue.set(state.cachedNotes, note._id, note)
   },
   [Types.EDIT_NOTE](state, { note }) {
-    state.noteToEdit = note
+    Vue.set(state, Types.EDIT_NOTE, note)
     state.currentEvent = Types.EDIT_NOTE
+  },
+  [Types.RESET_TARGET_EVENT](state, { eventRelatedProp }) {
+    console.log('reset')
+    state.currentEvent = null
+    Vue.set(state, eventRelatedProp, null)
   }
 }
 

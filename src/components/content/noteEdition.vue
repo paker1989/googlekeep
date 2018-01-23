@@ -18,7 +18,8 @@
                          @newImageUpload="uploadImage")
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import Types from '../../store/mutationType'
 import ImageWraper from './imageWraper'
 import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
@@ -81,7 +82,13 @@ export default {
       const note = this.collectNoteText()
       this.saveNoteText({ note, isUpdateCache }).then((res) => {
         if (res.note) {
-          this.reset()
+          if (this.getNoteConfigProp('currentEvent') === Types.EDIT_NOTE) {
+            this.resetTargetNoteEvent({
+              eventRelatedProp: Types.EDIT_NOTE
+            })
+          } else {
+            this.reset() // create new note edition event
+          }
         }
       })
     },
@@ -107,11 +114,17 @@ export default {
     },
     ...mapActions('noteStore', [
       'saveNoteText'
-    ])
+    ]),
+    ...mapMutations('noteStore', {
+      resetTargetNoteEvent: Types.RESET_TARGET_EVENT
+    }),
   },
   computed: {
     ...mapGetters([
       'getBgColors'
+    ]),
+    ...mapGetters('noteStore', [
+      'getNoteConfigProp'
     ]),
     bgColor() {
       return this.getBgColors(this.colorIndex)

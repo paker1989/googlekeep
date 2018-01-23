@@ -33,10 +33,15 @@
 2018/10/20
 - > 撤销和重做。--> done
 
+2018/10/22
+-> noteItem edition basic layout --> in progress (21h40 - 00h20)
+
+2018/10/23
+-> 继续完善edit note的point。
+
 ////////////////////////////////////////////
 to do (must):
 > 手机格式layout
-> noteItem edition basic layout
 > 图片展示
 > delete photos
 > delete items
