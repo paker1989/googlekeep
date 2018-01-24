@@ -1,11 +1,14 @@
 <template lang="jade">
   .noteWaterfallWraper
-    .noteItemColumns(v-for="i in nbColumns", v-cloak="true")
-      note-item(v-for="(note, index) in items",
-                :item="note",
-                v-if="index % nbColumns === i-1",
-                :last="index===items.length-1",
-                :key="note._id")
+    .waterfallTitle
+      slot
+    .noteItemContainer
+      .noteItemColumns(v-for="i in nbColumns", v-cloak="true")
+        note-item(v-for="(note, index) in items",
+                  :item="note",
+                  v-if="index % nbColumns === i-1",
+                  :last="index===items.length-1",
+                  :key="note._id")
 </template>
 <script>
 import NoteItem from './noteItem'
@@ -52,21 +55,32 @@ export default {
 <style lang="less" scoped>
 @import (reference) '../../style/headerVars';
 .noteWaterfallWraper {
-  .headerLayout(flex-start, row, nowrap, flex-start);
   position: relative;
   margin: 0 auto;
   width: 70%;
+  text-align: left;
   
-  & .noteItemColumns {
-   .headerLayout(flex-start, column, nowrap, flex-start);
-   width: 260px;
-   padding: 0 10px;
-    & > * {
-      margin: 10px 0;
-    }
+  & .waterfallTitle {
+    padding-left: 10px;
+    opacity: .8;
+    font-size: .9em;
   }
 
+  .noteItemContainer {
+    width: 100%;
+    .headerLayout(flex-start, row, nowrap, flex-start);
+
+    & .noteItemColumns {
+    .headerLayout(flex-start, column, nowrap, flex-start);
+    width: 260px;
+    padding: 0 10px;
+      & > * {
+        margin: 10px 0;
+      }
+    }
+  }
 }
+
 </style>
 <!--
   .headerLayout(flex-start, column, wrap, flex-start);

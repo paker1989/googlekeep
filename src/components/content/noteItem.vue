@@ -1,12 +1,14 @@
 <template lang="jade">
   .noteItem(:style="bgColor")
+    .hightLightWraper
+      span.glyphicon.glyphicon-bookmark(:class="{ isHighLighted: highLight}")
     .noteItemWraper(@click.capture="editItem")
-      image-wraper.photoWraper(:images="uploadedImages | noteItemImageFilter('6')", ref="imageWraper")
+      image-wraper.photoWraper(:images="uploadedImages | noteItemImageFilter('6')", 
+                               ref="imageWraper")
       .noteTitle
         {{ item.title}}
       .noteContent(v-html="item.content")
     note-toolbar.toolbar(:isEdit="false", :colorIndex.sync="colorIndex")
-
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
@@ -22,6 +24,7 @@ export default {
     return {
       colorIndex: this.item.colorIndex || 0,
       uploadedImages: this.item.photos,
+      highLight: this.item.meta.isHighLighted
     }
   },
   components: {
@@ -59,6 +62,7 @@ export default {
 <style lang="less" scoped>
  @import (reference) '../../style/contentVars';
 .noteItem {
+  position: relative;
   width: 100%;
   background: #ffffff;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 
@@ -68,9 +72,30 @@ export default {
     box-shadow: 0 0 0 0 transparent,
                 0 0 0 0 transparent,
                 0 2px 15px rgba(0,0,0,0.30);
+    & .hightLightWraper span {
+      opacity: 1;
+    }
     & .toolbar {
       opacity: 1;
     }
+  }
+
+  & .hightLightWraper {
+    position: absolute;
+    top: .5em;
+    right: 1em;
+    & > span {
+      cursor: pointer;
+      z-index: 3;
+      opacity: 0;
+      transition: opacity .25s ease;
+      &.isHighLighted {
+        opacity: 1;
+      }
+      &.isHighLighted {
+        color: #4285f4;
+      }
+    }    
   }
 
   & .toolbar {

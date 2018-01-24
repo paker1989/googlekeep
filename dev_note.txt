@@ -42,17 +42,22 @@
 -> hide item when it is been edited;
 
 2018/10/24
+-> toolbar下拉菜单 --> half
+> 固定记事
+
+2018/10/25
 TO DO
--> toolbar下拉菜单 0.5
--> delete items  0.5
+-> toolbar下拉菜单 --> in progress
 
 ////////////////////////////////////////////
 to do (must):
-> 固定记事 0.5
-> 直接在noteItem上操作 (更改颜色，加载图片 : 删除图片之后做) 0.5
+> 图片展示 1.5
+-> delete items  0.5
+> 直接在noteItem上操作 (更改颜色，加载图片, 固定记事 : 删除图片之后做) 0.5
 > delete photos 1
 > 点击外部时保存新建note 0.5
-> 图片展示 1.5
+
+> 懒加载
 > global select and delete noteItems 1
 > 手机格式layout 1
 -> if no changes, then do nothing while saving. (_.deepEquals) 0.5

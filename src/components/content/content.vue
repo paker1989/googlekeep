@@ -1,8 +1,10 @@
 <template lang="jade">
   .contentContainer
     note-edition.noteEditionLayout
+    NoteWaterfallWraper.highLighted(:items="highLightedUserNotes")
+      | {{ highLightedUserNotes.length === 0 ? '': '已固定的记事'}}
     NoteWaterfallWraper(:items="userNotes")
-
+      | {{ highLightedUserNotes.length === 0 ? '': '其他'}}
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -24,7 +26,10 @@ export default {
   },
   computed: {
     userNotes() {
-      return this.getUserNotes('abc')
+      return this.getUserNotes('abc').filter(note => note.meta.isHighLighted === false)
+    },
+    highLightedUserNotes() {
+      return this.getUserNotes('abc').filter(note => note.meta.isHighLighted === true)
     },
     ...mapGetters('noteStore', [
       'getUserNotes'
@@ -41,6 +46,9 @@ export default {
   width: 100vw;
   max-width: 100%;
   transition: all .25s ease;
+  & .highLighted {
+    padding-bottom: 40px;
+  }
   & .noteEditionLayout {
     margin: 32px auto 16px auto; 
   }

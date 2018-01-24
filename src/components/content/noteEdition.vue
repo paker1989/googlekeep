@@ -1,5 +1,9 @@
 <template lang="jade">
   .noteEdition(@focus.capture="editMode=true", :style="bgColor")
+    .hightLightWraper
+      span.glyphicon.glyphicon-bookmark(v-show="editMode",
+                                        :class="{ isHighLighted: highLight}"
+                                        @click="highLightNote")
     .noteEditableContainer
       image-wraper(:images="uploadedImages", ref="imageWraper")
       note-title(ref="noteTitle", v-show="editMode", :editMode="editMode",
@@ -41,6 +45,7 @@ export default {
       title: this.note ? this.note.title : '',
       content: this.note ? this.note.content : '',
       uploadedImages: this.note ? this.note.photos : [],
+      highLight: this.note ? this.note.meta.isHighLighted : false,
       cachedInputs: [''],
       removedInputs: [],
       // originalNote: this.note
@@ -85,7 +90,7 @@ export default {
               eventRelatedProp: Types.EDIT_NOTE
             })
           } else {
-            this.reset() // create new note edition event
+            this.resetForCreate() // create new note edition event
           }
         }
       })
@@ -94,21 +99,29 @@ export default {
       const note = {
         title: this.$refs.noteTitle.noteTitle,
         content: this.$refs.noteContent.getFinalText(),
-        colorIndex: this.colorIndex
+        colorIndex: this.colorIndex,
+        meta: { isHighLighted: this.highLight}
       }
+
       if (this.noteId) {
         note._id = this.noteId
       }
       return note
     },
-    reset() {
+    resetForCreate() {
       this.noteId = null
       this.colorIndex = 0
       this.editMode = false
       this.uploadedImages = []
+      this.title = ''
+      this.content = ''
+      this.highLight = false
       this.$refs.noteTitle.reset()
       this.$refs.noteContent.reset()
       this.$refs.imageWraper.reset()
+    },
+    highLightNote() {
+      this.highLight = !this.highLight
     },
     ...mapActions('noteStore', [
       'saveNoteText'
@@ -140,6 +153,7 @@ export default {
       this.title = newNote ? newNote.title : ''
       this.content = newNote ? newNote.content : ''
       this.uploadedImages = newNote ? newNote.photos : []
+      this.highLight = newNote ? newNote.meta.isHighLighted : false
       this.cachedInputs = ['']
       this.removedInputs = []
     },
@@ -165,6 +179,22 @@ export default {
   @media only screen and (min-width : 600px) {
     width: 600px;
   }
+  & .hightLightWraper {
+    position: absolute;
+    top: .5em;
+    right: 2em;
+    & > span {
+      cursor: pointer;
+      z-index: 3;
+      &:hover {
+        color: lightblue;
+      }
+      &.isHighLighted {
+        color: #4285f4;
+      }
+    }
+  }
+
   & .noteEditableContainer {
     position: relative;
     max-height: 70vh;
