@@ -100,7 +100,7 @@ export default {
         title: this.$refs.noteTitle.noteTitle,
         content: this.$refs.noteContent.getFinalText(),
         colorIndex: this.colorIndex,
-        meta: { isHighLighted: this.highLight}
+        meta: { isHighLighted: this.highLight }
       }
 
       if (this.noteId) {
