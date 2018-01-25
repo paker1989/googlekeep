@@ -73,4 +73,5 @@ to do (must):
 
 problems:
 > IE, Firefox bug
+> resize后setFontSize有明显问题
 
