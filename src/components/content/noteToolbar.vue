@@ -15,14 +15,19 @@
       a(href="#", data-toggle="tooltip", data-placement="top", title="重做")
         span.glyphicon.glyphicon-arrow-right(:class="{ isDisabled : disableRedo }",
                                              @click.prevent="redo")
+      a(href="#", data-toggle="tooltip", data-placement="top", title="更多",
+        @click="toggleDropDown($event, true)")
+        span.glyphicon.glyphicon-option-vertical
     .actionContainer(v-if="isEdit")
       span(@click="saveNote") 完成
     .notePaletteWraper(:style="palettePosition",
                        @mouseleave = "togglePalette($event, false)")
       note-palette(:colorIndex.sync='selectedIndex')
+    drop-down(ref="dropdown", :style="dropDownPosition", :actionItems="actionItems")
 </template>
 <script>
 import NotePalette from './notePalette'
+import DropDown from '../common/dropdown'
 
 export default {
   name: 'noteToolbar',
@@ -48,7 +53,18 @@ export default {
         top: 0,
         left: 0,
         display: 'none'
-      }
+      },
+      dropDownPosition: {
+        top: 0,
+        left: 0,
+        display: 'none'
+      },
+      actionItems: [
+        '删除这条记事',
+        '更改标签',
+        '添加绘图',
+        '复制'
+      ]
     }
   },
   watch: {
@@ -60,9 +76,15 @@ export default {
     $(() => {
       $('[data-toggle="tooltip"]').tooltip()
     })
+    // const vm = this
+    // document.addEventListener('mouseup', _.debounce(function(event) {
+    //   console.log(event)
+    //   console.log(vm.isDropdownShow)
+    //   console.log(vm.$refs.dropdown.$el.contains(event.target))
+    // }, 500))
   },
   components: {
-    NotePalette,
+    NotePalette, DropDown
   },
   methods: {
     openFile() {
@@ -88,6 +110,24 @@ export default {
           display: 'none'
         })
     },
+    toggleDropDown(event, isShow) {
+      const $target = $(event.target)
+      console.log($target.position())
+      console.log(isShow)
+      _.extend(this.dropDownPosition,
+        isShow ?
+        {
+          top: `${Math.ceil($target.position().top) + 20}px`,
+          left: `${Math.ceil($target.position().left) - 10}px`,
+          display: 'block'
+        }
+        : {
+          top: 0,
+          left: 0,
+          display: 'none'
+        })
+      console.log(this.dropDownPosition)
+    },
     undo() {
       this.$emit('undo')
     },
@@ -104,7 +144,10 @@ export default {
     },
     disableRedo() {
       return this.removedInputs.length === 0
-    }
+    },
+    // isDropdownShow() {
+    //   return this.dropDownPosition.display !== 'none'
+    // }
   }
 }
 </script>
@@ -116,10 +159,7 @@ export default {
   .headerLayout;
   &> .toollistContainer {
     flex-grow: 1;
-    .headerLayout(flex-start);
-    &> * {
-      margin-right: 2em;
-    }
+    .headerLayout(space-between);
     & .glyphicon-picture+input[type="file"] {
       opacity: 0;
       position: absolute; 
@@ -128,6 +168,8 @@ export default {
     }
   }
   &> .actionContainer {
+    width: 50%;
+    .headerLayout(flex-end);
     &> span {
       border-radius: 10%;
       padding: .5em 1em;
