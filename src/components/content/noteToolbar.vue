@@ -15,19 +15,22 @@
       a(href="#", data-toggle="tooltip", data-placement="top", title="重做")
         span.glyphicon.glyphicon-arrow-right(:class="{ isDisabled : disableRedo }",
                                              @click.prevent="redo")
-      a(href="#", data-toggle="tooltip", data-placement="top", title="更多",
-        @click="toggleDropDown($event, true)")
-        span.glyphicon.glyphicon-option-vertical
+      a(href="#", data-toggle="tooltip", data-placement="top", title="更多")
+        span.glyphicon.glyphicon-option-vertical(@click.prevent="displayDropdown")
     .actionContainer(v-if="isEdit")
       span(@click="saveNote") 完成
     .notePaletteWraper(:style="palettePosition",
                        @mouseleave = "togglePalette($event, false)")
       note-palette(:colorIndex.sync='selectedIndex')
-    drop-down(ref="dropdown", :style="dropDownPosition", :actionItems="actionItems")
+    drop-down(ref="dropdown", :style="dropDownPosition",
+              :actionItems="actionItems",
+              v-if="isShowDropdown",
+              v-click-outside="hideDropdown")
 </template>
 <script>
 import NotePalette from './notePalette'
 import DropDown from '../common/dropdown'
+import { clickOutside } from '../../directives'
 
 export default {
   name: 'noteToolbar',
@@ -57,15 +60,18 @@ export default {
       dropDownPosition: {
         top: 0,
         left: 0,
-        display: 'none'
       },
       actionItems: [
         '删除这条记事',
         '更改标签',
         '添加绘图',
         '复制'
-      ]
+      ],
+      isShowDropdown: false
     }
+  },
+  directives: {
+    clickOutside
   },
   watch: {
     selectedIndex(newVal) {
@@ -76,20 +82,6 @@ export default {
     $(() => {
       $('[data-toggle="tooltip"]').tooltip()
     })
-    const vm = this
-    document.addEventListener('mouseup', _.debounce(function(event) {
-      const isOutside = !vm.$refs.dropdown.$el.contains(event.target)
-      console.log(vm.isDropdownShow)
-      if (vm.isDropdownShow && isOutside) {
-        console.log('hide')
-        _.extend(vm.dropDownPosition,
-          {
-            top: 0,
-            left: 0,
-            display: 'none'
-          })        
-      }
-    }, 500))
   },
   components: {
     NotePalette, DropDown
@@ -118,23 +110,20 @@ export default {
           display: 'none'
         })
     },
-    toggleDropDown(event, isShow) {
+    displayDropdown(event) {
+      this.isShowDropdown = true
       const $target = $(event.target)
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         _.extend(this.dropDownPosition,
-          isShow ?
           {
             top: `${Math.ceil($target.position().top) + 20}px`,
             left: `${Math.ceil($target.position().left) - 10}px`,
-            display: 'block'
           }
-          : {
-            top: 0,
-            left: 0,
-            display: 'none'
-          })
+        )
       })
-
+    },
+    hideDropdown() {
+      this.isShowDropdown = false
     },
     undo() {
       this.$emit('undo')
@@ -153,10 +142,6 @@ export default {
     disableRedo() {
       return this.removedInputs.length === 0
     },
-    isDropdownShow() {
-      console.log(this.dropDownPosition.display)
-      return this.dropDownPosition.display !== 'none'
-    }
   }
 }
 </script>
