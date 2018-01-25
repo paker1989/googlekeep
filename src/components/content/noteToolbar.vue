@@ -76,12 +76,20 @@ export default {
     $(() => {
       $('[data-toggle="tooltip"]').tooltip()
     })
-    // const vm = this
-    // document.addEventListener('mouseup', _.debounce(function(event) {
-    //   console.log(event)
-    //   console.log(vm.isDropdownShow)
-    //   console.log(vm.$refs.dropdown.$el.contains(event.target))
-    // }, 500))
+    const vm = this
+    document.addEventListener('mouseup', _.debounce(function(event) {
+      const isOutside = !vm.$refs.dropdown.$el.contains(event.target)
+      console.log(vm.isDropdownShow)
+      if (vm.isDropdownShow && isOutside) {
+        console.log('hide')
+        _.extend(vm.dropDownPosition,
+          {
+            top: 0,
+            left: 0,
+            display: 'none'
+          })        
+      }
+    }, 500))
   },
   components: {
     NotePalette, DropDown
@@ -112,21 +120,21 @@ export default {
     },
     toggleDropDown(event, isShow) {
       const $target = $(event.target)
-      console.log($target.position())
-      console.log(isShow)
-      _.extend(this.dropDownPosition,
-        isShow ?
-        {
-          top: `${Math.ceil($target.position().top) + 20}px`,
-          left: `${Math.ceil($target.position().left) - 10}px`,
-          display: 'block'
-        }
-        : {
-          top: 0,
-          left: 0,
-          display: 'none'
-        })
-      console.log(this.dropDownPosition)
+      this.$nextTick(function() {
+        _.extend(this.dropDownPosition,
+          isShow ?
+          {
+            top: `${Math.ceil($target.position().top) + 20}px`,
+            left: `${Math.ceil($target.position().left) - 10}px`,
+            display: 'block'
+          }
+          : {
+            top: 0,
+            left: 0,
+            display: 'none'
+          })
+      })
+
     },
     undo() {
       this.$emit('undo')
@@ -145,9 +153,10 @@ export default {
     disableRedo() {
       return this.removedInputs.length === 0
     },
-    // isDropdownShow() {
-    //   return this.dropDownPosition.display !== 'none'
-    // }
+    isDropdownShow() {
+      console.log(this.dropDownPosition.display)
+      return this.dropDownPosition.display !== 'none'
+    }
   }
 }
 </script>
