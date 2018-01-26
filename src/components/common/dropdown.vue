@@ -1,8 +1,8 @@
 <template lang="jade">
   modal.dropdownContainer
     ul
-      li(v-for="item in actionItems")
-        span {{ item }}
+      li(v-for="(item, index) in items", :key="index", v-if="item.isVisible")
+        span {{ item.label }}
 </template>
 <script>
 import Modal from './modal'
@@ -12,6 +12,11 @@ export default {
   props: ['actionItems'],
   components: {
     Modal,
+  },
+  computed: {
+    items() {
+      return Object.values(this.actionItems)
+    }
   }
 }
 </script>

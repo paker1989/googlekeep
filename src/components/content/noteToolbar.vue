@@ -48,6 +48,10 @@ export default {
       type: Array,
       default() { return [] }
     },
+    actionItems: {
+      type: Object,
+      // default() { return [] }
+    }
   },
   data() {
     return {
@@ -61,12 +65,14 @@ export default {
         top: 0,
         left: 0,
       },
-      actionItems: [
-        '删除这条记事',
-        '更改标签',
-        '添加绘图',
-        '复制'
-      ],
+      // actionItems: [
+      //   { label: '更改标签', isVisible: true, event: 'changeTag' },
+      //   { label: '删除这条记事', isVisible: true, event: 'deleteNote' },
+      //   { label: '添加标签', isVisible: true, event: 'addTag' },
+      //   { label: '显示复选框', isVisible: true, event: 'refactToCheckList' },
+      //   { label: '隐藏复选框', isVisible: true, event: 'refactToNormal' },
+      //   { label: '复制', isVisible: true, event: 'duplicateNote' },
+      // ],
       isShowDropdown: false
     }
   },

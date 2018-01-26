@@ -21,6 +21,7 @@ const NoteSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  tags: [{ type: Schema.Types.ObjectId, ref: 'Tag', default: [] }],
   meta: {
     // Add later
     // createdBy: {

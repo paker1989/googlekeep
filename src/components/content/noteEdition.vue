@@ -16,10 +16,11 @@
     note-toolbar.toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
                          :cachedInputs="cachedInputs",
                          :removedInputs="removedInputs",
+                         :actionItems="actionItems",
                          @saveNote="saveNote",
                          @undo="undoContent",
                          @redo="redoContent",
-                         @newImageUpload="uploadImage")
+                         @newImageUpload="uploadImage") 
 </template>
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -29,6 +30,8 @@ import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 
+// import { clickOutside } from '../../directives'
+/* eslint no-unused-expressions: off */
 export default {
   name: 'noteEdition',
   props: {
@@ -48,8 +51,21 @@ export default {
       highLight: this.note ? this.note.meta.isHighLighted : false,
       cachedInputs: [''],
       removedInputs: [],
+      tags: this.note ? this.note.tags : [],
+      type: 'note',
+      actionItems: {
+        changeTag: { label: '更改标签', isVisible: true, event: 'changeTag' },
+        deleteNote: { label: '删除这条记事', isVisible: true, event: 'deleteNote' },
+        addTag: { label: '添加标签', isVisible: true, event: 'addTag' },
+        refactToCheckList: { label: '显示复选框', isVisible: true, event: 'refactToCheckList' },
+        refactToNote: { label: '隐藏复选框', isVisible: true, event: 'refactToNote' },
+        duplicateNote: { label: '复制', isVisible: true, event: 'duplicateNote' }
+      }
       // originalNote: this.note
     }
+  },
+  created() {
+    this.updateActionItems()
   },
   components: {
     NoteToolbar, NoteContent, NoteTitle, ImageWraper
@@ -109,16 +125,49 @@ export default {
       return note
     },
     resetForCreate() {
-      this.noteId = null
-      this.colorIndex = 0
-      this.editMode = false
-      this.uploadedImages = []
-      this.title = ''
-      this.content = ''
-      this.highLight = false
+      // this.noteId = null
+      // this.colorIndex = 0
+      // this.editMode = false
+      // this.uploadedImages = []
+      // this.title = ''
+      // this.content = ''
+      // this.highLight = false
+      this.resetNote(null)
       this.$refs.noteTitle.reset()
       this.$refs.noteContent.reset()
       this.$refs.imageWraper.reset()
+      // this.updateActionItems()
+    },
+    resetNote(newNote) {
+      this.noteId = newNote ? newNote._id : null
+      this.colorIndex = newNote ? newNote.colorIndex : 0
+      this.editMode = !!newNote
+      this.title = newNote ? newNote.title : ''
+      this.content = newNote ? newNote.content : ''
+      this.uploadedImages = newNote ? newNote.photos : []
+      this.highLight = newNote ? newNote.meta.isHighLighted : false
+      this.cachedInputs = ['']
+      this.removedInputs = []
+      this.updateActionItems()      
+    },
+    updateActionItems() {
+      this.actionItems.changeTag
+      && (this.actionItems.changeTag.isVisible = this.tags.length > 0)
+
+      this.actionItems.deleteNote
+      && (this.actionItems.deleteNote.isVisible = this.noteId != null)
+
+      this.actionItems.addTag
+      && (this.actionItems.addTag.isVisible = this.tags.length === 0)
+
+      this.actionItems.refactToCheckList
+      && (this.actionItems.refactToCheckList.isVisible = this.type === 'note')
+
+      this.actionItems.refactToNote
+      && (this.actionItems.refactToNote.isVisible = this.type !== 'note')
+
+      this.actionItems.duplicateNote
+      && (this.actionItems.duplicateNote.isVisible = this.noteId != null)
     },
     highLightNote() {
       this.highLight = !this.highLight
@@ -147,15 +196,17 @@ export default {
   watch: {
     note(newNote) { // value change only when edit a note, triger children components
                    // change by watch
-      this.noteId = newNote ? newNote._id : null
-      this.colorIndex = newNote ? newNote.colorIndex : 0
-      this.editMode = !!newNote
-      this.title = newNote ? newNote.title : ''
-      this.content = newNote ? newNote.content : ''
-      this.uploadedImages = newNote ? newNote.photos : []
-      this.highLight = newNote ? newNote.meta.isHighLighted : false
-      this.cachedInputs = ['']
-      this.removedInputs = []
+      this.resetNote(newNote)
+      // this.noteId = newNote ? newNote._id : null
+      // this.colorIndex = newNote ? newNote.colorIndex : 0
+      // this.editMode = !!newNote
+      // this.title = newNote ? newNote.title : ''
+      // this.content = newNote ? newNote.content : ''
+      // this.uploadedImages = newNote ? newNote.photos : []
+      // this.highLight = newNote ? newNote.meta.isHighLighted : false
+      // this.cachedInputs = ['']
+      // this.removedInputs = []
+      // this.updateActionItems()
     },
     globalNoteEvent(newVal) {
       if (newVal === Types.TERMINATE_TARGET_EVENT && this.editMode) {
