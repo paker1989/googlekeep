@@ -4,6 +4,7 @@
       | 标题
     .noteTitleEdit(contenteditable="true",
                    ref="noteTitleEdit",
+                   v-html="noteTitle",
                    @input="tapeTitle",
                    @keydown.prevent.enter="focusContent")
 </template>
@@ -50,11 +51,12 @@ export default {
       return this.editMode && this.noteTitle.length === 0
     },
   },
-  watch: {
-    title(newval) {
-      this.target.innerHTML = this.noteTitle = newval
-    }
-  }
+  // watch: {
+  //   title(newval) {
+  //     console.log('title changed')
+  //     this.target.innerHTML = this.noteTitle = newval
+  //   }
+  // }
 }
 </script>
 <style lang="less" scoped>

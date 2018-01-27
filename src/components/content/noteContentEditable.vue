@@ -108,12 +108,14 @@ export default {
     },
     ...mapGetters('noteStore', ['getNoteConfigProp'])
   },
-  watch: { // content changed from upper level occurs
-           // only when edit a different note
-    content(newval) {
-      this.target.innerHTML = this.noteContent = newval
-    }
-  }
+  // content changed from upper level occurs
+  // only when edit a different note
+  // watch: {
+  //   content(newval) {
+  //     console.log('content changed')
+  //     this.target.innerHTML = this.noteContent = newval
+  //   }
+  // }
 }
 </script>
 <style lang="less" scoped>

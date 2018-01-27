@@ -34,6 +34,8 @@ const saveNoteText = (req, res) => {
     })
   } else {
     const newNote = new Note(note)
+    // console.log('newNote: ')
+    // console.log(newNote)
     newNote.save((err, note) => {
       if (err) {
         res.send({

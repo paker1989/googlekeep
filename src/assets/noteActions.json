@@ -1,0 +1,17 @@
+{
+    "deleteNote": {
+        "label": "删除这条记事",
+        "isVisible": true,
+        "event": "deleteNote"
+    },
+    "addTag": {
+        "label": "添加标签",
+        "isVisible": true,
+        "event": "addTag"
+    },
+    "changeTag": {
+        "label": "更改标签",
+        "isVisible": true,
+        "event": "changeTag"
+    }
+}

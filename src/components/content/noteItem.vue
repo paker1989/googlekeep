@@ -8,7 +8,8 @@
       .noteTitle
         {{ item.title}}
       .noteContent(v-html="item.content")
-    note-toolbar.toolbar(:isEdit="false", :colorIndex.sync="colorIndex")
+    note-toolbar.toolbar(:isEdit="false", :colorIndex.sync="colorIndex",
+                         :actionItems="actionItems")
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
@@ -16,6 +17,10 @@ import Types from '../../store/mutationType'
 import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
+// import noteActions from '../../config/noteActions'
+import noteActions from '../../assets/noteActions'
+// import { noteActions } from '../../config/noteActions'
+console.log(noteActions)
 
 export default {
   name: 'noteItem',
@@ -24,7 +29,8 @@ export default {
     return {
       colorIndex: this.item.colorIndex || 0,
       uploadedImages: this.item.photos,
-      highLight: this.item.meta.isHighLighted
+      highLight: this.item.meta.isHighLighted,
+      actionItems: JSON.parse(JSON.stringify(noteActions)),
     }
   },
   components: {

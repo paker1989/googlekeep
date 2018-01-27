@@ -29,8 +29,10 @@ import ImageWraper from './imageWraper'
 import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
-
+// import { noteActions } from '../../config/noteActions'
+import noteActions from '../../assets/noteActions'
 // import { clickOutside } from '../../directives'
+
 /* eslint no-unused-expressions: off */
 export default {
   name: 'noteEdition',
@@ -53,14 +55,7 @@ export default {
       removedInputs: [],
       tags: this.note ? this.note.tags : [],
       type: 'note',
-      actionItems: {
-        changeTag: { label: '更改标签', isVisible: true, event: 'changeTag' },
-        deleteNote: { label: '删除这条记事', isVisible: true, event: 'deleteNote' },
-        addTag: { label: '添加标签', isVisible: true, event: 'addTag' },
-        refactToCheckList: { label: '显示复选框', isVisible: true, event: 'refactToCheckList' },
-        refactToNote: { label: '隐藏复选框', isVisible: true, event: 'refactToNote' },
-        duplicateNote: { label: '复制', isVisible: true, event: 'duplicateNote' }
-      }
+      actionItems: JSON.parse(JSON.stringify(noteActions)),
       // originalNote: this.note
     }
   },
@@ -106,7 +101,7 @@ export default {
               eventRelatedProp: Types.EDIT_NOTE
             })
           } else {
-            this.resetForCreate() // create new note edition event
+            this.resetNote(null) // create new note edition event
           }
         }
       })
@@ -124,20 +119,6 @@ export default {
       }
       return note
     },
-    resetForCreate() {
-      // this.noteId = null
-      // this.colorIndex = 0
-      // this.editMode = false
-      // this.uploadedImages = []
-      // this.title = ''
-      // this.content = ''
-      // this.highLight = false
-      this.resetNote(null)
-      this.$refs.noteTitle.reset()
-      this.$refs.noteContent.reset()
-      this.$refs.imageWraper.reset()
-      // this.updateActionItems()
-    },
     resetNote(newNote) {
       this.noteId = newNote ? newNote._id : null
       this.colorIndex = newNote ? newNote.colorIndex : 0
@@ -148,26 +129,15 @@ export default {
       this.highLight = newNote ? newNote.meta.isHighLighted : false
       this.cachedInputs = ['']
       this.removedInputs = []
-      this.updateActionItems()      
+      this.$refs.noteTitle.reset()  // 手动reset，否则这里子组件无法通过监听到
+      this.$refs.noteContent.reset() // 母组件变化来reset，因为母组件值无变化
+      this.$refs.imageWraper.reset()
+      this.updateActionItems()
     },
     updateActionItems() {
-      this.actionItems.changeTag
-      && (this.actionItems.changeTag.isVisible = this.tags.length > 0)
-
-      this.actionItems.deleteNote
-      && (this.actionItems.deleteNote.isVisible = this.noteId != null)
-
-      this.actionItems.addTag
-      && (this.actionItems.addTag.isVisible = this.tags.length === 0)
-
-      this.actionItems.refactToCheckList
-      && (this.actionItems.refactToCheckList.isVisible = this.type === 'note')
-
-      this.actionItems.refactToNote
-      && (this.actionItems.refactToNote.isVisible = this.type !== 'note')
-
-      this.actionItems.duplicateNote
-      && (this.actionItems.duplicateNote.isVisible = this.noteId != null)
+      this.actionItems.deleteNote.isVisible = !!this.noteId
+      this.actionItems.changeTag.isVisible = this.tags.length > 0
+      this.actionItems.addTag.isVisible = ! this.actionItems.changeTag.isVisible
     },
     highLightNote() {
       this.highLight = !this.highLight
@@ -194,20 +164,6 @@ export default {
     }
   },
   watch: {
-    note(newNote) { // value change only when edit a note, triger children components
-                   // change by watch
-      this.resetNote(newNote)
-      // this.noteId = newNote ? newNote._id : null
-      // this.colorIndex = newNote ? newNote.colorIndex : 0
-      // this.editMode = !!newNote
-      // this.title = newNote ? newNote.title : ''
-      // this.content = newNote ? newNote.content : ''
-      // this.uploadedImages = newNote ? newNote.photos : []
-      // this.highLight = newNote ? newNote.meta.isHighLighted : false
-      // this.cachedInputs = ['']
-      // this.removedInputs = []
-      // this.updateActionItems()
-    },
     globalNoteEvent(newVal) {
       if (newVal === Types.TERMINATE_TARGET_EVENT && this.editMode) {
         this.saveNote()
@@ -260,3 +216,21 @@ export default {
 }
 </style>
 
+<!--
+    // saveNoteFromOutSide() {
+    //   // console.log('saveNoteFromOutSide')
+    //   if (this.editMode) {
+    //     this.saveNote()
+    //   }
+    // },
+
+    // value change only when edit a note, triger children components
+    // change by watch
+    // note(newNote) {
+    //   this.resetNote(newNote)
+    // },
+
+    // resetForCreate() {
+    //   this.resetNote(null)
+    // },
+-->

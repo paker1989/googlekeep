@@ -2,9 +2,9 @@
   .home.container-fluid
     header-container(v-on:toggleSideBar="setContentLayout")
     note-container(:class="{ isAside: displaySideBar }")
-    .editNoteContainer(v-show="displayNoteToEdit")
+    .editNoteContainer(v-if="displayNoteToEdit")
        note-edition(:note="noteToEdit")
-    .bgWraper(v-show="displayBackground", @click="terminateEvent")
+    .bgWraper(v-if="displayBackground", @click.stop="terminateEvent")
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
