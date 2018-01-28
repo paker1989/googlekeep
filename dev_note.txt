@@ -53,14 +53,21 @@
 
 2018/01/26
 TO DO
--> delete items  0.5
--> if no changes, then do nothing while saving. (_.deepEquals) 0.5
+-> delete items  -- in progress
+
+2018/01/27
+-> delete items, shallow delete (only update isArchived flag)
+
+TO DO
+> Delete photos (deep delete && shallow delete)
+> 图片展示 1.5
 
 ////////////////////////////////////////////
 to do (must):
 
+-> 撤销操作
+-> if no changes, then do nothing while saving. (_.deepEquals) 0.5
 > 点击外部时保存新建note 0.5
-> 图片展示 1.5
 > 直接在noteItem上操作 (更改颜色，加载图片, 固定记事 : 删除图片之后做) 0.5
 > delete photos 1
 > global select and delete noteItems 1

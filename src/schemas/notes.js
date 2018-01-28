@@ -1,4 +1,7 @@
 const mongoose = require('mongoose')
+const resourceIO = require('../util/resourceIO')
+const Photo = require('../model/photo')
+
 
 const Schema = mongoose.Schema
 
@@ -54,6 +57,31 @@ NoteSchema.pre('save', function (next) {
     this.meta.updateAt = Date.now()
   }
   next()
+})
+
+ /**
+  * @description: remove all photos before remove target note
+  */
+NoteSchema.pre('remove', function (next) {
+  if (this.photos.length > 0) {
+    Photo.find({ _id: { $in: this.photos } }).exec((err, photos) => {
+      if (err) return next(new Error('failed to retrieve photos'))
+
+      resourceIO.deletePhotos(photos).then((deleteIds) => {
+        Photo.remove({ _id: { $in: deleteIds } }, (error) => {
+          if (error) {
+            next(new Error('delete photo from mongo failed'))
+          } else {
+            next()
+          }
+        })
+      }, () => {
+        next(new Error('delete photo from server failed'))
+      })
+    })
+  } else {
+    next()
+  }
 })
 
 NoteSchema.statics = {

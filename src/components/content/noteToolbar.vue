@@ -25,7 +25,8 @@
     drop-down(ref="dropdown", :style="dropDownPosition",
               :actionItems="actionItems",
               v-if="isShowDropdown",
-              v-click-outside="hideDropdown")
+              v-click-outside="hideDropdown",
+              @dropdownEvent="emitDropdownEvent")
 </template>
 <script>
 import NotePalette from './notePalette'
@@ -65,14 +66,6 @@ export default {
         top: 0,
         left: 0,
       },
-      // actionItems: [
-      //   { label: '更改标签', isVisible: true, event: 'changeTag' },
-      //   { label: '删除这条记事', isVisible: true, event: 'deleteNote' },
-      //   { label: '添加标签', isVisible: true, event: 'addTag' },
-      //   { label: '显示复选框', isVisible: true, event: 'refactToCheckList' },
-      //   { label: '隐藏复选框', isVisible: true, event: 'refactToNormal' },
-      //   { label: '复制', isVisible: true, event: 'duplicateNote' },
-      // ],
       isShowDropdown: false
     }
   },
@@ -139,6 +132,9 @@ export default {
     },
     saveNote() {
       this.$emit('saveNote')
+    },
+    emitDropdownEvent(event) {
+      this.$emit(event)
     }
   },
   computed: {

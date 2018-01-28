@@ -40,9 +40,6 @@ export function updateActionItems(tags, noteId, type) {
   // console.log(tags)
   // console.log(noteId)
   // console.log(type)
-  console.log(tags)
-  console.log(noteId)
-  console.log(type)
   const actionItems = Object.assign({}, noteActions)
 
   if (actionItems.changeTag) {
@@ -75,7 +72,7 @@ export function updateActionItems(tags, noteId, type) {
   if (actionItems.duplicateNote) {
     actionItems.duplicateNote.isVisible = !!noteId
   }
-  console.log(actionItems)
+  // console.log(actionItems)
   return actionItems
 }
 

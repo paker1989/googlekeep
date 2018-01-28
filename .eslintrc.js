@@ -58,6 +58,7 @@ module.exports = {
     'no-console': 'off',
     'no-underscore-dangle': 'off',
     'no-param-reassign': 'off',
-    'no-multi-assign': 'off'
+    'no-multi-assign': 'off',
+    'eslint: consistent-return': 'off' 
   }
 }

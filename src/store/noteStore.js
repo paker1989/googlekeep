@@ -35,6 +35,9 @@ const mutations = {
   },
   [Types.TERMINATE_TARGET_EVENT](state) {
     state.currentEvent = Types.TERMINATE_TARGET_EVENT
+  },
+  [Types.DELETE_NOTE](state, { noteId }) {
+    if (state.cachedNotes[noteId]) { Vue.delete(state.cachedNotes, noteId) }
   }
 }
 
@@ -67,6 +70,34 @@ const actions = {
             })
           }
           resolve({ note: res.body.note })
+        }
+      })
+    })
+  },
+  /**
+   *
+   * @param {*} noteId
+   * @param {*} isShallow: indicates if shallow delete
+   */
+  deleteNote({ commit }, { noteId, isShallow }) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('/note/deleteNote', { noteId, isShallow }).then((res) => {
+        if (res.body.err) {
+          console.log(res.body.err)
+          reject({ err: res.body.err })
+        } else {
+          if (isShallow) {
+            commit({
+              type: Types.UPDATE_NOTE,
+              note: res.body.note
+            })
+          } else {
+            commit({
+              type: Types.DELETE_NOTE,
+              noteId
+            })
+          }
+          resolve({ isDeleted: res.body.isDeleted })
         }
       })
     })

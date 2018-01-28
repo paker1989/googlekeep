@@ -20,7 +20,8 @@
                          @saveNote="saveNote",
                          @undo="undoContent",
                          @redo="redoContent",
-                         @newImageUpload="uploadImage") 
+                         @newImageUpload="uploadImage",
+                         @deleteNote="deleteNoteEvent") 
 </template>
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -29,7 +30,6 @@ import ImageWraper from './imageWraper'
 import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
-// import { noteActions } from '../../config/noteActions'
 import noteActions from '../../assets/noteActions'
 // import { clickOutside } from '../../directives'
 
@@ -54,7 +54,7 @@ export default {
       cachedInputs: [''],
       removedInputs: [],
       tags: this.note ? this.note.tags : [],
-      type: 'note',
+      type: this.note ? this.note.type : 'note',
       actionItems: JSON.parse(JSON.stringify(noteActions)),
       // originalNote: this.note
     }
@@ -127,6 +127,8 @@ export default {
       this.content = newNote ? newNote.content : ''
       this.uploadedImages = newNote ? newNote.photos : []
       this.highLight = newNote ? newNote.meta.isHighLighted : false
+      this.type = 'note'
+      this.tags = []
       this.cachedInputs = ['']
       this.removedInputs = []
       this.$refs.noteTitle.reset()  // 手动reset，否则这里子组件无法通过监听到
@@ -137,16 +139,31 @@ export default {
     updateActionItems() {
       this.actionItems.deleteNote.isVisible = !!this.noteId
       this.actionItems.changeTag.isVisible = this.tags.length > 0
-      this.actionItems.addTag.isVisible = ! this.actionItems.changeTag.isVisible
+      this.actionItems.addTag.isVisible = this.tags.length === 0
     },
     highLightNote() {
       this.highLight = !this.highLight
     },
+    deleteNoteEvent() {
+      if (!this.noteId) return
+
+      this.deleteNote({ noteId: this.noteId, isShallow: true }).then(() => {
+        if (this.getNoteConfigProp(Types.EDIT_NOTE)) {
+          this.finalizeTargetNoteEvent({
+            eventRelatedProp: Types.EDIT_NOTE
+          })
+        } else {
+          this.resetNote(null) // create new note edition event
+        }
+      }, (res) => {
+        console.log(res)
+      })
+    },
     ...mapActions('noteStore', [
-      'saveNoteText'
+      'saveNoteText', 'deleteNote'
     ]),
     ...mapMutations('noteStore', {
-      finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT
+      finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT,
     }),
   },
   computed: {

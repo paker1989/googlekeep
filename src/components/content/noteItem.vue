@@ -17,10 +17,8 @@ import Types from '../../store/mutationType'
 import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
-// import noteActions from '../../config/noteActions'
 import noteActions from '../../assets/noteActions'
 // import { noteActions } from '../../config/noteActions'
-console.log(noteActions)
 
 export default {
   name: 'noteItem',
@@ -52,6 +50,11 @@ export default {
       this.editNote({
         note: this.item
       })
+    },
+    updateActionItems() {
+      this.actionItems.deleteNote.isVisible = !!this.item.noteId
+      this.actionItems.changeTag.isVisible = this.item.tags.length > 0
+      this.actionItems.addTag.isVisible = this.item.tags.length === 0
     },
     ...mapMutations('noteStore', {
       editNote: Types.EDIT_NOTE,

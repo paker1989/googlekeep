@@ -8,6 +8,12 @@ const _ = require('lodash')
 
 const router = express.Router()
 
+function handleError(err, res) {
+  if (err) {
+    res.send({ err })
+  }
+}
+
 /**
  * @param {*} req
  * @param {*} res
@@ -34,8 +40,6 @@ const saveNoteText = (req, res) => {
     })
   } else {
     const newNote = new Note(note)
-    // console.log('newNote: ')
-    // console.log(newNote)
     newNote.save((err, note) => {
       if (err) {
         res.send({
@@ -65,7 +69,7 @@ const savePhoto = (req, res) => {
   }
   const filepath = url.resolve('/static/', req.file.filename)
   const newPhoto = new Photo({
-    url: filepath,
+    url: decodeURIComponent(filepath),
     naturalHeight: req.body.naturalHeight,
     naturalWidth: req.body.naturalWidth,
   })
@@ -131,10 +135,44 @@ const fetchNoteById = (req, res) => {
   })
 }
 
+/**
+ * @param {*} req
+ * @param {*} res
+ * @returns {err | (note | isDeleted)}
+ */
+/* eslint consistent-return: off */
+const deleteNote = (req, res) => {
+  const isShallow = req.body.isShallow
+  if (isShallow) {
+    Note.findById(req.body.noteId, (err, note) => {
+      if (err) {
+        res.send({ err })
+      } else {
+        note.meta.isArchived = true
+        note.save((err, note) => {
+          if (err) {
+            res.send({ err })
+          } else {
+            res.send({ note })
+          }
+        })
+      }
+    })
+  } else {
+    Note.findById(req.body.noteId, (err, note) => {
+      note.remove((err) => {
+        if (err) return handleError(err, res)
+        res.send({ isDeleted: true })
+      })
+    })
+  }
+}
+
 router.post('/saveNoteText', saveNoteText)
 router.post('/fetchNotes', fetchNotes)
 router.post('/fetchNoteById', fetchNoteById)
 router.post('/savePhoto', upload.single('newPhoto'), savePhoto)
+router.post('/deleteNote', deleteNote)
 
 module.exports = router
 

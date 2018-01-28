@@ -26,10 +26,12 @@ export default {
   },
   computed: {
     userNotes() {
-      return this.getUserNotes('abc').filter(note => note.meta.isHighLighted === false)
+      return this.getUserNotes('abc').filter(note => note.meta.isHighLighted === false
+        && note.meta.isArchived === false)
     },
     highLightedUserNotes() {
-      return this.getUserNotes('abc').filter(note => note.meta.isHighLighted === true)
+      return this.getUserNotes('abc').filter(note => note.meta.isHighLighted === true
+        && note.meta.isArchived === false)
     },
     ...mapGetters('noteStore', [
       'getUserNotes'
