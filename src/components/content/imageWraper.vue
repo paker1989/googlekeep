@@ -3,6 +3,8 @@
     .imageContainer(v-for="image in attachedImages", 
                     :style= "{ width: image.width}")
       img(:src="image.url", :class="{uploading: image.uploading}")
+      .deleteWraper(v-if="showDelete", @click="deleteImage(image._id)")
+        span.glyphicon.glyphicon-trash
       .progress(v-if="image.uploading")
         .progress-bar.progress-bar-striped.active(role="progressbar", style="width: 100%")
 </template>
@@ -14,7 +16,15 @@ const { mapActions } = createNamespacedHelpers('noteStore')
 
 export default {
   name: 'imageWraper',
-  props: ['images'],
+  props: {
+    images: {
+      type: Array
+    },
+    showDelete: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       attachedImages: []
@@ -33,7 +43,7 @@ export default {
           const image = new Image()
           image.src = tmpUrl
           image.onload = () => {
-            let tmpImage = {
+            const tmpImage = {
               url: image.src,
               uploading: true,
               naturalHeight: image.naturalHeight,
@@ -49,10 +59,9 @@ export default {
             if (noteId) {
               formData.append('noteId', noteId)
             }
-            vm.savePhoto({ formData }).then(() => {
-              tmpImage = _.assign(tmpImage, {
-                uploading: false
-              })
+            vm.savePhoto({ formData }).then((res) => {
+              // 之后通过watch parent uploadedImages来更新该组件
+              vm.$emit('photoUploaded', res.savedPhoto)
             }, (err) => {
               console.log(err)
             })
@@ -63,6 +72,9 @@ export default {
     },
     reset() {
       this.attachedImages = []
+    },
+    deleteImage(id) {
+      this.$emit('deleteImage', id)
     },
     ...mapActions([
       'savePhoto'
@@ -93,8 +105,32 @@ export default {
         opacity: .3;
       }
     }
+    &> .deleteWraper {
+      position: absolute;
+      right: .5em;
+      bottom: .5em;
+      padding: .25em .5em;
+      border-radius: 2px;
+      background: rgba(0,0,0,0.8);
+      opacity: 0;
+      &:hover {
+        cursor: pointer;
+      }
+      & span {
+        color: white;
+      }
+    }
+    &:hover .deleteWraper {
+      opacity: .75;
+    }
   }
 }
 </style>
 
+<!--
+              // tmpImage = _.assign(tmpImage, {
+              //   uploading: false,
+              //   _id: res.savedPhoto._id
+              // })
+-->
 

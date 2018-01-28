@@ -5,6 +5,7 @@
     .noteTitleEdit(contenteditable="true",
                    ref="noteTitleEdit",
                    v-html="noteTitle",
+                   v-once="true",
                    @input="tapeTitle",
                    @keydown.prevent.enter="focusContent")
 </template>

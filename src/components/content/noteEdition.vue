@@ -5,7 +5,8 @@
                                         :class="{ isHighLighted: highLight}"
                                         @click="highLightNote")
     .noteEditableContainer
-      image-wraper(:images="uploadedImages", ref="imageWraper")
+      image-wraper(:images="uploadedImages", ref="imageWraper", @deleteImage="deletePhoto"
+                   @photoUploaded="updatePhoto")
       note-title(ref="noteTitle", v-show="editMode", :editMode="editMode",
                  :title="title",
                  @focusContent="focusContent")
@@ -49,7 +50,7 @@ export default {
       editMode: !!this.note,
       title: this.note ? this.note.title : '',
       content: this.note ? this.note.content : '',
-      uploadedImages: this.note ? this.note.photos : [],
+      uploadedImages: this.note ? this.note.photos.filter(photo => !photo.meta.isArchived) : [],
       highLight: this.note ? this.note.meta.isHighLighted : false,
       cachedInputs: [''],
       removedInputs: [],
@@ -84,6 +85,16 @@ export default {
       } else {
         this.$refs.imageWraper.uploadNewImage({ newImages: files }, vm.noteId)
       }
+    },
+    deletePhoto(imageId) {
+      this.removePhoto({ imageId, noteId: this.noteId, isShallow: true })
+        .then((res) => {
+          this.uploadedImages = res.updatedPhotos.filter(photo => !photo.meta.isArchived)
+        })
+    },
+    updatePhoto(newPhoto) {
+
+      this.uploadedImages.push(newPhoto)
     },
     undoContent() {
       this.$refs.noteContent.undo()
@@ -146,7 +157,6 @@ export default {
     },
     deleteNoteEvent() {
       if (!this.noteId) return
-
       this.deleteNote({ noteId: this.noteId, isShallow: true }).then(() => {
         if (this.getNoteConfigProp(Types.EDIT_NOTE)) {
           this.finalizeTargetNoteEvent({
@@ -155,12 +165,12 @@ export default {
         } else {
           this.resetNote(null) // create new note edition event
         }
-      }, (res) => {
-        console.log(res)
+      }, (err) => {
+        console.log(err)
       })
     },
     ...mapActions('noteStore', [
-      'saveNoteText', 'deleteNote'
+      'saveNoteText', 'deleteNote', 'removePhoto'
     ]),
     ...mapMutations('noteStore', {
       finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT,

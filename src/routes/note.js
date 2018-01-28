@@ -22,7 +22,7 @@ function handleError(err, res) {
 const saveNoteText = (req, res) => {
   const note = req.body.note
   if (note._id) {
-    Note.findById({ _id: note._id }, (err, existingNote) => {
+    Note.findById(note._id, (err, existingNote) => {
       if (err) {
         res.send({ err })
       } else {
@@ -80,7 +80,7 @@ const savePhoto = (req, res) => {
       return
     }
     if (noteId) {
-      Note.findById({ _id: noteId }, (err, note) => {
+      Note.findById(noteId, (err, note) => {
         if (err) {
           res.send({ err })
         } else {
@@ -168,11 +168,42 @@ const deleteNote = (req, res) => {
   }
 }
 
+const removePhoto = (req, res) => {
+  const isShallow = req.body.isShallow
+  Photo.findById(req.body.imageId, (err, photo) => {
+    if (err) return handleError({ err, res })
+    if (isShallow) {
+      photo.meta.isArchived = true
+      photo.save(() => {
+        Note.fetchById({ noteId: req.body.noteId }, (err, note) => {
+          if (err) return handleError({ err, res })
+          res.send({ note })
+        })
+      })
+    } else {
+      photo.remove(() => {
+        Note.findById(req.body.noteId, (err, note) => {
+          if (err) return handleError({ err, res })
+          const photoIndex = note.photos.indexOf(req.body.imageId)
+          if (photoIndex !== -1) {
+            note.photos.splice(photoIndex, 1)
+          }
+          note.save((err) => {
+            if (err) return handleError({ err, res })
+            res.send({ note })
+          })
+        })
+      })
+    }
+  })
+}
+
 router.post('/saveNoteText', saveNoteText)
 router.post('/fetchNotes', fetchNotes)
 router.post('/fetchNoteById', fetchNoteById)
 router.post('/savePhoto', upload.single('newPhoto'), savePhoto)
 router.post('/deleteNote', deleteNote)
+router.post('/removePhoto', removePhoto)
 
 module.exports = router
 

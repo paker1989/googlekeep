@@ -4,6 +4,7 @@
       span.glyphicon.glyphicon-bookmark(:class="{ isHighLighted: highLight}")
     .noteItemWraper(@click.capture="editItem")
       image-wraper.photoWraper(:images="uploadedImages | noteItemImageFilter('6')", 
+                               :showDelete="false",
                                ref="imageWraper")
       .noteTitle
         {{ item.title}}
@@ -26,7 +27,7 @@ export default {
   data() {
     return {
       colorIndex: this.item.colorIndex || 0,
-      uploadedImages: this.item.photos,
+      uploadedImages: this.item.photos.filter(photo => !photo.meta.isArchived),
       highLight: this.item.meta.isHighLighted,
       actionItems: JSON.parse(JSON.stringify(noteActions)),
     }
@@ -63,7 +64,7 @@ export default {
   watch: {
     item(newVal) {
       this.colorIndex = newVal.colorIndex || 0
-      this.uploadedImages = newVal.photos
+      this.uploadedImages = newVal.photos.filter(photo => !photo.meta.isArchived)
     }
   }
 }

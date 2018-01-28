@@ -83,7 +83,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       Vue.http.post('/note/deleteNote', { noteId, isShallow }).then((res) => {
         if (res.body.err) {
-          console.log(res.body.err)
           reject({ err: res.body.err })
         } else {
           if (isShallow) {
@@ -124,8 +123,29 @@ const actions = {
           reject(res.body.err)
         } else {
           resolve({
-            photo: res.body.savedPhoto
+            savedPhoto: res.body.savedPhoto
           })
+        }
+      })
+    })
+  },
+  /**
+   * @param {*} param0
+   * @param {*} param1
+   * @returns { err | updatedPhotos }
+   */
+  removePhoto({ commit, state }, { imageId, noteId, isShallow }) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('/note/removePhoto', { imageId, noteId, isShallow }).then((res) => {
+        if (res.body.err) {
+          reject(res.body.err)
+        } else {
+          // removePhoto的时候无须update cache, 因为之后必定显式update cache
+          // commit({
+          //   type: Types.UPDATE_NOTE,
+          //   note: res.body.note
+          // })
+          resolve({ updatedPhotos: res.body.note.photos })
         }
       })
     })

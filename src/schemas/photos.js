@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const resourceIO = require('../util/resourceIO')
 
 const PhotoSchema = new mongoose.Schema({
   url: String,
@@ -27,6 +28,15 @@ PhotoSchema.pre('save', function (next) {
     this.meta.updateAt = Date.now()
   }
   next()
+})
+
+PhotoSchema.pre('remove', function (next) {
+  console.log('photo remove')
+  resourceIO.deletePhoto(this).then(() => {
+    next()
+  }, (err) => {
+    next(err)
+  })
 })
 
 // PhotoSchema.statics = {

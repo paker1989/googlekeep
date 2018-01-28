@@ -93,6 +93,7 @@ export default {
       const files = event.target.files
       if (!files) return
       this.$emit('newImageUpload', [...files])
+      event.target.value = '' //手动重置，否则无法上传同样文件
     },
     togglePalette(event, isShow) {
       const $target = $(event.target)
