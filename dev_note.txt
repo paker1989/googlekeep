@@ -60,6 +60,7 @@
 -> 删除图片 (shallow or deepDelete) --> both done
 -> 解决了一些bug，比如无法上传同样文件。
 
+2018/01/29
 TO DO
 > new note: once photo added, active dropdown list, meaning allow delete
 > 图片展示 1.5
@@ -72,10 +73,9 @@ to do (must):
 -> if no changes, then do nothing while saving. (_.deepEquals) 0.5
 > 点击外部时保存新建note 0.5
 > 直接在noteItem上操作 (更改颜色，加载图片, 固定记事 : 删除图片之后做) 0.5
-> delete photos 1
 > global select and delete noteItems 1
 > 手机格式layout 1
--> 标签 2
+-> 标签 3
 -> 修改时间 0.5
 > 懒加载
 
