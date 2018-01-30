@@ -93,7 +93,6 @@ export default {
         })
     },
     updatePhoto(newPhoto) {
-
       this.uploadedImages.push(newPhoto)
     },
     undoContent() {

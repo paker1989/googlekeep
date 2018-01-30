@@ -61,13 +61,16 @@
 -> 解决了一些bug，比如无法上传同样文件。
 
 2018/01/29
+> 图片展示 样式 --> done
+
+2018/01/30
 TO DO
+> 图片展示 基本逻辑
 > new note: once photo added, active dropdown list, meaning allow delete
-> 图片展示 1.5
 
 ////////////////////////////////////////////
-to do (must):
 
+to do (must):
 -> 无文字时的toolbar毛玻璃效果
 -> 撤销操作
 -> if no changes, then do nothing while saving. (_.deepEquals) 0.5

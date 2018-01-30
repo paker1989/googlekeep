@@ -113,6 +113,7 @@ export default {
       border-radius: 2px;
       background: rgba(0,0,0,0.8);
       opacity: 0;
+      transition: opacity .25s ease;
       &:hover {
         cursor: pointer;
       }

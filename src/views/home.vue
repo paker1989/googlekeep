@@ -5,12 +5,14 @@
     .editNoteContainer(v-if="displayNoteToEdit")
        note-edition(:note="noteToEdit")
     .bgWraper(v-if="displayBackground", @click.stop="terminateEvent")
+    image-presenter(v-if="true")
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import HeaderContainer from '@/components/header/headerContainer'
 import NoteContainer from '@/components/content/content'
 import NoteEdition from '@/components/content/noteEdition'
+import ImagePresenter from '@/components/content/imagePresenter'
 import Types from '../store/mutationType'
 
 export default {
@@ -27,7 +29,7 @@ export default {
     })
   },
   components: {
-    HeaderContainer, NoteContainer, NoteEdition
+    HeaderContainer, NoteContainer, NoteEdition, ImagePresenter
   },
   computed: {
     ...mapGetters('userStore', [
