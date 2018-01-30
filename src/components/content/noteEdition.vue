@@ -6,7 +6,7 @@
                                         @click="highLightNote")
     .noteEditableContainer
       image-wraper(:images="uploadedImages", ref="imageWraper", @deleteImage="deletePhoto"
-                   @photoUploaded="updatePhoto")
+                   @photoUploaded="updatePhoto", @presentPhoto="presentPhoto")
       note-title(ref="noteTitle", v-show="editMode", :editMode="editMode",
                  :title="title",
                  @focusContent="focusContent")
@@ -135,7 +135,8 @@ export default {
       this.editMode = !!newNote
       this.title = newNote ? newNote.title : ''
       this.content = newNote ? newNote.content : ''
-      this.uploadedImages = newNote ? newNote.photos : []
+      this.uploadedImages = newNote ? newNote.photos.filter(
+        photo => !photo.meta.isArchived) : []
       this.highLight = newNote ? newNote.meta.isHighLighted : false
       this.type = 'note'
       this.tags = []
@@ -168,11 +169,18 @@ export default {
         console.log(err)
       })
     },
+    presentPhoto(imageIndex) {
+      this.vpresentPhoto({
+        imageIndex,
+        images: this.uploadedImages
+      })
+    },
     ...mapActions('noteStore', [
       'saveNoteText', 'deleteNote', 'removePhoto'
     ]),
     ...mapMutations('noteStore', {
       finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT,
+      vpresentPhoto: Types.PRESENT_PHOTO,
     }),
   },
   computed: {

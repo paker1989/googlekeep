@@ -1,8 +1,9 @@
 <template lang="jade">
   .imageWraper
-    .imageContainer(v-for="image in attachedImages", 
-                    :style= "{ width: image.width}")
-      img(:src="image.url", :class="{uploading: image.uploading}")
+    .imageContainer(v-for="(image, index) in attachedImages", 
+                    :style="{ width: image.width}",
+                    :key="index")
+      img(:src="image.url", :class="{uploading: image.uploading}", @click.stop="presentPhoto(index)")
       .deleteWraper(v-if="showDelete", @click="deleteImage(image._id)")
         span.glyphicon.glyphicon-trash
       .progress(v-if="image.uploading")
@@ -75,6 +76,11 @@ export default {
     },
     deleteImage(id) {
       this.$emit('deleteImage', id)
+    },
+    presentPhoto(imageIndex) {
+      if (this.showDelete) {
+        this.$emit('presentPhoto', imageIndex)
+      }
     },
     ...mapActions([
       'savePhoto'

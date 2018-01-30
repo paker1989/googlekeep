@@ -6,5 +6,6 @@ export default {
   EDIT_NOTE: 'edit_note',
   FINALIZE_TARGET_EVENT: 'finalize_target_event', // do normal action to terminate event
   TERMINATE_TARGET_EVENT: 'terminate_target_event', // click outside to terminate event
-  DELETE_NOTE: 'delete_note'
+  DELETE_NOTE: 'delete_note',
+  PRESENT_PHOTO: 'present_photos',
 }

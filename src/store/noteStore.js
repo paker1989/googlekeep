@@ -4,8 +4,10 @@ import Types from './mutationType'
 /* eslint no-shadow: off, no-unused-vars: off, consistent-return: off */
 const state = {
   mostUndo: 5,
+  zoomRange: 1.4,
   currentEvent: null,
-  cachedNotes: {}
+  cachedNotes: {},
+
   // noteToEdit: null,
 }
 
@@ -38,6 +40,9 @@ const mutations = {
   },
   [Types.DELETE_NOTE](state, { noteId }) {
     if (state.cachedNotes[noteId]) { Vue.delete(state.cachedNotes, noteId) }
+  },
+  [Types.PRESENT_PHOTO](state, { imageIndex, images }) {
+    Vue.set(state, Types.PRESENT_PHOTO, { imageIndex, images })
   }
 }
 

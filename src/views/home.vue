@@ -5,7 +5,7 @@
     .editNoteContainer(v-if="displayNoteToEdit")
        note-edition(:note="noteToEdit")
     .bgWraper(v-if="displayBackground", @click.stop="terminateEvent")
-    image-presenter(v-if="true")
+    image-presenter(v-if="photoToPresent", :imageEntity="photoToPresent")
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
@@ -50,7 +50,10 @@ export default {
     displaySideBar() {
       return !this.getUserProp('abc', 'sideBarStatus')
     },
-  }
+    photoToPresent() {
+      return this.getNoteConfigProp(Types.PRESENT_PHOTO)
+    }
+  },
 }
 </script>
 <style lang="less" scoped>

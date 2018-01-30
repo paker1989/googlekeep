@@ -7,7 +7,7 @@
         span.glyphicon.glyphicon-picture.red
         span 照片记事
     .imageContainer
-      img.initImagLayout(src="https://keep.google.com/u/1/media/v2/1bSS2CJRCSuWj2ojEwg3rmWSfY_WuWEu8B6BTDGiZ2E8cQNyjI89BV7tDtc_IeA/1DuCVKuXM0EC7sX7d8YxSztD91fCRskRpxoUTMeFkNu41RrdwFTbnO4NmmQYGqw?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=587")
+      img.initImagLayout(:src="currentImage")
     .zoomWraper
       .iconContainer
         span.glyphicon.glyphicon-minus
@@ -15,20 +15,68 @@
         span.glyphicon.glyphicon-zoom-out
       .iconContainer
         span.glyphicon.glyphicon-plus
-    .toggleActionWraper
+    .toggleActionWraper(v-show="isLeftRemaining")
       .arrow.arrow-left
       span.glyphicon.glyphicon-chevron-left.chevron-left
-    .toggleActionWraper
+    .toggleActionWraper(v-show="isRightRemaining")
       .arrow.arrow-right
       span.glyphicon.glyphicon-chevron-right.chevron-right
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'imagePresenter',
   props: {
-    images: {
-      type: Array,
-      default() { return [] }
+    imageEntity: {
+      type: Object,
+    }
+  },
+  data() {
+    return {
+      currentIndex: this.imageEntity.imageIndex,
+      currentZoomer: 1, // 当前放大比例
+      maxZoomRatio: 1, // 最多放大比例
+    }
+  },
+  mounted() {
+    this.resetZoomer()
+  },
+  computed: {
+    imageRange() {
+      return this.getNoteConfigProp('zoomRange')
+    },
+    currentImage() {
+      return this.imageEntity.images[this.currentIndex].url
+    },
+    isLeftRemaining() {
+      return this.currentIndex > 0
+    },
+    isRightRemaining() {
+      return this.currentIndex < this.imageEntity.images.length - 1
+    },
+    isZoomLess() {
+      return this.currentZoomer > 1
+    },
+    isZoomMore() {
+      return this.maxZoomRatio > this.currentZoomer
+    },
+    ...mapGetters('noteStore', [
+      'getNoteConfigProp',
+    ]),
+  },
+  methods: {
+    resetZoomer() {
+      const actualWidth = document.querySelector('.initImagLayout').width
+      const natureWidth = this.imageEntity.images[this.currentIndex].naturalWidth
+      this.currentZoomer = 1
+      this.maxZoomRatio = Number(natureWidth / actualWidth).toFixed(1)
+      console.log(this.maxZoomRatio)
+    },
+  },
+  watch: {
+    currentIndex() {
+      this.resetZoomer()
     }
   }
 }
@@ -47,7 +95,7 @@ export default {
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.8);
-  z-index:999;
+  z-index:4002;
   & > .imageContainer {
     position: absolute;
     top: 50%;
@@ -56,7 +104,7 @@ export default {
     & .initImagLayout {
       max-width: 60vw;
       max-height: calc(100vh ~"-" @headHeight ~"-" @bottom ~"-" @zoomHeight);
-      z-index: 1000;
+      z-index: 4003;
     }
   } // end .imageContainer
   & > .headerContainer {
@@ -139,14 +187,19 @@ export default {
       font-weight: 100;
       font-size: 1.2em;
       padding: 10px 15px;
-      color: white;
+      // color: white;
       transition: background .25s ease;
       &:hover{
         cursor: pointer;
+        color: white;
         background: lighten(black, 30%);
       }
     }
   } // end .zoomWraper
 }
-
 </style>
+
+<!--
+img.initImagLayout(src="https://keep.google.com/u/1/media/v2/1bSS2CJRCSuWj2ojEwg3rmWSfY_WuWEu8B6BTDGiZ2E8cQNyjI89BV7tDtc_IeA/1DuCVKuXM0EC7sX7d8YxSztD91fCRskRpxoUTMeFkNu41RrdwFTbnO4NmmQYGqw?
+accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=587")
+-->
