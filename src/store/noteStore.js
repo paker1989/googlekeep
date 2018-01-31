@@ -43,7 +43,10 @@ const mutations = {
   },
   [Types.PRESENT_PHOTO](state, { imageIndex, images }) {
     Vue.set(state, Types.PRESENT_PHOTO, { imageIndex, images })
-  }
+  },
+  [Types.CANCEL_PRESENT_PHOTO](state) {
+    Vue.set(state, Types.PRESENT_PHOTO, null)
+  },
 }
 
 const actions = {

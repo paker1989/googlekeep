@@ -64,10 +64,13 @@
 > 图片展示 样式 --> done
 
 2018/01/30
-TO DO
-> 图片展示 基本逻辑
-> new note: once photo added, active dropdown list, meaning allow delete
+> 图片展示 基本逻辑 --> done (问题: 拖拽事件)
 
+2018/01/31
+-- TO DO
+  > new note: once photo added, active dropdown list, meaning allow delete
+  -> 标签 3
+  
 ////////////////////////////////////////////
 
 to do (must):
@@ -78,10 +81,10 @@ to do (must):
 > 直接在noteItem上操作 (更改颜色，加载图片, 固定记事 : 删除图片之后做) 0.5
 > global select and delete noteItems 1
 > 手机格式layout 1
--> 标签 3
 -> 修改时间 0.5
 > 懒加载
-
+> (问题: 拖拽事件)
+ 
 -> 搜索
 -> 动画
 -> 图片编辑等
@@ -91,4 +94,5 @@ to do (must):
 problems:
 > IE, Firefox bug
 > resize后setFontSize有明显问题
+
 

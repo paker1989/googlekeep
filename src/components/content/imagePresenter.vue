@@ -2,28 +2,31 @@
   .imagePresenter
     .headerContainer
       .backContainer
-        .backWraper
+        .backWraper(@click="backToEdition")
           span.glyphicon.glyphicon-arrow-left
         span.glyphicon.glyphicon-picture.red
         span 照片记事
     .imageContainer
-      img.initImagLayout(:src="currentImage")
+      //- img.initImagLayout(:src="currentImage")
+      img#targetPhoto(:src="currentImage", :class="{initImagLayout: initialLayout}",
+        @keyup.enter="test")
     .zoomWraper
-      .iconContainer
+      .iconContainer(:class="{activeZoom: isZoomLess}", @click="zoomLess")
         span.glyphicon.glyphicon-minus
-      .iconContainer
+      .iconContainer(:class="{activeZoom: isZoomOriginal}", @click="zoomOrigin")
         span.glyphicon.glyphicon-zoom-out
-      .iconContainer
+      .iconContainer(:class="{activeZoom: isZoomMore}", @click="zoomMore")
         span.glyphicon.glyphicon-plus
-    .toggleActionWraper(v-show="isLeftRemaining")
+    .toggleActionWraper(v-show="isLeftRemaining", @click="currentIndex--")
       .arrow.arrow-left
       span.glyphicon.glyphicon-chevron-left.chevron-left
-    .toggleActionWraper(v-show="isRightRemaining")
+    .toggleActionWraper(v-show="isRightRemaining", @click="currentIndex++")
       .arrow.arrow-right
       span.glyphicon.glyphicon-chevron-right.chevron-right
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import Types from '../../store/mutationType'
 
 export default {
   name: 'imagePresenter',
@@ -35,9 +38,13 @@ export default {
   data() {
     return {
       currentIndex: this.imageEntity.imageIndex,
+      initialLayout: true, // 需要监听鼠标事件模拟拖拽效果
       currentZoomer: 1, // 当前放大比例
       maxZoomRatio: 1, // 最多放大比例
     }
+  },
+  created() {
+    document.addEventListener('keyup', this.escEventListener)
   },
   mounted() {
     this.resetZoomer()
@@ -61,18 +68,75 @@ export default {
     isZoomMore() {
       return this.maxZoomRatio > this.currentZoomer
     },
+    isZoomOriginal() {
+      return this.currentZoomer !== 1
+    },
     ...mapGetters('noteStore', [
       'getNoteConfigProp',
     ]),
   },
   methods: {
     resetZoomer() {
-      const actualWidth = document.querySelector('.initImagLayout').width
-      const natureWidth = this.imageEntity.images[this.currentIndex].naturalWidth
-      this.currentZoomer = 1
-      this.maxZoomRatio = Number(natureWidth / actualWidth).toFixed(1)
-      console.log(this.maxZoomRatio)
+      this.initialLayout = true
+      this.$nextTick(function () {
+        const actualWidth = document.querySelector('.initImagLayout').width
+        const natureWidth = this.imageEntity.images[this.currentIndex].naturalWidth
+
+        this.currentZoomer = 1
+        this.maxZoomRatio = Number(natureWidth / actualWidth).toFixed(1)
+      })
     },
+    // zoomMore() {},
+    // zoomLess() {},
+    // zoomOrigin() {},
+    zoomMore() {
+      if (this.isZoomMore) {
+        if (this.initialLayout) {
+          this.initialLayout = false
+        }
+        const nextZoomer = Math.min(this.currentZoomer * this.imageRange, this.maxZoomRatio)
+        document.querySelector('#targetPhoto').width *= nextZoomer / this.currentZoomer
+        document.querySelector('#targetPhoto').height *= nextZoomer / this.currentZoomer
+        this.currentZoomer = nextZoomer
+      }
+    },
+    zoomLess() {
+      if (this.isZoomLess) {
+        if (this.initialLayout) {
+          this.initialLayout = false
+        }
+        const nextZoomer = Math.max(this.currentZoomer / this.imageRange, 1)
+        document.querySelector('#targetPhoto').width *= nextZoomer / this.currentZoomer
+        document.querySelector('#targetPhoto').height *= nextZoomer / this.currentZoomer
+        this.currentZoomer = nextZoomer
+      }
+    },
+    zoomOrigin() {
+      if (this.isZoomOriginal) {
+        this.initialLayout = true
+        document.querySelector('#targetPhoto').width *= 1 / this.currentZoomer // resize事件有问题
+        document.querySelector('#targetPhoto').height *= 1 / this.currentZoomer
+        this.currentZoomer = 1
+      }
+    },
+    backToEdition() {
+      document.removeEventListener('keyup', this.escEventListener)
+      this.cancelPresentation()
+    },
+    escEventListener(e) {
+      if (e.keyCode === 27) {
+        this.backToEdition()
+      }
+      if (e.keyCode === 37 && this.isLeftRemaining) {
+        this.currentIndex --
+      }
+      if (e.keyCode === 39 && this.isRightRemaining) {
+        this.currentIndex ++
+      }
+    },
+    ...mapMutations('noteStore', {
+      cancelPresentation: Types.CANCEL_PRESENT_PHOTO
+    })
   },
   watch: {
     currentIndex() {
@@ -105,6 +169,9 @@ export default {
       max-width: 60vw;
       max-height: calc(100vh ~"-" @headHeight ~"-" @bottom ~"-" @zoomHeight);
       z-index: 4003;
+    }
+    & img {
+      transition: all .2s ease;
     }
   } // end .imageContainer
   & > .headerContainer {
@@ -189,7 +256,7 @@ export default {
       padding: 10px 15px;
       // color: white;
       transition: background .25s ease;
-      &:hover{
+      &.activeZoom:hover{
         cursor: pointer;
         color: white;
         background: lighten(black, 30%);
@@ -198,8 +265,3 @@ export default {
   } // end .zoomWraper
 }
 </style>
-
-<!--
-img.initImagLayout(src="https://keep.google.com/u/1/media/v2/1bSS2CJRCSuWj2ojEwg3rmWSfY_WuWEu8B6BTDGiZ2E8cQNyjI89BV7tDtc_IeA/1DuCVKuXM0EC7sX7d8YxSztD91fCRskRpxoUTMeFkNu41RrdwFTbnO4NmmQYGqw?
-accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=587")
--->
