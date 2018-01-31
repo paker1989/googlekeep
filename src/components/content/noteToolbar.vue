@@ -51,7 +51,6 @@ export default {
     },
     actionItems: {
       type: Object,
-      // default() { return [] }
     }
   },
   data() {
