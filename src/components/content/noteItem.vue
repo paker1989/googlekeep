@@ -1,5 +1,7 @@
 <template lang="jade">
-  .noteItem.globalSelect(:style="bgColor")
+  .noteItem(:style="bgColor", :class="{ globalSelect: false}")
+    .globalSelectIcon(data-toggle="tooltip", data-placement="bottom", title="选择该记事",
+                      @click="globalSelect")
     .hightLightWraper
       span.glyphicon.glyphicon-bookmark(:class="{ isHighLighted: highLight}")
     .noteItemWraper(@click.capture="editItem")
@@ -93,12 +95,34 @@ export default {
       opacity: 1;
       // transform: scaleY(1);
     }
+    & .globalSelectIcon {
+      opacity: 1;
+    }
   }
 
   &.globalSelect {
     border: solid lighten(black, 45%);
     border-width: 5px;
     border-radius: 6px;
+  }
+
+  & .globalSelectIcon {
+    position: absolute;
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    background-color: white;
+    top:0;
+    left:0;
+    cursor: pointer;
+    background-image: url('../../assets/globalSelect.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: translate3d(-50%, -50%, 0);
+    transition: opacity .25s ease;
+    box-shadow: 0 1px 1px 1px rgba(0,0,0,.1);
+    z-index: 3;
+    opacity: 0;
   }
 
   & .transparent {
