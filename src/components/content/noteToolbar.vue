@@ -156,6 +156,9 @@ export default {
   &> .toollistContainer {
     flex-grow: 1;
     .headerLayout(space-between);
+    & .glyphicon {
+      color: lighten(black, 25%);
+    }
     & .glyphicon-picture+input[type="file"] {
       opacity: 0;
       position: absolute; 

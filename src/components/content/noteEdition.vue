@@ -148,6 +148,7 @@ export default {
       this.updateActionItems()
     },
     updateActionItems() {
+      // console.log('update action items')
       this.actionItems.deleteNote.isVisible = !!this.noteId
       this.actionItems.changeTag.isVisible = this.tags.length > 0
       this.actionItems.addTag.isVisible = this.tags.length === 0
@@ -203,6 +204,15 @@ export default {
         this.saveNote()
       }
     },
+    noteId() {
+      this.updateActionItems()
+    },
+    type() {
+      this.updateActionItems()
+    },
+    tags() {
+      this.updateActionItems()
+    }
   }
 }
 </script>

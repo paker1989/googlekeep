@@ -1,15 +1,16 @@
 <template lang="jade">
-  .noteItem(:style="bgColor")
+  .noteItem.globalSelect(:style="bgColor")
     .hightLightWraper
       span.glyphicon.glyphicon-bookmark(:class="{ isHighLighted: highLight}")
     .noteItemWraper(@click.capture="editItem")
       image-wraper.photoWraper(:images="uploadedImages | noteItemImageFilter('6')", 
                                :showDelete="false",
                                ref="imageWraper")
-      .noteTitle
-        {{ item.title}}
-      .noteContent(v-html="item.content")
-    note-toolbar.toolbar(:isEdit="false", :colorIndex.sync="colorIndex",
+      .noteTitle(v-html="item.title", v-show="!isNoText")
+      .noteContent(v-html="item.content", v-show="!isNoText")
+    .toolbarWraper(:class="{ transparent: isNoText}")
+      note-toolbar.toolbar(:isEdit="false", :class="{transparentBg: isNoText}",
+                         :colorIndex.sync="colorIndex",
                          :actionItems="actionItems")
 </template>
 <script>
@@ -19,7 +20,6 @@ import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
 import noteActions from '../../assets/noteActions'
-// import { noteActions } from '../../config/noteActions'
 
 export default {
   name: 'noteItem',
@@ -45,6 +45,11 @@ export default {
     bgColor() {
       return this.getBgColors(this.colorIndex)
     },
+    isNoText() {
+      return this.item.title.trim() === ''
+        && this.item.content.trim() === ''
+        && this.item.photos.filter(photo => photo.meta.isArchived === false).length > 0
+    }
   },
   methods: {
     editItem() {
@@ -74,7 +79,6 @@ export default {
 .noteItem {
   position: relative;
   width: 100%;
-  background: #ffffff;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 
               0 3px 1px -2px rgba(0,0,0,0.2), 
               0 1px 5px 0 rgba(0,0,0,0.12);
@@ -87,6 +91,23 @@ export default {
     }
     & .toolbar {
       opacity: 1;
+      // transform: scaleY(1);
+    }
+  }
+
+  &.globalSelect {
+    border: solid lighten(black, 45%);
+    border-width: 5px;
+    border-radius: 6px;
+  }
+
+  & .transparent {
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    & .transparentBg {
+      background: rgba(255,255,255,0.6);
     }
   }
 
@@ -110,15 +131,18 @@ export default {
 
   & .toolbar {
     padding: 15px;
+    // transform: scaleY(0);
+    // transform-origin: bottom;
     opacity: 0;
     transition: opacity .25s ease;
+    // transition: transform .25s ease;
   }
 
   & .noteItemWraper {
     position: relative;
     text-align: left;
     min-height: 30px;
-    &>*:not(.photoWraper) {
+    & > *:not(.photoWraper) {
       padding: 15px 15px 0 15px;
     }
 

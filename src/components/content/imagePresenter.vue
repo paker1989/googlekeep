@@ -128,10 +128,10 @@ export default {
         this.backToEdition()
       }
       if (e.keyCode === 37 && this.isLeftRemaining) {
-        this.currentIndex --
+        this.currentIndex -= 1
       }
       if (e.keyCode === 39 && this.isRightRemaining) {
-        this.currentIndex ++
+        this.currentIndex += 1
       }
     },
     ...mapMutations('noteStore', {
