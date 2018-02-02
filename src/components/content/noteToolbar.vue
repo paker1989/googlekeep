@@ -25,13 +25,13 @@
     drop-down(ref="dropdown", :style="dropDownPosition",
               :actionItems="actionItems",
               v-if="isShowDropdown",
-              v-click-outside="hideDropdown",
+              v-cust-blur="hideDropdown",
               @dropdownEvent="emitDropdownEvent")
 </template>
 <script>
 import NotePalette from './notePalette'
 import DropDown from '../common/dropdown'
-import { clickOutside } from '../../directives'
+import { custBlur } from '../../directives'
 
 export default {
   name: 'noteToolbar',
@@ -69,7 +69,7 @@ export default {
     }
   },
   directives: {
-    clickOutside
+    custBlur
   },
   watch: {
     selectedIndex(newVal) {

@@ -32,7 +32,6 @@ import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
 import noteActions from '../../assets/noteActions'
-// import { clickOutside } from '../../directives'
 
 /* eslint no-unused-expressions: off */
 export default {

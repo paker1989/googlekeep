@@ -1,7 +1,8 @@
 <template lang="jade">
-  .noteItem(:style="bgColor", :class="{ globalSelect: false}")
+  .noteItem(:style="bgColor", :class="{ globalSelect: isGlobalSelect }", v-cust-blur="cancelGlobalSelect")
     .globalSelectIcon(data-toggle="tooltip", data-placement="bottom", title="选择该记事",
-                      @click="globalSelect")
+                      :class="{ globalSelect: isGlobalSelect }",
+                      @click="actionGlobalSelect")
     .hightLightWraper
       span.glyphicon.glyphicon-bookmark(:class="{ isHighLighted: highLight}")
     .noteItemWraper(@click.capture="editItem")
@@ -22,7 +23,9 @@ import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
 import noteActions from '../../assets/noteActions'
+import { custBlur } from '../../directives'
 
+/* eslint no-nested-ternary: off */
 export default {
   name: 'noteItem',
   props: ['item'],
@@ -40,9 +43,15 @@ export default {
   filters: {
     noteItemImageFilter,
   },
+  directives: {
+    custBlur
+  },
   computed: {
     ...mapGetters([
       'getBgColors'
+    ]),
+    ...mapGetters('noteStore', [
+      'isGlobalSelected', 'isGlobalSelecting'
     ]),
     bgColor() {
       return this.getBgColors(this.colorIndex)
@@ -51,21 +60,71 @@ export default {
       return this.item.title.trim() === ''
         && this.item.content.trim() === ''
         && this.item.photos.filter(photo => photo.meta.isArchived === false).length > 0
+    },
+    isGlobalSelect() {
+      // console.log('isGlobalSelect for ' + this.isGlobalSelected(this.item._id))
+      return this.isGlobalSelected(this.item._id)
     }
   },
   methods: {
     editItem() {
-      this.editNote({
-        note: this.item
-      })
+      const currentGlobalStat = this.isGlobalSelecting ? (this.isGlobalSelect ? 1 : 2) : 3
+      switch (currentGlobalStat) {
+        case 1: // 全局事件进行中且被选中
+          this.updateGlobalSelectEvent({
+            noteId: this.item._id,
+            isAdd: false
+          })
+          break
+        case 2: // 全局事件进行中但未被选中
+          this.updateGlobalSelectEvent({
+            noteId: this.item._id,
+            isAdd: true
+          })
+          break
+        default: // 3 全局事件尚未发送
+          this.editNote({
+            note: this.item
+          })
+          break
+      }
     },
     updateActionItems() {
       this.actionItems.deleteNote.isVisible = !!this.item.noteId
       this.actionItems.changeTag.isVisible = this.item.tags.length > 0
       this.actionItems.addTag.isVisible = this.item.tags.length === 0
     },
+    actionGlobalSelect() {
+      const currentGlobalStat = this.isGlobalSelecting ? (this.isGlobalSelect ? 1 : 2) : 3
+      switch (currentGlobalStat) {
+        case 1: // 全局事件进行中且被选中
+          this.updateGlobalSelectEvent({
+            noteId: this.item._id,
+            isAdd: false
+          })
+          break
+        case 2: // 全局事件进行中但未被选中
+          this.updateGlobalSelectEvent({
+            noteId: this.item._id,
+            isAdd: true
+          })
+          break
+        default: // 3 全局事件尚未发送
+          this.updateGlobalSelectEvent({
+            noteId: this.item._id,
+            isAdd: true
+          })
+          break
+      }
+    },
+    cancelGlobalSelect() {
+      console.log('cancel it')
+      this.cancelGlobalSelectEvent()
+    },
     ...mapMutations('noteStore', {
       editNote: Types.EDIT_NOTE,
+      updateGlobalSelectEvent: Types.UPDATE_NOTE_GLOBAL_SELECT,
+      cancelGlobalSelectEvent: Types.CANCEL_NOTE_GLOBAL_SELECT
     })
   },
   watch: {
@@ -123,6 +182,10 @@ export default {
     box-shadow: 0 1px 1px 1px rgba(0,0,0,.1);
     z-index: 3;
     opacity: 0;
+    &.globalSelect {
+      background-color: lighten(black, 45%);
+      opacity: 1;
+    }
   }
 
   & .transparent {

@@ -8,5 +8,7 @@ export default {
   TERMINATE_TARGET_EVENT: 'terminate_target_event', // click outside to terminate event
   DELETE_NOTE: 'delete_note',
   PRESENT_PHOTO: 'present_photos',
-  CANCEL_PRESENT_PHOTO: 'cancel_present_photos'
+  CANCEL_PRESENT_PHOTO: 'cancel_present_photos',
+  UPDATE_NOTE_GLOBAL_SELECT: 'update_note_global_select',
+  CANCEL_NOTE_GLOBAL_SELECT: 'cancel_note_global_select'
 }

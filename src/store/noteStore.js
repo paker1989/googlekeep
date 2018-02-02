@@ -7,6 +7,7 @@ const state = {
   zoomRange: 1.4,
   currentEvent: null,
   cachedNotes: {},
+  globalSelectedNotes: [],
 
   // noteToEdit: null,
 }
@@ -16,6 +17,8 @@ const getters = {
   getUserNotes: state => userId => Object.keys(state.cachedNotes)
     .map(noteId => state.cachedNotes[noteId])
     .sort((a, b) => new Date(b.meta.updateAt) - new Date(a.meta.updateAt)),
+  isGlobalSelected: state => noteId => state.globalSelectedNotes.indexOf(noteId) !== -1,
+  isGlobalSelecting: state => state.globalSelectedNotes.length > 0
 }
 
 const mutations = {
@@ -47,6 +50,17 @@ const mutations = {
   [Types.CANCEL_PRESENT_PHOTO](state) {
     Vue.set(state, Types.PRESENT_PHOTO, null)
   },
+  [Types.UPDATE_NOTE_GLOBAL_SELECT](state, { noteId, isAdd }) {
+    if (isAdd && state.globalSelectedNotes.indexOf(noteId) === -1) {
+      state.globalSelectedNotes.push(noteId)
+    } else if (state.globalSelectedNotes.indexOf(noteId) !== -1) {
+      state.globalSelectedNotes.splice(state.globalSelectedNotes.indexOf(noteId), 1)
+    }
+  },
+  [Types.CANCEL_NOTE_GLOBAL_SELECT](state) {
+    console.log('execute cancel global')
+    state.globalSelectedNotes = []
+  }
 }
 
 const actions = {
