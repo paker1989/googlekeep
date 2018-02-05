@@ -115,5 +115,6 @@ problems:
 > IE, Firefox bug
 > resize后setFontSize有明显问题
 > global select header bar 的actionItem的初始化没有做
+> global select actions发送太多服务器请求，应该发arguments数组，只处理一次
 
 

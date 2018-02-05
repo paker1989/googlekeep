@@ -121,7 +121,7 @@ export default {
       }
     },
     cancelGlobalSelect() {
-      console.log('cancel it')
+      // console.log('cancel it')
       this.cancelGlobalSelectEvent()
     },
     ...mapMutations('noteStore', {
