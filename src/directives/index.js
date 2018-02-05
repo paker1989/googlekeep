@@ -12,12 +12,22 @@ function execBindingEvent(vnode, binding) {
 export const custBlur = {
   bind(el, binding, vnode) {
     el.addEventListener('click', stopProp)
-    document.addEventListener('click', execBindingEvent(vnode, binding))
+    if (binding.arg) {
+      document.querySelector(`.${binding.arg}`).addEventListener(
+        'click', execBindingEvent(vnode, binding))
+    } else {
+      document.addEventListener('click', execBindingEvent(vnode, binding))
+    }
   },
 
   unbind(el, binding, vnode) {
     el.removeEventListener('click', stopProp)
-    document.removeEventListener('click', execBindingEvent(vnode, binding))
+    if (binding.arg) {
+      document.querySelector(`.${binding.arg}`).removeEventListener(
+        'click', execBindingEvent(vnode, binding))
+    } else {
+      document.removeEventListener('click', execBindingEvent(vnode, binding))
+    }
   },
 }
 

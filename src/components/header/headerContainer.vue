@@ -1,33 +1,38 @@
 <template lang="jade">
   .headerContainer
+    global-select-header(:class="{ hideGsHeader : !isGlobalSelecting }")
     header-bar
     side-bar.md-sbar(ref="mdSideBar", :class="{ hiddenSideBar: hideSideBar }")
     .sm-sbarWraper(@click="toggleSideBar", :class="{ hiddenSideBar: hideSideBar }")
       side-bar.sm-sbar(ref="smSideBar", :class="{ hiddenSideBar: hideSideBar }")  
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
+// import { createNamespacedHelpers } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import Types from '../../store/mutationType'
 import HeaderBar from './headerBar'
+import GlobalSelectHeader from './globalSelectHeader'
 import SideBar from './sideBar'
-
-const { mapGetters, mapMutations } = createNamespacedHelpers('userStore')
+// const { mapGetters, mapMutations } = createNamespacedHelpers('userStore')
 
 export default {
   name: 'headerContainer',
   components: {
-    HeaderBar, SideBar
+    HeaderBar, SideBar, GlobalSelectHeader
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('userStore', [
       'getUserProp'
+    ]),
+    ...mapGetters('noteStore', [
+      'isGlobalSelecting'
     ]),
     hideSideBar() {
       return this.getUserProp('abc', 'sideBarStatus')
     }
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations('userStore', {
       toggleSideBarStatus: Types.TOGGLE_SIDE_BAR
     }),
     toggleSideBar(event) {
@@ -48,6 +53,11 @@ export default {
   position: relative;
   width: 100%;
   height: @bar-height;
+
+  .hideGsHeader {
+    transform: translateY(-@bar-height);
+    opacity: 0;
+  }
   .md-sbar {
     display: none;
     position: absolute;

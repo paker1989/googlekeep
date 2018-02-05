@@ -18,7 +18,8 @@ const getters = {
     .map(noteId => state.cachedNotes[noteId])
     .sort((a, b) => new Date(b.meta.updateAt) - new Date(a.meta.updateAt)),
   isGlobalSelected: state => noteId => state.globalSelectedNotes.indexOf(noteId) !== -1,
-  isGlobalSelecting: state => state.globalSelectedNotes.length > 0
+  isGlobalSelecting: state => state.globalSelectedNotes.length > 0,
+  globalSelectedNotes: state => state.globalSelectedNotes.map(noteId => state.cachedNotes[noteId])
 }
 
 const mutations = {
@@ -58,7 +59,7 @@ const mutations = {
     }
   },
   [Types.CANCEL_NOTE_GLOBAL_SELECT](state) {
-    console.log('execute cancel global')
+    // console.log('execute cancel global')
     state.globalSelectedNotes = []
   }
 }
@@ -118,7 +119,8 @@ const actions = {
               noteId
             })
           }
-          resolve({ isDeleted: res.body.isDeleted })
+          console.log(res)
+          resolve({ isDeleted: true })
         }
       })
     })

@@ -86,9 +86,6 @@ export default {
         this.maxZoomRatio = Number(natureWidth / actualWidth).toFixed(1)
       })
     },
-    // zoomMore() {},
-    // zoomLess() {},
-    // zoomOrigin() {},
     zoomMore() {
       if (this.isZoomMore) {
         if (this.initialLayout) {

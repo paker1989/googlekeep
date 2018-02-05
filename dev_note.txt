@@ -76,11 +76,22 @@
 > 研究moment.js --> done
 
 2018/02/02
+> global select and actions such as: delete noteItems, set colors, etc --> In Progress
+
+2018/02/03
 > global select and actions such as: delete noteItems, set colors, etc --> almost done
 
-TO DO 
--> 标签 3
+2018/02/04
+> global select and actions such as: delete noteItems, set colors, etc --> done
 
+2018/02/05
+TO DO 
+-> 标签 4:
+ - 标签悬浮窗: input输入时监测，如果现有tag list里没有，就显示 '创建'，否则显示选项，
+ - noteItem和noteEdition的tag显示问题
+ - sideBar的标签部分
+ - sideBar的修改标签悬浮窗
+ 
 ////////////////////////////////////////////
 
 to do (must):
@@ -103,5 +114,6 @@ to do (must):
 problems:
 > IE, Firefox bug
 > resize后setFontSize有明显问题
+> global select header bar 的actionItem的初始化没有做
 
 

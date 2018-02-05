@@ -1,5 +1,6 @@
 <template lang="jade">
-  .noteItem(:style="bgColor", :class="{ globalSelect: isGlobalSelect }", v-cust-blur="cancelGlobalSelect")
+  .noteItem(:style="bgColor", :class="{ globalSelect: isGlobalSelect }",
+            v-cust-blur:contentContainer="cancelGlobalSelect")
     .globalSelectIcon(data-toggle="tooltip", data-placement="bottom", title="选择该记事",
                       :class="{ globalSelect: isGlobalSelect }",
                       @click="actionGlobalSelect")
@@ -11,10 +12,12 @@
                                ref="imageWraper")
       .noteTitle(v-html="item.title", v-show="!isNoText")
       .noteContent(v-html="item.content", v-show="!isNoText")
-    .toolbarWraper(:class="{ transparent: isNoText}")
-      note-toolbar.toolbar(:isEdit="false", :class="{transparentBg: isNoText}",
-                         :colorIndex.sync="colorIndex",
-                         :actionItems="actionItems")
+    .toolbarWraper(:class="{ transparent: isNoText }")
+      .toolbarGlobalSelectWraper(v-if="isGlobalSelecting", @click="actionGlobalSelect")
+      note-toolbar.toolbar(:isEdit="false",
+                           :class="{transparentBg: isNoText, globalSelect : isGlobalSelecting }",
+                           :colorIndex.sync="colorIndex",
+                           :actionItems="actionItems")
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
@@ -150,7 +153,7 @@ export default {
     & .hightLightWraper span {
       opacity: 1;
     }
-    & .toolbar {
+    & .toolbar:not(.globalSelect) {
       opacity: 1;
       // transform: scaleY(1);
     }
@@ -193,7 +196,7 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
-    & .transparentBg {
+    & .transparentBg:not(.globalSelect) {
       background: rgba(255,255,255,0.6);
     }
   }
@@ -216,6 +219,15 @@ export default {
     }    
   }
 
+  & .toolbarGlobalSelectWraper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    top: 0;
+    left: 0;
+    z-index: 3;
+  }
   & .toolbar {
     padding: 15px;
     // transform: scaleY(0);
