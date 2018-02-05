@@ -1,6 +1,6 @@
 <template lang="jade">
   .contentContainer
-    tag-modifier
+    //- tag-modifier
     note-edition.noteEditionLayout
     NoteWaterfallWraper.highLighted(:items="highLightedUserNotes")
       | {{ highLightedUserNotes.length === 0 ? '': '已固定的记事'}}
@@ -11,12 +11,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import NoteEdition from './noteEdition'
 import NoteWaterfallWraper from './noteWaterfallWraper'
-import TagModifier from '../common/tagModifier'
+// import TagModifier from '../common/tagModifier'
 /* eslint no-underscore-dangle: off, no-console: off */
 export default {
   name: 'contentContainer',
   components: {
-    NoteEdition, NoteWaterfallWraper, TagModifier
+    NoteEdition, NoteWaterfallWraper
   },
   created() {
     this.fetchNotes()

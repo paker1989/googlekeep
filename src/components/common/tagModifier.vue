@@ -8,11 +8,12 @@
       li(v-for="(item, index) in demoTags", :key="index")
         span.checkIcon(:class="{checked : item.isChecked }")
         {{ item.value }}
-    .newTagContainer(v-show="false")
+    .newTagContainer(v-show="true")
       span.glyphicon.glyphicon-plus
       span 创建 "{{typingText}}"
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Modal from './modal'
 
 export default {
@@ -25,18 +26,37 @@ export default {
   },
   data() {
     return {
-      // demoTags: ['blue', '臭美', '略长的标签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签']
-      demoTags: [
-        { value: 'blue', isChecked: false },
-        { value: '臭美', isChecked: true },
-        { value: '略长的标签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签签', isChecked: false },
-      ],
+      tags: [],
       typingText: ''
+    }
+  },
+  created() {
+    const cachedTags = this.getNoteConfigProp('cachedTags')
+    if (cachedTags && cachedTags.isRefreshed) {
+      this.tags.push(...cachedTags.tags)
+    } else {
+      this.getTags().then((res) => {
+        if (res.err) {
+          console.log(res.err)
+        } else {
+          this.tags.push(...res.tags)
+        }
+      })
     }
   },
   components: {
     Modal,
   },
+  computed: {
+    ...mapGetters('noteStore', [
+      'getNoteConfigProp'
+    ])
+  },
+  methods: {
+    ...mapActions('noteStore', [
+      'getTags'
+    ])
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -46,7 +66,7 @@ export default {
 .tagModifier {
   width: @tagModifier-width;
   text-align: left;
-  padding: .6em 0;
+  padding: .6em 0 0 0;
   & > *:not(:last-child) {
     margin-bottom: .5em; 
     padding: 0 1em;
@@ -78,10 +98,14 @@ export default {
     max-height: @taglist-maxHeight;
     overflow-y: auto;
     margin-top: 1em;
+    cursor: pointer;
     & > li {
       .headerLayout(flex-start, row, nowrap, flex-start);
       &:not(:last-child) {
-        margin-bottom: 1em;
+        padding-bottom: 1em;
+      }
+      &:hover {
+        background: #eee;
       }
       & > .checkIcon {
         width: 1.3em;
@@ -100,8 +124,15 @@ export default {
 
   & > .newTagContainer {
     .headerLayout(flex-start, row, nowrap, flex-start);
+    border-top: 1px solid #eee;
+    padding: 1em;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+    }
     & > .glyphicon-plus {
       margin-right: .5em;
+      color: lighten(black, 50%);
     }
   }
 }

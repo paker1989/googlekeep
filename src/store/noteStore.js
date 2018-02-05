@@ -8,6 +8,11 @@ const state = {
   currentEvent: null,
   cachedNotes: {},
   globalSelectedNotes: [],
+  cachedTags: {
+    isRefresh: false,
+    lastRefresh: null,
+    tags: []
+  }
 
   // noteToEdit: null,
 }
@@ -59,7 +64,6 @@ const mutations = {
     }
   },
   [Types.CANCEL_NOTE_GLOBAL_SELECT](state) {
-    // console.log('execute cancel global')
     state.globalSelectedNotes = []
   }
 }
@@ -170,6 +174,17 @@ const actions = {
           //   note: res.body.note
           // })
           resolve({ updatedPhotos: res.body.note.photos })
+        }
+      })
+    })
+  },
+  getTags({ commit }) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('/note/getTags').then((res) => {
+        if (res.body.err) {
+          reject(res.body.err)
+        } else {
+          resolve({ tags: res.body.tags })
         }
       })
     })

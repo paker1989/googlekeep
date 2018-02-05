@@ -27,10 +27,13 @@
               v-if="isShowDropdown",
               v-cust-blur="hideDropdown",
               @dropdownEvent="emitDropdownEvent")
+    tag-modifier(v-if="isShowTagModifier", :style="dropDownPosition"
+                 v-cust-blur="hideTagModifier")
 </template>
 <script>
 import NotePalette from './notePalette'
 import DropDown from '../common/dropdown'
+import TagModifier from '../common/tagModifier'
 import { custBlur } from '../../directives'
 
 export default {
@@ -65,7 +68,8 @@ export default {
         top: 0,
         left: 0,
       },
-      isShowDropdown: false
+      isShowDropdown: false,
+      isShowTagModifier: false,
     }
   },
   directives: {
@@ -82,7 +86,7 @@ export default {
     })
   },
   components: {
-    NotePalette, DropDown
+    NotePalette, DropDown, TagModifier
   },
   methods: {
     openFile() {
@@ -124,6 +128,9 @@ export default {
     hideDropdown() {
       this.isShowDropdown = false
     },
+    hideTagModifier() {
+      this.isShowTagModifier = false
+    },
     undo() {
       this.$emit('undo')
     },
@@ -134,7 +141,13 @@ export default {
       this.$emit('saveNote')
     },
     emitDropdownEvent(event) {
-      this.$emit(event)
+      console.log(event)
+      if (event === 'addTag' || event === 'changeTag') {
+        this.isShowDropdown = false
+        this.isShowTagModifier = !this.isShowDropdown
+      } else {
+        this.$emit(event)
+      }
     }
   },
   computed: {
