@@ -17,6 +17,7 @@ let proxyMiddleware = require('http-proxy-middleware')
 let webpackConfigPromise = require('./webpack.dev.conf')
 
 let noteRoutes = require('../src/routes/note')
+let userRoutes = require('../src/routes/user')
 let bodyParser = require('body-parser')
 
 webpackConfigPromise.then((webpackConfig) => {
@@ -86,6 +87,7 @@ webpackConfigPromise.then((webpackConfig) => {
   //   type: 'multipart/form-data'
   // }))
   app.use('/note', noteRoutes)
+  app.use('/user', userRoutes)
 
   module.exports = app.listen(port, (err) => {
       if (err) {

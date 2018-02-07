@@ -2,13 +2,14 @@
   modal.tagModifier
     .tagHeader 为记事添加标签
     .tagSearchContainer
-      input(type="text", placeholder="输入标签名称", v-model="typingText")
+      input(type="text", placeholder="输入标签名称", v-model="typingText",
+            @keyup.enter="enterTypingText")
       span.glyphicon.glyphicon-search
     ul.tagFilterListContainer
-      li(v-for="(item, index) in demoTags", :key="index")
-        span.checkIcon(:class="{checked : item.isChecked }")
-        {{ item.value }}
-    .newTagContainer(v-show="true")
+      li(v-for="(item, index) in matchedTags", :key="index", @click="toggleTag(index)")
+        span.checkIcon(:class="{checked : item.checked }")
+        {{ item.name }}
+    .newTagContainer(v-show="isShowCreate", @click.stop="createAndAddTag")
       span.glyphicon.glyphicon-plus
       span 创建 "{{typingText}}"
 </template>
@@ -19,7 +20,7 @@ import Modal from './modal'
 export default {
   name: 'tagModifier',
   props: {
-    existingTags: {
+    selectedTags: {
       type: Array,
       default() { return [] }
     }
@@ -31,31 +32,74 @@ export default {
     }
   },
   created() {
-    const cachedTags = this.getNoteConfigProp('cachedTags')
-    if (cachedTags && cachedTags.isRefreshed) {
-      this.tags.push(...cachedTags.tags)
-    } else {
-      this.getTags().then((res) => {
-        if (res.err) {
-          console.log(res.err)
-        } else {
-          this.tags.push(...res.tags)
-        }
-      })
-    }
+    this.fetchTags()
   },
   components: {
     Modal,
   },
   computed: {
-    ...mapGetters('noteStore', [
-      'getNoteConfigProp'
+    matchedTags() {
+      return this.tags.filter(tag => tag.name.includes(this.typingText.trim()))
+    },
+    isShowCreate() {
+      return this.matchedTags.length === 0 && this.typingText.trim().length > 0
+    },
+    ...mapGetters('userStore', [
+      'getUserProp'
     ])
   },
   methods: {
-    ...mapActions('noteStore', [
-      'getTags'
+    fetchTags() {
+      this.tags = []
+      const cachedTags = this.getUserProp('abc', 'cachedTags')
+      if (cachedTags && cachedTags.isRefreshed) {
+        this.tags.push(...cachedTags.tags)
+        this.fetchStatus()
+      } else {
+        this.getTags({ userId: 'abc' }).then((res) => {
+          if (res.err) {
+            console.log(res.err)
+          } else {
+            this.tags.push(...res.tags)
+            this.fetchStatus()
+          }
+        })
+      }
+    },
+    fetchStatus() {
+      this.tags.forEach((tag) => {
+        tag.checked = this.selectedTags.some(selectedTag => selectedTag.name === tag.name)
+      })
+    },
+    createAndAddTag() {
+      this.addTag({ tag: this.typingText.trim(), userId: 'abc' })
+        .then((res) => {
+          this.$emit('toggleTagToNote', { tag: res.tag })
+          this.typingText = ''
+        }, (err) => {
+          console.log(err)
+        })
+    },
+    toggleTag(index) {
+      this.$emit('toggleTagToNote', { tag: this.matchedTags[index] })
+      this.typingText = ''
+    },
+    enterTypingText() {
+      if (this.typingText.trim().length === 0) return
+      if (this.isShowCreate) {
+        this.createAndAddTag()
+      } else {
+        this.toggleTag(0)
+      }
+    },
+    ...mapActions('userStore', [
+      'getTags', 'addTag'
     ])
+  },
+  watch: {
+    selectedTags() {
+      this.fetchTags()
+    }
   }
 }
 </script>
@@ -101,9 +145,7 @@ export default {
     cursor: pointer;
     & > li {
       .headerLayout(flex-start, row, nowrap, flex-start);
-      &:not(:last-child) {
-        padding-bottom: 1em;
-      }
+      padding-bottom: 1em;
       &:hover {
         background: #eee;
       }

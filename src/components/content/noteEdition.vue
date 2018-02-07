@@ -18,6 +18,8 @@
                          :cachedInputs="cachedInputs",
                          :removedInputs="removedInputs",
                          :actionItems="actionItems",
+                         :selectedTags="tags",
+                         @toggleTagToNote="toggleTagToNote",
                          @saveNote="saveNote",
                          @undo="undoContent",
                          @redo="redoContent",
@@ -69,18 +71,25 @@ export default {
     focusContent() {
       this.$refs.noteContent.focusContent()
     },
-    uploadImage(files) {
+    createNewNote() {
       const vm = this
-      if (!this.noteId) {
+      return new Promise((resolve, reject) => {
         const note = this.collectNoteText()
         this.saveNoteText({ note }).then((res) => {
           if (res.err) {
-            console.log(res.err)
-          } else {
-            vm.noteId = res.note._id
-            this.$refs.imageWraper.uploadNewImage({ newImages: files }, vm.noteId)
+            reject(res.err)
           }
+          vm.noteId = res.note._id
+          resolve({ noteId: res.note._id })
         })
+      })
+    },
+    uploadImage(files) {
+      const vm = this
+      if (!this.noteId) {
+        this.createNewNote().then((res) => {
+          vm.$refs.imageWraper.uploadNewImage({ newImages: files }, res.noteId)
+        }, (err) => { console.log(err) })
       } else {
         this.$refs.imageWraper.uploadNewImage({ newImages: files }, vm.noteId)
       }
@@ -120,7 +129,8 @@ export default {
         title: this.$refs.noteTitle.noteTitle,
         content: this.$refs.noteContent.getFinalText(),
         colorIndex: this.colorIndex,
-        meta: { isHighLighted: this.highLight }
+        meta: { isHighLighted: this.highLight },
+        tags: this.tags,
       }
 
       if (this.noteId) {
@@ -147,7 +157,6 @@ export default {
       this.updateActionItems()
     },
     updateActionItems() {
-      // console.log('update action items')
       this.actionItems.deleteNote.isVisible = !!this.noteId
       this.actionItems.changeTag.isVisible = this.tags.length > 0
       this.actionItems.addTag.isVisible = this.tags.length === 0
@@ -174,6 +183,24 @@ export default {
         imageIndex,
         images: this.uploadedImages
       })
+    },
+    toggleTagToNote({ tag }) {
+      const vm = this
+      if (!this.noteId) {
+        this.createNewNote().then(() => {
+          vm.toggleTag(tag)
+        }, (err) => { console.log(err) })
+      } else {
+        vm.toggleTag(tag)
+      }
+    },
+    toggleTag(tag) {
+      const index = this.tags.findIndex(e => e.name === tag.name)
+      if (index !== -1) {
+        this.tags.splice(index, 1)
+      } else {
+        this.tags.unshift(tag)
+      }
     },
     ...mapActions('noteStore', [
       'saveNoteText', 'deleteNote', 'removePhoto'

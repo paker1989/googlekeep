@@ -89,6 +89,7 @@ NoteSchema.statics = {
     return this
       .find({})
       .populate('photos')
+      .populate('tags')
       .sort('meta.updateAt')
       .exec(cb)
   },
@@ -96,6 +97,7 @@ NoteSchema.statics = {
     return this
       .findById({ _id: noteId })
       .populate('photos')
+      .populate('tags')
       .exec(cb)
   }
 }

@@ -27,8 +27,10 @@
               v-if="isShowDropdown",
               v-cust-blur="hideDropdown",
               @dropdownEvent="emitDropdownEvent")
-    tag-modifier(v-if="isShowTagModifier", :style="dropDownPosition"
-                 v-cust-blur="hideTagModifier")
+    tag-modifier(v-if="isShowTagModifier", :style="dropDownPosition",
+                 :selectedTags = "selectedTags",
+                 v-cust-blur="hideTagModifier",
+                 @toggleTagToNote="toggleTagToNote")
 </template>
 <script>
 import NotePalette from './notePalette'
@@ -54,6 +56,10 @@ export default {
     },
     actionItems: {
       type: Object,
+    },
+    selectedTags: {
+      type: Array,
+      default() { return [] }
     }
   },
   data() {
@@ -141,13 +147,15 @@ export default {
       this.$emit('saveNote')
     },
     emitDropdownEvent(event) {
-      console.log(event)
       if (event === 'addTag' || event === 'changeTag') {
         this.isShowDropdown = false
         this.isShowTagModifier = !this.isShowDropdown
       } else {
         this.$emit(event)
       }
+    },
+    toggleTagToNote({ tag }) {
+      this.$emit('toggleTagToNote', { tag })
     }
   },
   computed: {

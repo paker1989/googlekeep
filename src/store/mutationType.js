@@ -10,5 +10,7 @@ export default {
   PRESENT_PHOTO: 'present_photos',
   CANCEL_PRESENT_PHOTO: 'cancel_present_photos',
   UPDATE_NOTE_GLOBAL_SELECT: 'update_note_global_select',
-  CANCEL_NOTE_GLOBAL_SELECT: 'cancel_note_global_select'
+  CANCEL_NOTE_GLOBAL_SELECT: 'cancel_note_global_select',
+  UPDATE_TAGS: 'UPDATE_TAGS',
+  REFRESH_TAGS: 'REFRESH_TAGS'
 }

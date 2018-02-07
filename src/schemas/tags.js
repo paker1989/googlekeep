@@ -1,8 +1,12 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const TagSchema = new mongoose.Schema({
   name: String,
   meta: {
+    // createdBy: {
+    //   type: Schema.Types.ObjectId
+    // },
     createdAt: {
       type: Date,
       default: Date.now()
