@@ -7,9 +7,11 @@
       side-bar-menu-item
         span.glyphicon.glyphicon-glass
         | 提醒
+    tag-sidebar
 </template>
 <script>
 import SideBarMenuItem from './sideBarMenuItem'
+import TagSidebar from './tagSidebar'
 
 export default {
   name: 'sideBar',
@@ -19,7 +21,7 @@ export default {
     }
   },
   components: {
-    SideBarMenuItem,
+    SideBarMenuItem, TagSidebar
   }
 }
 </script>

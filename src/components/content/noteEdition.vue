@@ -13,7 +13,9 @@
       note-content(ref="noteContent",
                    :content="content",
                    :cachedInputs.sync="cachedInputs",
-                   :removedInputs.sync="removedInputs")          
+                   :removedInputs.sync="removedInputs")  
+      tag-presenter(:selectedTags="tags", @deleteTag="deleteTag",
+                    v-if="tags.length > 0")        
     note-toolbar.toolbar(:colorIndex.sync="colorIndex", v-show="editMode",
                          :cachedInputs="cachedInputs",
                          :removedInputs="removedInputs",
@@ -33,7 +35,9 @@ import ImageWraper from './imageWraper'
 import NoteContent from './noteContentEditable'
 import NoteTitle from './noteTitleEditable'
 import NoteToolbar from './noteToolbar'
+import TagPresenter from '../common/tagPresenter'
 import noteActions from '../../assets/noteActions'
+
 
 /* eslint no-unused-expressions: off */
 export default {
@@ -65,7 +69,7 @@ export default {
     this.updateActionItems()
   },
   components: {
-    NoteToolbar, NoteContent, NoteTitle, ImageWraper
+    NoteToolbar, NoteContent, NoteTitle, ImageWraper, TagPresenter,
   },
   methods: {
     focusContent() {
@@ -209,6 +213,10 @@ export default {
       finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT,
       vpresentPhoto: Types.PRESENT_PHOTO,
     }),
+    deleteTag(tagIndex) {
+      // console.log(tag.name)
+      this.tags.splice(tagIndex, 1)
+    }
   },
   computed: {
     ...mapGetters([

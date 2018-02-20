@@ -90,13 +90,14 @@
 2018/02/06
 - 标签悬浮窗UI＋逻辑 --> done
 
-2018/02/07
+2018/02/16
+ - noteItem和noteEdition的tag显示问题 --> done
+ 
 TO DO 
 -> 标签 3:
- - noteItem和noteEdition的tag显示问题
  - sideBar的标签部分
  - sideBar的修改标签悬浮窗
- 
+
 ////////////////////////////////////////////
 
 to do (must):

@@ -2,17 +2,21 @@
   .home.container-fluid
     header-container(v-on:toggleSideBar="setContentLayout")
     note-container(:class="{ isAside: displaySideBar }")
-    .editNoteContainer(v-if="displayNoteToEdit")
+    .editAdminContainer(v-if="displayNoteToEdit")
        note-edition(:note="noteToEdit")
+    .editAdminContainer(v-if="displayTagAdmin")
+      tag-admin
     .bgWraper(v-if="displayBackground", @click.stop="terminateEvent")
     image-presenter(v-if="photoToPresent", :imageEntity="photoToPresent")
 </template>
+
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import HeaderContainer from '@/components/header/headerContainer'
 import NoteContainer from '@/components/content/content'
 import NoteEdition from '@/components/content/noteEdition'
 import ImagePresenter from '@/components/content/imagePresenter'
+import TagAdmin from '@/components/common/tagAdmin'
 import Types from '../store/mutationType'
 
 export default {
@@ -29,7 +33,7 @@ export default {
     })
   },
   components: {
-    HeaderContainer, NoteContainer, NoteEdition, ImagePresenter
+    HeaderContainer, NoteContainer, NoteEdition, ImagePresenter, TagAdmin
   },
   computed: {
     ...mapGetters('userStore', [
@@ -38,14 +42,20 @@ export default {
     ...mapGetters('noteStore', [
       'getNoteConfigProp',
     ]),
+    ...mapGetters([
+      'getGlobalProps'
+    ]),
     noteToEdit() {
-      return this.getNoteConfigProp(Types.EDIT_NOTE)
+      // return this.getNoteConfigProp(Types.EDIT_NOTE)
+      return this.getGlobalProps(Types.EDIT_NOTE)
     },
     displayNoteToEdit() {
-      return this.getNoteConfigProp(Types.EDIT_NOTE) != null
+      // return this.getNoteConfigProp(Types.EDIT_NOTE) != null
+      return this.getGlobalProps(Types.EDIT_NOTE) != null
     },
     displayBackground() {
-      return this.getNoteConfigProp('currentEvent') != null
+      // return this.getNoteConfigProp('currentEvent') != null
+      return this.getGlobalProps('currentEvent') != null
     },
     displaySideBar() {
       return !this.getUserProp('abc', 'sideBarStatus')
@@ -81,7 +91,7 @@ export default {
     right: 0;
   }
 
-  & .editNoteContainer {
+  & .editAdminContainer {
     z-index: 4001;
     position: fixed;
     top: 10vh;

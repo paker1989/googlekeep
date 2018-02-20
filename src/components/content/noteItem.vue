@@ -12,6 +12,7 @@
                                ref="imageWraper")
       .noteTitle(v-html="item.title", v-show="!isNoText")
       .noteContent(v-html="item.content", v-show="!isNoText")
+      tag-Presenter(:selectedTags="item.tags", :maxDisplayItems="2")
     .toolbarWraper(:class="{ transparent: isNoText }")
       .toolbarGlobalSelectWraper(v-if="isGlobalSelecting", @click="actionGlobalSelect")
       note-toolbar.toolbar(:isEdit="false",
@@ -25,6 +26,7 @@ import Types from '../../store/mutationType'
 import noteItemImageFilter from '../../filters'
 import NoteToolbar from './noteToolbar'
 import ImageWraper from './imageWraper'
+import TagPresenter from '../common/tagPresenter'
 import noteActions from '../../assets/noteActions'
 import { custBlur } from '../../directives'
 
@@ -41,7 +43,7 @@ export default {
     }
   },
   components: {
-    NoteToolbar, ImageWraper
+    NoteToolbar, ImageWraper, TagPresenter
   },
   filters: {
     noteItemImageFilter,
