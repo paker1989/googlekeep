@@ -5,10 +5,8 @@ import Types from './mutationType'
 const state = {
   mostUndo: 5,
   zoomRange: 1.4,
-  currentEvent: null,
   cachedNotes: {},
   globalSelectedNotes: [],
-  // noteToEdit: null,
 }
 
 const getters = {
@@ -30,17 +28,6 @@ const mutations = {
   [Types.UPDATE_NOTE](state, { note }) {
     Vue.set(state.cachedNotes, note._id, note)
   },
-  // [Types.EDIT_NOTE](state, { note }) {
-  //   Vue.set(state, Types.EDIT_NOTE, note)
-  //   state.currentEvent = Types.EDIT_NOTE
-  // },
-  // [Types.FINALIZE_TARGET_EVENT](state, { eventRelatedProp }) {
-  //   state.currentEvent = null
-  //   Vue.set(state, eventRelatedProp, null)
-  // },
-  // [Types.TERMINATE_TARGET_EVENT](state) {
-  //   state.currentEvent = Types.TERMINATE_TARGET_EVENT
-  // },
   [Types.DELETE_NOTE](state, { noteId }) {
     if (state.cachedNotes[noteId]) { Vue.delete(state.cachedNotes, noteId) }
   },

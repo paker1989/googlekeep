@@ -2,7 +2,7 @@
   .tagSidebarContainer
     .tagSidebarHeader
       span 标签
-      span.modifier 修改
+      span.modifier(@click="editTagAdmin") 修改
     ul.availableTagWrapeer
       li(v-for="(tag, index) in tags", :key="index")
         span.glyphicon.glyphicon-file
@@ -13,7 +13,8 @@
           span 添加新标签
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import Types from '../../store/mutationType'
 
 export default {
   name: 'tagSideBar',
@@ -46,6 +47,9 @@ export default {
         })
       }
     },
+    ...mapMutations({
+      editTagAdmin: Types.EDIT_TAG_ADMIN
+    }),
     ...mapActions('userStore', [
       'getTags'
     ])

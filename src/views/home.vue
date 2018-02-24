@@ -28,7 +28,7 @@ export default {
     terminateEvent() {
       this.terminateCurrentEvent()
     },
-    ...mapMutations('noteStore', {
+    ...mapMutations({
       terminateCurrentEvent: Types.TERMINATE_TARGET_EVENT
     })
   },
@@ -46,15 +46,15 @@ export default {
       'getGlobalProps'
     ]),
     noteToEdit() {
-      // return this.getNoteConfigProp(Types.EDIT_NOTE)
       return this.getGlobalProps(Types.EDIT_NOTE)
     },
     displayNoteToEdit() {
-      // return this.getNoteConfigProp(Types.EDIT_NOTE) != null
       return this.getGlobalProps(Types.EDIT_NOTE) != null
     },
+    displayTagAdmin() {
+      return this.getGlobalProps('currentEvent') === Types.EDIT_TAG_ADMIN
+    },
     displayBackground() {
-      // return this.getNoteConfigProp('currentEvent') != null
       return this.getGlobalProps('currentEvent') != null
     },
     displaySideBar() {

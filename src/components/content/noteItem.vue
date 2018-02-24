@@ -123,13 +123,14 @@ export default {
       }
     },
     cancelGlobalSelect() {
-      // console.log('cancel it')
       this.cancelGlobalSelectEvent()
     },
     ...mapMutations('noteStore', {
-      editNote: Types.EDIT_NOTE,
       updateGlobalSelectEvent: Types.UPDATE_NOTE_GLOBAL_SELECT,
       cancelGlobalSelectEvent: Types.CANCEL_NOTE_GLOBAL_SELECT
+    }),
+    ...mapMutations({
+      editNote: Types.EDIT_NOTE,
     })
   },
   watch: {
@@ -157,7 +158,6 @@ export default {
     }
     & .toolbar:not(.globalSelect) {
       opacity: 1;
-      // transform: scaleY(1);
     }
     & .globalSelectIcon {
       opacity: 1;
@@ -232,11 +232,8 @@ export default {
   }
   & .toolbar {
     padding: 15px;
-    // transform: scaleY(0);
-    // transform-origin: bottom;
     opacity: 0;
     transition: opacity .25s ease;
-    // transition: transform .25s ease;
   }
 
   & .noteItemWraper {

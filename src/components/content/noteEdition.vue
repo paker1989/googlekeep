@@ -118,7 +118,7 @@ export default {
       const note = this.collectNoteText()
       this.saveNoteText({ note, isUpdateCache }).then((res) => {
         if (res.note) {
-          if (this.getNoteConfigProp(Types.EDIT_NOTE) != null) {
+          if (this.getGlobalProps(Types.EDIT_NOTE) != null) {
             this.finalizeTargetNoteEvent({
               eventRelatedProp: Types.EDIT_NOTE
             })
@@ -171,7 +171,7 @@ export default {
     deleteNoteEvent() {
       if (!this.noteId) return
       this.deleteNote({ noteId: this.noteId, isShallow: true }).then(() => {
-        if (this.getNoteConfigProp(Types.EDIT_NOTE)) {
+        if (this.getGlobalProps(Types.EDIT_NOTE)) {
           this.finalizeTargetNoteEvent({
             eventRelatedProp: Types.EDIT_NOTE
           })
@@ -210,11 +210,12 @@ export default {
       'saveNoteText', 'deleteNote', 'removePhoto'
     ]),
     ...mapMutations('noteStore', {
-      finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT,
       vpresentPhoto: Types.PRESENT_PHOTO,
     }),
+    ...mapMutations({
+      finalizeTargetNoteEvent: Types.FINALIZE_TARGET_EVENT,
+    }),
     deleteTag(tagIndex) {
-      // console.log(tag.name)
       this.tags.splice(tagIndex, 1)
     }
   },
@@ -225,16 +226,23 @@ export default {
     ...mapGetters('noteStore', [
       'getNoteConfigProp'
     ]),
+    ...mapGetters([
+      'getGlobalProps'
+    ]),
     bgColor() {
       return this.getBgColors(this.colorIndex)
     },
     globalNoteEvent() {
-      return this.getNoteConfigProp('currentEvent')
+      return this.getGlobalProps('currentEvent')
     }
   },
   watch: {
     globalNoteEvent(newVal) {
+      console.log('watch note')
+      console.log(newVal)
+      console.log(this.content)
       if (newVal === Types.TERMINATE_TARGET_EVENT && this.editMode) {
+        console.log('save note')
         this.saveNote()
       }
     },

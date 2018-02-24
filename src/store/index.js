@@ -32,6 +32,9 @@ const store = new Vuex.Store({
     [Types.TERMINATE_TARGET_EVENT](state) {
       state.currentEvent = Types.TERMINATE_TARGET_EVENT
     },
+    [Types.EDIT_TAG_ADMIN](state) {
+      state.currentEvent = Types.EDIT_TAG_ADMIN
+    },
   }
 })
 
