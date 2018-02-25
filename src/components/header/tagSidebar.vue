@@ -7,7 +7,7 @@
       li(v-for="(tag, index) in tags", :key="index")
         span.glyphicon.glyphicon-file
         span {{ tag.name }}
-      li
+      li(@click="editTagAdmin")
         span.glyphicon.glyphicon-plus
         strong
           span 添加新标签

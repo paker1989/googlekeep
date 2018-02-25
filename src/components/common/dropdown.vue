@@ -29,6 +29,7 @@ export default {
 <style lang="less" scoped>
 @import (reference) '../../style/headerVars';
 .dropdownContainer {
+    position: absolute;
     & ul {
       .headerLayout(flex-start, column, nowrap, flex-start);
       list-style-type: none;

@@ -10,7 +10,7 @@ export default {
 <style lang="less" scoped>
 @import (reference) '../../style/headerVars';
 .modalWraper {
-  position: absolute;
+  // position: absolute;
   font-size: .9em;
   border-radius: 2px;
   box-shadow: 0 0 4px rgba(0,0,0,0.2);

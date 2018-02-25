@@ -27,7 +27,9 @@ const store = new Vuex.Store({
     },
     [Types.FINALIZE_TARGET_EVENT](state, { eventRelatedProp }) {
       state.currentEvent = null
-      Vue.set(state, eventRelatedProp, null)
+      if (eventRelatedProp) {
+        Vue.set(state, eventRelatedProp, null)
+      }
     },
     [Types.TERMINATE_TARGET_EVENT](state) {
       state.currentEvent = Types.TERMINATE_TARGET_EVENT

@@ -108,6 +108,7 @@ export default {
 @import (reference) '../../style/common';
 
 .tagModifier {
+  position: absolute;
   width: @tagModifier-width;
   text-align: left;
   padding: .6em 0 0 0;

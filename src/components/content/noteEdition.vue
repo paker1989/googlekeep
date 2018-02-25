@@ -238,11 +238,7 @@ export default {
   },
   watch: {
     globalNoteEvent(newVal) {
-      console.log('watch note')
-      console.log(newVal)
-      console.log(this.content)
       if (newVal === Types.TERMINATE_TARGET_EVENT && this.editMode) {
-        console.log('save note')
         this.saveNote()
       }
     },
