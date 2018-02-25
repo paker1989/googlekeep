@@ -16,8 +16,8 @@
       span(@click="terminateEvent") 完成
 </template>
 <script>
-import Modal from './modal'
 import { mapMutations, mapGetters } from 'vuex'
+import Modal from './modal'
 import Types from '../../store/mutationType'
 
 export default {
@@ -58,7 +58,7 @@ export default {
   methods: {
     finalizeEdition(selectedIndex, val) {
       this.tags.forEach((tag, index) => {
-        tag.editing = index === selectedIndex? 
+        tag.editing = index === selectedIndex ?
           val : false
         // console.log(tag.editing)
       })
