@@ -27,6 +27,9 @@ export default {
     this.fetchTags()
   },
   computed: {
+    cachedTagsLength() {
+      return this.getUserProp('abc', 'cachedTags').tags.length
+    },
     ...mapGetters('userStore', [
       'getUserProp'
     ])
@@ -54,6 +57,11 @@ export default {
       'getTags'
     ])
   },
+  watch: {
+    cachedTagsLength() {
+      this.fetchTags()
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

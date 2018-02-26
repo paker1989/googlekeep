@@ -92,11 +92,16 @@
 
 2018/02/16
  - noteItem和noteEdition的tag显示问题 --> done
- 
-TO DO 
+
+2018/02/25
 -> 标签 3:
- - sideBar的标签部分
- - sideBar的修改标签悬浮窗
+ - sideBar的标签部分 --> done
+ - sideBar的修改标签悬浮窗 --> UI done, total in progress
+
+2018/02/26
+- sideBar的修改标签悬浮窗 --> 逻辑
+
+
 
 ////////////////////////////////////////////
 

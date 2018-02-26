@@ -3,10 +3,13 @@
     .titleWraper
       span 修改标签
     .actionContainer
-      span.iconBefore(:class="{ editing: isAddingTag }")
-      input(type="text", placeholder="创建新标签", @focus="isAddingTag=true",
-        @blur="isAddingTag=false")
-      span.iconAfter(v-show="isAddingTag")
+      span.iconBefore(:class="{ editing: isAddingTag }", @click="toggleCreateTag")
+      input(type="text", placeholder="创建新标签",
+            v-model="typingText",
+            v-focus="isAddingTag",
+            @focus="isAddingTag=true",
+            @keyup.enter="createTag")
+      span.iconAfter(v-show="isAddingTag", @click.stop="createTag")
     ul.listContainer
       li(v-for="(tag, index) in tags", :key="index")
         span.iconBefore(:class="{ editing: tag.editing }")
@@ -16,7 +19,7 @@
       span(@click="terminateEvent") 完成
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
 import Modal from './modal'
 import Types from '../../store/mutationType'
 
@@ -29,14 +32,11 @@ export default {
     return {
       isAddingTag: false,
       tags: [],
+      typingText: '',
     }
   },
   created() {
-    const cachedTags = this.getUserProp('abc', 'cachedTags')
-    this.tags.push(...cachedTags.tags)
-    this.tags.forEach((tag) => {
-      this.$set(tag, 'editing', false)
-    })
+    this.fetchTags()
   },
   beforeDestroy() {
     this.finalizeDestroy({ eventRelatedProp: null })
@@ -60,13 +60,46 @@ export default {
       this.tags.forEach((tag, index) => {
         tag.editing = index === selectedIndex ?
           val : false
-        // console.log(tag.editing)
+      })
+    },
+    fetchTags() {
+      const cachedTags = this.getUserProp('abc', 'cachedTags')
+      this.tags = []
+      this.tags.push(...cachedTags.tags)
+      this.tags.forEach((tag) => {
+        this.$set(tag, 'editing', false)
+      })
+    },
+    toggleCreateTag() {
+      if (this.isAddingTag) {
+        this.typingText = ''
+        this.isAddingTag = false // 取消
+      } else {
+        this.isAddingTag = true
+      }
+    },
+    createTag() {
+      const findTag = this.tags.find(tag =>
+        tag.name.toLowerCase() === this.typingText.trim().toLowerCase()
+      )
+      if (findTag) return
+      this.addTag({ userId: 'abc', tag: this.typingText.trim() })
+      .then((res) => {
+        this.$set(res.tag, 'editing', false)
+        this.tags.unshift(res.tag)
+        this.typingText = ''
+      },
+      (err) => {
+        console.log(err)
       })
     },
     ...mapMutations({
       finalizeDestroy: Types.FINALIZE_TARGET_EVENT,
       terminateEvent: Types.TERMINATE_TARGET_EVENT,
-    })
+    }),
+    ...mapActions('userStore', [
+      'addTag'
+    ])
   },
   watch: {
     isAddingTag(val) {
