@@ -37,6 +37,8 @@ const store = new Vuex.Store({
     [Types.EDIT_TAG_ADMIN](state) {
       state.currentEvent = Types.EDIT_TAG_ADMIN
     },
+  },
+  actions: {
   }
 })
 

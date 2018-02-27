@@ -29,7 +29,7 @@ const addTag = (req, res) => {
   const userId = req.body.userId
   const tagName = req.body.tag
   const newTag = new Tag({
-    name: tagName, 
+    name: tagName 
   })
   newTag.save((err, tag) => {
     if (err) {

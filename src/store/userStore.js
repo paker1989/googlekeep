@@ -72,6 +72,9 @@ const actions = {
         }
       })
     })
+  },
+  testAction() {
+    console.log('test action succeed')
   }
 }
 

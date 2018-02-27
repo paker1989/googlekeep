@@ -12,7 +12,8 @@
       span.iconAfter(v-show="isAddingTag", @click.stop="createTag")
     ul.listContainer
       li(v-for="(tag, index) in tags", :key="index")
-        span.iconBefore(:class="{ editing: tag.editing }")
+        span.iconBefore(:class="{ editing: tag.editing }", @click="deleteTag",
+                        data-toggle="tooltip", data-placement="bottom", title="背景")
         input(type="text", :value="tag.name", v-focus="tag.editing", @focus="finalizeEdition(index, true)")
         span.iconAfter(:class="{ editing: tag.editing }", @click="finalizeEdition(index, !tag.editing)")      
     footer
@@ -37,6 +38,9 @@ export default {
   },
   created() {
     this.fetchTags()
+    $(() => {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
   },
   beforeDestroy() {
     this.finalizeDestroy({ eventRelatedProp: null })
@@ -93,12 +97,15 @@ export default {
         console.log(err)
       })
     },
+    deleteTag() {
+      this.$tagDeletePopover(this)
+    },
     ...mapMutations({
       finalizeDestroy: Types.FINALIZE_TARGET_EVENT,
       terminateEvent: Types.TERMINATE_TARGET_EVENT,
     }),
     ...mapActions('userStore', [
-      'addTag'
+      'addTag', 'testAction'
     ])
   },
   watch: {
@@ -189,6 +196,9 @@ export default {
         background-image: url('../../assets/trash.svg');
         &:not(.editing) {
           background-image: url('../../assets/tag.svg');
+          &:hover {
+            background-image: url('../../assets/trash.svg');
+          }          
         }
       }
       & > .iconAfter {
