@@ -13,5 +13,6 @@ export default {
   UPDATE_NOTE_GLOBAL_SELECT: 'update_note_global_select',
   CANCEL_NOTE_GLOBAL_SELECT: 'cancel_note_global_select',
   UPDATE_TAGS: 'UPDATE_TAGS',
-  REFRESH_TAGS: 'REFRESH_TAGS'
+  REFRESH_TAGS: 'REFRESH_TAGS',
+  REMOVE_TAGS: 'REMOVE_TAGS',
 }

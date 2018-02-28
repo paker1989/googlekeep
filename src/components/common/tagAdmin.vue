@@ -12,7 +12,7 @@
       span.iconAfter(v-show="isAddingTag", @click.stop="createTag")
     ul.listContainer
       li(v-for="(tag, index) in tags", :key="index")
-        span.iconBefore(:class="{ editing: tag.editing }", @click="deleteTag",
+        span.iconBefore(:class="{ editing: tag.editing }", @click="deleteTag(index)",
                         data-toggle="tooltip", data-placement="bottom", title="背景")
         input(type="text", :value="tag.name", v-focus="tag.editing", @focus="finalizeEdition(index, true)")
         span.iconAfter(:class="{ editing: tag.editing }", @click="finalizeEdition(index, !tag.editing)")      
@@ -55,9 +55,12 @@ export default {
     }
   },
   computed: {
+    cachedTagsLength() {
+      return this.getUserProp('abc', 'cachedTags').tags.length
+    },
     ...mapGetters('userStore', [
       'getUserProp'
-    ])
+    ]),
   },
   methods: {
     finalizeEdition(selectedIndex, val) {
@@ -97,15 +100,26 @@ export default {
         console.log(err)
       })
     },
-    deleteTag() {
-      this.$tagDeletePopover(this)
+    deleteTag(index) {
+      this.$tagDeletePopover(this, index)
+    },
+    confirmDeleteTag(index) {
+      return new Promise((resolve, reject) => {
+        this.deleteTagAction({
+          userId: 'abc',
+          tag: this.tags[index]
+        })
+        .then(() => {
+          resolve()
+        })
+      })
     },
     ...mapMutations({
       finalizeDestroy: Types.FINALIZE_TARGET_EVENT,
       terminateEvent: Types.TERMINATE_TARGET_EVENT,
     }),
     ...mapActions('userStore', [
-      'addTag', 'testAction'
+      'addTag', 'deleteTagAction'
     ])
   },
   watch: {
@@ -115,7 +129,10 @@ export default {
           tag.editing = false
         })
       }
-    }
+    },
+    cachedTagsLength() {
+      this.fetchTags()
+    }    
   }
 }
 </script>

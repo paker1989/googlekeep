@@ -38,8 +38,6 @@ const store = new Vuex.Store({
       state.currentEvent = Types.EDIT_TAG_ADMIN
     },
   },
-  actions: {
-  }
 })
 
 export default store

@@ -16,9 +16,17 @@ export default {
   components: {
     Modal,
   },
+  data() {
+    return {
+      index: -1,
+    }
+  },
   methods: {
     deleteTag() {
-      this.parent.testAction()
+      this.parent.confirmDeleteTag(this.index).then((res) => {
+        console.log('delete over, start destroy')
+        this.destroy()
+      })
     },
     destroy() {
       this.$destroy()
