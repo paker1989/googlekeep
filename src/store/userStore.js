@@ -38,7 +38,7 @@ const mutations = {
   [Types.REMOVE_TAGS](state, { userId, tag }) {
     const index = state.activeUsers[userId].cachedTags.tags.findIndex(
       e => e.name === tag.name)
-    console.log('remove tags index: ' + index)
+    // console.log('remove tags index: ' + index)
     if (index >= 0) {
       state.activeUsers[userId].cachedTags.tags.splice(index, 1)
     }

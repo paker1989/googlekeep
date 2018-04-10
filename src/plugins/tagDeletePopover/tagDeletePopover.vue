@@ -23,8 +23,8 @@ export default {
   },
   methods: {
     deleteTag() {
-      this.parent.confirmDeleteTag(this.index).then((res) => {
-        console.log('delete over, start destroy')
+      this.parent.confirmDeleteTag(this.index).then(() => {
+        // console.log('delete over, start destroy')
         this.destroy()
       })
     },

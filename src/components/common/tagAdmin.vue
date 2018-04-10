@@ -104,7 +104,7 @@ export default {
       this.$tagDeletePopover(this, index)
     },
     confirmDeleteTag(index) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.deleteTagAction({
           userId: 'abc',
           tag: this.tags[index]
@@ -132,7 +132,7 @@ export default {
     },
     cachedTagsLength() {
       this.fetchTags()
-    }    
+    }
   }
 }
 </script>
