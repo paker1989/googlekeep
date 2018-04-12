@@ -48,6 +48,10 @@ export default {
   },
   mounted() {
     this.resetZoomer()
+    // let targetPhoto = document.querySelector('#targetPhoto')
+    // targetPhoto.addEventListener('dragenter', function(event) {
+    //   console.log('targetEnter')
+    // })
   },
   computed: {
     imageRange() {
