@@ -9,7 +9,7 @@
     .imageContainer
       //- img.initImagLayout(:src="currentImage")
       img#targetPhoto(:src="currentImage", :class="{initImagLayout: initialLayout}",
-        @keyup.enter="test")
+        @keyup.enter="test", v-drag-drop="currentZoomer")
     .zoomWraper
       .iconContainer(:class="{activeZoom: isZoomLess}", @click="zoomLess")
         span.glyphicon.glyphicon-minus
@@ -26,6 +26,7 @@
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import DragDrop from '../../directives/dragDrop'
 import Types from '../../store/mutationType'
 
 export default {
@@ -40,7 +41,9 @@ export default {
       currentIndex: this.imageEntity.imageIndex,
       initialLayout: true, // 需要监听鼠标事件模拟拖拽效果
       currentZoomer: 1, // 当前放大比例
-      maxZoomRatio: 1, // 最多放大比例
+      maxZoomRatio: 1, // 最多放大比例,
+      allowX: false,
+      allowY: false,
     }
   },
   created() {
@@ -48,10 +51,9 @@ export default {
   },
   mounted() {
     this.resetZoomer()
-    // let targetPhoto = document.querySelector('#targetPhoto')
-    // targetPhoto.addEventListener('dragenter', function(event) {
-    //   console.log('targetEnter')
-    // })
+  },
+  directives: {
+    DragDrop,
   },
   computed: {
     imageRange() {
@@ -134,6 +136,9 @@ export default {
       if (e.keyCode === 39 && this.isRightRemaining) {
         this.currentIndex += 1
       }
+    },
+    updateDragValidation() {
+
     },
     ...mapMutations('noteStore', {
       cancelPresentation: Types.CANCEL_PRESENT_PHOTO
@@ -264,5 +269,12 @@ export default {
       }
     }
   } // end .zoomWraper
+
+  .dragging {
+    cursor: pointer;
+  }
+  .move {
+    cursor: move;
+  }
 }
 </style>

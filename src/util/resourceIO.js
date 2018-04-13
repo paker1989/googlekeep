@@ -1,7 +1,7 @@
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-module.exports = {
+export default {
   getPhotoPath(photoUrl) {
     if (photoUrl.indexOf('/') === 0) {
       photoUrl = photoUrl.substring(1)
