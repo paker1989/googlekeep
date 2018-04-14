@@ -100,7 +100,9 @@ export default {
         const nextZoomer = Math.min(this.currentZoomer * this.imageRange, this.maxZoomRatio)
         document.querySelector('#targetPhoto').width *= nextZoomer / this.currentZoomer
         document.querySelector('#targetPhoto').height *= nextZoomer / this.currentZoomer
-        this.currentZoomer = nextZoomer
+        this.$nextTick(function(){
+          this.currentZoomer = nextZoomer
+        })
       }
     },
     zoomLess() {
@@ -111,7 +113,9 @@ export default {
         const nextZoomer = Math.max(this.currentZoomer / this.imageRange, 1)
         document.querySelector('#targetPhoto').width *= nextZoomer / this.currentZoomer
         document.querySelector('#targetPhoto').height *= nextZoomer / this.currentZoomer
-        this.currentZoomer = nextZoomer
+        this.$nextTick(function(){
+          this.currentZoomer = nextZoomer
+        })
       }
     },
     zoomOrigin() {

@@ -15,5 +15,20 @@ export default {
     } else if (document.defaultView.getComputedStyle) {
       return document.defaultView.getComputedStyle(node, null).getPropertyValue(styleProp)
     }
+  },
+  getOffset: (el, dir) => {
+    switch(dir) {
+      case 'left':
+        let offsetLeft = el.offsetLeft
+        let parent = el.offsetParent
+
+        if (parent != null) {
+          offsetLeft += parent.offsetLeft
+          parent = parent.offsetParent
+          console.log(parent)
+        }
+        return offsetLeft
+    }
+    return 0
   }
 }
